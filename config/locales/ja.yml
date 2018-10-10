@@ -1,0 +1,12 @@
+ja:
+  default: &default
+    too_short: 'は%{count}文字以上に設定して下さい。'
+    too_long: 'は%{count}文字以下に設定して下さい。'
+    blank: 'が入力されていません。'
+    taken: 'は既に使用されています。'
+    invalid: 'は有効でありません。'
+    confirmation: 'が内容とあっていません。'
+  activerecord:
+    attributes:
+    error:
+      models:
