@@ -1,6 +1,7 @@
-# Examin ~Webテストシステム~
+# Examin (Webテストシステム)
 
-Rails API
+フロントエンド: Vue.js     
+バックエンド: Rails API      
 
 ## 開発環境
 
@@ -8,6 +9,8 @@ Rails API
 * DB: MySQL5.7.23
 
 ## 環境構築
+
+### 環境構築(APIのみ)
 
 * .envファイルを作成
 
@@ -33,7 +36,23 @@ DATABASE_PASSWORD = 'DBのパスワード'
 
 > $ rails db:apply
 
-## 起動方法
+# 環境構築(フロント)
+
+* ルートディレクトリで以下のコマンドを実行
+
+> $ mkdir ./client
+
+* 作成したディレクトリに，examin_vueプロジェクトを格納
+
+> $ git clone https://github.com/nishikawatadashi/examin_vue.git
+
+(examin_vueをgithubからクローンする)
+
+> $ mv examin_vue ./client
+
+(クローンしたプロジェクトをclientディレクトリに移動する)
+
+## 起動方法(APIのみの場合)
 
 * MySQLの起動
 
@@ -50,3 +69,33 @@ DATABASE_PASSWORD = 'DBのパスワード'
 * 下記のURLにアクセスして確認
 
 > http://localhost:3000
+
+## 起動方法(フロントを含めた実行方法)
+
+* MySQLの起動
+
+> $ sudo mysql.server start
+
+* フロント(Vue.js)のテストを実行
+
+> $ cd ./client     
+> $ npm run unit        
+> $ npm run e2e
+
+* Railsのテストを実行
+
+> $ cd ./examin     
+> $ bundle exec rspec
+
+* テストをパスしたのを確認後，以下のコマンドを実行しサーバーを起動
+
+> $ foreman start
+
+* 下記のURLにアクセスして確認(フロントのポート番号はターミナルを確認)
+
+> http://localhost:3000
+
+(Rails 用のURL)
+
+> http://localhost:`ターミナルに表示されているポート番号`
+

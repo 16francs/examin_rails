@@ -31,3 +31,6 @@
 
 # Ignore public/assets
 /public/assets/*
+
+# Ignore front files
+/client/**/*
