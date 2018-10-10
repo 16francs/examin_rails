@@ -1,0 +1,56 @@
+version: 2
+jobs:
+  build:
+    parallelism: 1
+    docker:
+    - image: circleci/ruby:2.5.1-stretch-node
+      environment:
+        BUNDLE_JOBS: 3
+        BUNDLE_RETRY: 3
+        BUNDLE_PATH: vendor/bundle
+        RAILS_ENV: test
+        DATABASE_HOSTNAME: 127.0.0.1
+        DATABASE_USERNAME: examin
+        DATABASE_PASSWORD: examin
+        DATABASE_PORT: 3306
+    - image: circleci/mysql:5.7.23
+      environment:
+        MYSQL_USER: examin
+        MYSQL_PASSWORD: examin
+        MYSQL_DATABASE: examin_test
+    working_directory: ~/examin
+    steps:
+    - checkout
+
+    # Which version of bundler?
+    - run:
+        name: Which bundler?
+        command: bundle -v
+
+    # Bundle install dependencies
+    - run:
+        name: Bundle Install
+        command: bundle check || bundle install
+
+    # Database setup
+    - run:
+        name: Wait for DB
+        command: dockerize -wait tcp://localhost:3306 -timeout 120s
+
+    - run:
+        name: Database setup
+        command: rails db:apply RAILS_ENV=test
+
+    # Run rspec in parallel
+    - run:
+        name: Run rspec in parallel
+        command: |
+          bundle exec rspec --profile 10 \
+                            --format RspecJunitFormatter \
+                            --out test_results/rspec.xml \
+                            --format progress \
+                            $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+    # Run rubocop
+    - run:
+        name: Run rubocop
+        command: rubocop
