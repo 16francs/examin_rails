@@ -52,6 +52,10 @@ DATABASE_PASSWORD = 'DBのパスワード'
 
 (クローンしたプロジェクトをclientディレクトリに移動する)
 
+* 必要な物ををインストールする
+
+> $ npm install
+
 ## 起動方法
 
 ### 起動方法(APIのみの場合)
@@ -77,12 +81,6 @@ DATABASE_PASSWORD = 'DBのパスワード'
 * MySQLの起動
 
 > $ sudo mysql.server start
-
-* フロント(Vue.js)のテストを実行
-
-> $ cd ./client     
-> $ npm run unit        
-> $ npm run e2e
 
 * Railsのテストを実行
 
