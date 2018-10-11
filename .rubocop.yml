@@ -2,10 +2,10 @@
 AllCops:
   TargetRubyVersion: 2.5.1
   Exclude:
-  - 'bin/*'
+  - 'bin/**/*'
+  - 'client/**/*'
   - 'config/**/*'
-  - 'db/*'
-  - 'spec/*'
+  - 'db/**/*'
   - 'vendor/**/*'
 
 Metrics/AbcSize:
