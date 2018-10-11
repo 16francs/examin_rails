@@ -17,9 +17,6 @@
 # Mac finder artifacts
 .DS_Store
 
-# RubyMine project files
-/.idea
-
 # Add environment setting.
 /.env
 .ruby-version
