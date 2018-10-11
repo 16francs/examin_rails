@@ -9,16 +9,12 @@ jobs:
         BUNDLE_RETRY: 3
         BUNDLE_PATH: vendor/bundle
         RAILS_ENV: test
-#        DATABASE_USERNAME: examin
-#        DATABASE_PASSWORD: examin
         DATABASE_USERNAME: root
         DATABASE_PASSWORD: ''
         DATABASE_HOST: 127.0.0.1
         DATABASE_PORT: 3306
     - image: circleci/mysql:5.7.23
       environment:
-#        MYSQL_USER: examin
-#        MYSQL_PASSWORD: examin
         MYSQL_USER: root
         MYSQL_ALLOW_EMPTY_PASSWORD: yes
         MYSQL_DATABASE: examin_test
