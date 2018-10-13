@@ -29,8 +29,7 @@ gem 'bootsnap', '>= 1.1.0', require: false
 gem 'rack-cors'
 
 # トークンベースの認証を行うためのGem
-gem 'devise'
-gem 'devise_token_auth'
+gem 'sorcery', github: 'sorcery/sorcery'
 
 # N+1問題を検出するGem
 gem 'bullet'
