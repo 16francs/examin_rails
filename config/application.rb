@@ -33,6 +33,8 @@ module Examin
     config.api_only = true
     config.i18n.default_locale = :ja
 
+    config.middleware.use ActionDispatch::Flash
+
     # Rspec setting
     config.generators do |generator|
       generator.test_framework :rspec,

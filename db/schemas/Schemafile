@@ -1,2 +1,4 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'api_keys.schema'
+require 'users.schema'
