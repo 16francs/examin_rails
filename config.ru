@@ -3,3 +3,6 @@
 require_relative 'config/environment'
 
 run Rails.application
+use Rack::Health, sick_if: lambda {
+  File.exist?('/tmp/service_out')
+}
