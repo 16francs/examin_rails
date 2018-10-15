@@ -10,7 +10,7 @@ RSpec.describe ApiKey, type: :model do
     expect(@api_key).to be_valid
   end
 
-  describe('before_expired?') do
+  describe 'before_expired?' do
     it '有効期限内' do
       expect(@api_key.before_expired?).to eq(true)
     end
