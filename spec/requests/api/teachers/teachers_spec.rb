@@ -14,7 +14,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
     describe 'POST /api/teachers/teachers' do
       it '新規講師登録 OK' do
         post '/api/teachers/teachers',
-             headers: { access_token: @api_key[:access_token] },
+             headers: { 'access-token': @api_key[:access_token] },
              params: { user: {
                name: @user[:name],
                school: @user[:school],
@@ -29,7 +29,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
 
       it '新規講師登録 NG' do
         post '/api/teachers/teachers',
-             headers: { access_token: @api_key[:access_token] },
+             headers: { 'access-token': @api_key[:access_token] },
              params: { user: {
                name: @user[:name],
                school: @user[:school],
