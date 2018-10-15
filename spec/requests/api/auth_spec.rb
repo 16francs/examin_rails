@@ -30,14 +30,5 @@ RSpec.describe 'Auth', type: :request do
       # 有効期限が更新されているかの確認
       expect(@api_key[:expires_at]).to_not eq(expires_at)
     end
-
-    it 'すでにログイン済みの場合' do
-      post '/api/auth', params: { login_id: @user[:login_id], password: '12345678' }
-      expect(response.status).to eq(200)
-
-      post '/api/auth', params: { login_id: @user[:login_id], password: '12345678' }
-      expect(response.status).to eq(200)
-      expect(ApiKey.count).to eq(1)
-    end
   end
 end
