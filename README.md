@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/nishikawatadashi/examin.svg?style=shield&circle-token=41b2aced5a2b8630217b7b2b187196dc831b0625)](https://circleci.com/gh/nishikawatadashi/examin)
+
 # Examin (Webテストシステム)
 
 フロントエンド: Vue.js     
