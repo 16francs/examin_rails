@@ -32,6 +32,13 @@ class User < ApplicationRecord
     end
   end
 
+  # ユーザーをログアウト状態にする
+  def inactivate
+    api_key = find_api_key
+    api_key[:activated] = false
+    api_key.save
+  end
+
   private
 
   def find_api_key

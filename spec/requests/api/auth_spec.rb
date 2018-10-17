@@ -31,4 +31,19 @@ RSpec.describe 'Auth', type: :request do
       expect(@api_key[:expires_at]).to_not eq(expires_at)
     end
   end
+
+  describe 'Delete /api/auth' do
+    it 'ログインユーザー' do
+      delete '/api/auth', headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(200)
+      # ログアウト状態になっていることを確認
+      @api_key = ApiKey.find_by(user_id: @user)
+      expect(@api_key[:activated]).to eq(false)
+    end
+
+    it '未ログインユーザー' do
+      delete '/api/auth'
+      expect(response.status).to eq(404)
+    end
+  end
 end

@@ -1,7 +1,8 @@
 Rails.application.routes.draw do
   namespace :api, { format: :json } do
     # 共通のpath
-    post '/auth', to: 'auth#create'
+    post   '/auth', to: 'auth#create'
+    delete '/auth', to: 'auth#destroy'
 
     # 講師用のpath
     namespace :teachers do
