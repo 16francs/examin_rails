@@ -70,6 +70,10 @@ DATABASE_PASSWORD = 'DBのパスワード'
 
 > $ bundle exec rspec
 
+* (任意のテストを実行する場合, 下記のコマンドを実行する方が速い)
+
+> $ bin/rspec spec/
+
 * サーバーを起動
 
 > $ rails server

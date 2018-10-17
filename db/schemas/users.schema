@@ -1,0 +1,15 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "users", id: :bigint, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.string "login_id", limit: 32, default: "", null: false
+  t.string "crypted_password", default: "", null: false
+  t.string "salt", default: "", null: false
+  t.string "name", limit: 32, null: false
+  t.string "school", limit: 32, null: false
+  t.integer "role", default: 0, null: false, unsigned: true
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+  t.index ["login_id"], name: "index_users_on_email", unique: true
+end
+
+add_foreign_key "api_keys", "users", name: "api_keys_ibfk_1", on_delete: :cascade

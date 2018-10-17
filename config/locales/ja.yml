@@ -1,12 +1,33 @@
 ja:
   default: &default
-    too_short: 'は%{count}文字以上に設定して下さい。'
-    too_long: 'は%{count}文字以下に設定して下さい。'
-    blank: 'が入力されていません。'
-    taken: 'は既に使用されています。'
-    invalid: 'は有効でありません。'
-    confirmation: 'が内容とあっていません。'
+    too_short: "は%{count}文字以上に設定して下さい。"
+    too_long: "は%{count}文字以下に設定して下さい。"
+    blank: "が入力されていません。"
+    taken: "は既に使用されています。"
+    invalid: "は有効でありません。"
+    confirmation: "が内容とあっていません。"
   activerecord:
     attributes:
-    error:
+      user:
+        login_id: ログインID
+        password: パスワード
+        password_confirmation: パスワード確認
+        name: 名前
+        school: 学校
+        role: 権限
+    errors:
       models:
+        user:
+          attributes:
+            login_id:
+              <<: *default
+            password:
+              <<: *default
+            password_confirmation:
+              <<: *default
+            name:
+              <<: *default
+            school:
+              <<: *default
+            role:
+              <<: *default

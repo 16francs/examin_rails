@@ -1,3 +1,13 @@
 Rails.application.routes.draw do
-  # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
+  namespace :api, { format: :json } do
+    # 共通のpath
+    post   '/auth', to: 'auth#create'
+    delete '/auth', to: 'auth#destroy'
+
+    # 講師用のpath
+    namespace :teachers do
+      resources :students, only: [:create]
+      resources :teachers, only: [:create]
+    end
+  end
 end
