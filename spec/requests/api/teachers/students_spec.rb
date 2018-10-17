@@ -41,6 +41,18 @@ RSpec.describe 'Teachers/Students', type: :request do
     end
   end
 
+  describe '講師以外に対するテスト' do
+    before do
+      @student = create(:student)
+      @api_key = @student.activate
+    end
+
+    it '新規生徒登録 NG' do
+      post '/api/teachers/students'
+      expect(response.status).to eq(401)
+    end
+  end
+
   describe '未ログイン講師に対するテスト' do
     it '新規生徒登録 NG' do
       post '/api/teachers/students'
