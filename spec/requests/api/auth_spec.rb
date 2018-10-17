@@ -35,9 +35,9 @@ RSpec.describe 'Auth', type: :request do
       expect(response.status).to eq(200)
       # jsonの検証
       json = JSON.parse(response.body)
-      expect(json['data']['access_token']).to eq(@api_key[:access_token])
-      expect(json['data']['user']['id']).to eq(@user[:id])
-      expect(json['data']['user']['role']).to eq(@user[:role])
+      expect(json['access_token']).to eq(@api_key[:access_token])
+      expect(json['user']['id']).to eq(@user[:id])
+      expect(json['user']['role']).to eq(@user[:role])
     end
 
     it 'ログイン失敗' do
