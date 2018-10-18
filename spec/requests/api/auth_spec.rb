@@ -6,15 +6,38 @@ RSpec.describe 'Auth', type: :request do
     @api_key = @user.activate
   end
 
+  describe 'GET /api/auth' do
+    it '正しいユーザー' do
+      get '/api/auth', headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(200)
+      # jsonの検証
+      json = JSON.parse(response.body)
+      expect(json['user']['id']).to_not eq(nil)
+      expect(json['user']['login_id']).to_not eq(nil)
+      expect(json['user']['name']).to_not eq(nil)
+      expect(json['user']['school']).to_not eq(nil)
+      expect(json['user']['role']).to_not eq(nil)
+      expect(json['user']['encrypted_password']).to eq(nil)
+      expect(json['user']['salt']).to eq(nil)
+      expect(json['api_key']['access_token']).to_not eq(nil)
+      expect(json['api_key']['expires_at']).to_not eq(nil)
+    end
+
+    it '未ログインユーザー' do
+      get '/api/auth'
+      expect(response.status).to eq(401)
+    end
+  end
+
   describe 'POST /api/auth' do
     it 'ログイン成功' do
       post '/api/auth', params: { login_id: @user[:login_id], password: '12345678' }
       expect(response.status).to eq(200)
       # jsonの検証
       json = JSON.parse(response.body)
-      expect(json['data']['access_token']).to eq(@api_key[:access_token])
-      expect(json['data']['user']['id']).to eq(@user[:id])
-      expect(json['data']['user']['role']).to eq(@user[:role])
+      expect(json['access_token']).to eq(@api_key[:access_token])
+      expect(json['user']['id']).to eq(@user[:id])
+      expect(json['user']['role']).to eq(@user[:role])
     end
 
     it 'ログイン失敗' do
@@ -43,7 +66,7 @@ RSpec.describe 'Auth', type: :request do
 
     it '未ログインユーザー' do
       delete '/api/auth'
-      expect(response.status).to eq(404)
+      expect(response.status).to eq(401)
     end
   end
 end
