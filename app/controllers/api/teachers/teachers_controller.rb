@@ -9,6 +9,20 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
     end
   end
 
+  def edit
+    @user = User.find(params[:id])
+    render json: @user
+  end
+
+  def update
+    @user = User.find(params[:id])
+    if @user.update(user_params)
+      render json: { status: :success, data: @user }
+    else
+      record_invalid(@user)
+    end
+  end
+
   private
 
   def user_params
