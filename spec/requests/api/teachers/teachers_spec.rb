@@ -9,7 +9,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
 
   describe '正しい講師に対するテスト' do
     describe 'GET /api/teachers/teachers' do
-      it '講師詳細 取得' do
+      it '講師一覧 取得' do
         get '/api/teachers/teachers/',
             headers: { 'access-token': @api_key[:access_token] }
         expect(response.status).to eq(200)
