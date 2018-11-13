@@ -15,4 +15,9 @@ class Api::Teachers::BaseController < ApplicationController
       unauthorized
     end
   end
+
+  # ログイン中の講師情報と一致するか確認
+  def correct_teacher?(user)
+    user == current_user
+  end
 end
