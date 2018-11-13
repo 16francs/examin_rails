@@ -2,11 +2,17 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
   before_action :correct_teacher, only: %i[edit update]
 
   def index
-    @users = User.all
+    @users = User.where(role: 1..3)
+    render :index, formats: :json, handlers: :jbuilder
   end
 
   def show
-
+    @user = User.find_by(id: params[:id], role: 1..3)
+    if @user
+      render :show, formats: :json, handlers: :jbuilder
+    else
+      not_found
+    end
   end
 
   def create
