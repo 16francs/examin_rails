@@ -1,6 +1,14 @@
 class Api::Teachers::TeachersController < Api::Teachers::BaseController
   before_action :correct_teacher, only: %i[edit update]
 
+  def index
+    @users = User.all
+  end
+
+  def show
+
+  end
+
   def create
     @user = User.new(user_params)
     @user[:role] = 1
@@ -29,7 +37,7 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
 
   def correct_teacher
     user = User.find(params[:id])
-    raise forbidden unless correct_teacher?(user)
+    forbidden unless correct_teacher?(user)
   end
 
   def user_params
