@@ -8,6 +8,22 @@ RSpec.describe 'Teachers/Teachers', type: :request do
   end
 
   describe '正しい講師に対するテスト' do
+    describe 'GET /api/teachers/teachers' do
+      it '講師詳細 取得' do
+        get '/api/teachers/teachers/',
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(200)
+      end
+    end
+
+    describe 'GET /api/teachers/teachers/:id' do
+      it '講師詳細 取得' do
+        get '/api/teachers/teachers/' + @teacher[:id].to_s,
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(200)
+      end
+    end
+
     describe 'POST /api/teachers/teachers' do
       it '新規講師登録 OK' do
         post '/api/teachers/teachers',
@@ -79,7 +95,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
     end
   end
 
-  describe '正しくない講師以外に対するテスト' do
+  describe '正しくない講師に対するテスト' do
     before do
       @other_teacher = create(:teacher)
       @other_api_key = @other_teacher.activate
