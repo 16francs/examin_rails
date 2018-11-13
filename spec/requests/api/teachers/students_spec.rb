@@ -24,7 +24,7 @@ RSpec.describe 'Teachers/Students', type: :request do
       expect(response.status).to eq(200)
       # roleの値の確認 (生徒の初期権限: 0)
       json = JSON.parse(response.body)
-      expect(json['data']['role']).to eq(0)
+      expect(json['user']['role']).to eq(0)
     end
 
     it '新規生徒登録 NG' do

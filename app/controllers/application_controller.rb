@@ -32,6 +32,6 @@ class ApplicationController < ActionController::Base
   # ログイン中の user 情報を返す
   def current_user
     api_key = ApiKey.find_by(access_token: request.headers['access-token'])
-    User.find(api_key[:user_id])
+    User.find(api_key[:user_id]) if api_key # gem と競合するため，api_keyが存在する場合のみ値を返す
   end
 end
