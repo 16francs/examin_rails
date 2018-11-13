@@ -7,7 +7,7 @@ class Api::AuthController < ApplicationController
       @user = User.find(@api_key[:user_id])
       render :show, formats: :json, handler: :jbuilder
     else
-      render json: { status: :error }, status: :not_found
+      not_found
     end
   end
 
@@ -27,7 +27,7 @@ class Api::AuthController < ApplicationController
       user.inactivate
       render json: { status: :success }
     else
-      render json: { status: :error }, status: :not_found
+      not_found
     end
   end
 end

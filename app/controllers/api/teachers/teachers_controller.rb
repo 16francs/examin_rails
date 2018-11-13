@@ -1,4 +1,6 @@
 class Api::Teachers::TeachersController < Api::Teachers::BaseController
+  before_action :correct_teacher, only: %i[edit update]
+
   def create
     @user = User.new(user_params)
     @user[:role] = 1
@@ -25,8 +27,12 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
 
   private
 
+  def correct_teacher
+    user = User.find(params[:id])
+    raise forbidden unless correct_teacher?(user)
+  end
+
   def user_params
-    params.require(:user)
-          .permit(:login_id, :password, :password_confirmation, :name, :school)
+    params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school)
   end
 end
