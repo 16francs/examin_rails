@@ -5,7 +5,7 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
     @user = User.new(user_params)
     @user[:role] = 1
     if @user.save
-      render json: { status: :success, data: @user }
+      render :create, formats: :json, handlers: :jbuilder
     else
       record_invalid(@user)
     end
@@ -13,13 +13,13 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
 
   def edit
     @user = User.find(params[:id])
-    render json: @user
+    render :edit, formats: :json, handlers: :jbuilder
   end
 
   def update
     @user = User.find(params[:id])
     if @user.update(user_params)
-      render json: { status: :success, data: @user }
+      render :update, formats: :json, handlers: :jbuilder
     else
       record_invalid(@user)
     end
