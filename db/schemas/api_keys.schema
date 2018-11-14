@@ -3,7 +3,7 @@
 create_table "api_keys", id: :bigint, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
   t.bigint "user_id", null: false, unsigned: true
   t.string "access_token", default: "", null: false
-  t.boolean "activated", default: false, null: false, comment: "ログイン情報"
+  t.boolean "activated", default: false, null: false, comment: "ログイン情報", unsigned: true
   t.datetime "expires_at", null: false, comment: "ログイン期限"
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false

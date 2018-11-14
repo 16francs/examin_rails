@@ -3,6 +3,7 @@ class User < ApplicationRecord
 
   self.table_name = 'users'
   has_many :api_keys, dependent: :destroy
+  has_many :problems
 
   validates :password, length: { minimum: 6, maximum: 16 }, if: -> { new_record? || changes[:crypted_password] }
   validates :password, confirmation: true, if: -> { new_record? || changes[:crypted_password] }

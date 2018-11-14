@@ -3,7 +3,7 @@ FactoryBot.define do
     sequence(:name) { 'テストユーザー' }
     sequence(:school) { 'テスト学校' }
     sequence(:role) { 1 }
-    sequence(:login_id) { 'test_user' }
+    sequence(:login_id) { |n| "test_user#{n}" }
     sequence(:password) { '12345678' }
     sequence(:password_confirmation) { '12345678' }
 

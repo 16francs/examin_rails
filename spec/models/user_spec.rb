@@ -9,6 +9,11 @@ RSpec.describe User, type: :model do
     expect(@user).to be_valid
   end
 
+  describe 'Userとの関連' do
+    it { should have_many(:api_keys) }
+    it { should have_many(:problems) }
+  end
+
   describe 'nilの場合のテスト NG' do
     it 'login_idがnil NG' do
       @user[:login_id] = nil
@@ -44,13 +49,12 @@ RSpec.describe User, type: :model do
   end
 
   describe 'ユニーク値の検証 NG' do
+    before do
+      @other_user = create(:user)
+    end
+
     it 'login_idがユニーク' do
-      User.create(name: 'ユニークユーザー',
-                  school: 'テスト学校',
-                  role: 1,
-                  login_id: 'test_user',
-                  password: '12345678',
-                  password_confirmation: '12345678')
+      @user[:login_id] = @other_user[:login_id]
       expect(@user).to_not be_valid
     end
   end
