@@ -7,6 +7,7 @@ abort('The Rails environment is running in production mode!') if Rails.env.produ
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
+require 'simplecov'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -83,4 +84,23 @@ Shoulda::Matchers.configure do |config|
     with.library :active_model
     with.library :rails
   end
+end
+
+# save to CircleCI's artifacts directory if we're on CircleCI
+if ENV['CIRCLE_ARTIFACTS']
+  dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
+  SimpleCov.coverage_dir(dir)
+end
+
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter])
+SimpleCov.start 'rails' do
+  add_filter %w[
+    app/channels/
+    app/jobs/
+    app/mailers/
+    config/
+    db/
+    spec/
+    vendor/
+  ]
 end
