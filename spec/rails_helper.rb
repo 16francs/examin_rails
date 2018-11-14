@@ -72,15 +72,15 @@ RSpec.configure do |config|
       Bullet.end_request
     end
   end
+end
 
-  # shoulda-matchersに関する設定
-  Shoulda::Matchers.configure do |config|
-    config.integrate do |with|
-      with.test_framework :rspec
-      # shoulda-matchersを使いたいライブラリの指定
-      with.library :active_record
-      with.library :active_model
-      with.library :rails
-    end
+# shoulda-matchersに関する設定
+Shoulda::Matchers.configure do |config|
+  config.integrate do |with|
+    with.test_framework :rspec
+    # shoulda-matchersを使いたいライブラリの指定
+    with.library :active_record
+    with.library :active_model
+    with.library :rails
   end
 end
