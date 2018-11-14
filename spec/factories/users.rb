@@ -10,13 +10,13 @@ FactoryBot.define do
     factory :student do
       sequence(:name) { 'テスト生徒' }
       sequence(:role) { 0 }
-      sequence(:login_id) { 'test_student' }
+      sequence(:login_id) { |n| "test_student#{n}" }
     end
 
     factory :teacher do
       sequence(:name) { 'テスト講師' }
       sequence(:role) { 1 }
-      sequence(:login_id) { 'test_teacher' }
+      sequence(:login_id) { |n| "test_teacher#{n}" }
     end
   end
 end

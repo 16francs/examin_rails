@@ -8,6 +8,22 @@ RSpec.describe 'Teachers/Teachers', type: :request do
   end
 
   describe '正しい講師に対するテスト' do
+    describe 'GET /api/teachers/teachers' do
+      it '講師一覧 取得' do
+        get '/api/teachers/teachers/',
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(200)
+      end
+    end
+
+    describe 'GET /api/teachers/teachers/:id' do
+      it '講師詳細 取得' do
+        get '/api/teachers/teachers/' + @teacher[:id].to_s,
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(200)
+      end
+    end
+
     describe 'POST /api/teachers/teachers' do
       it '新規講師登録 OK' do
         post '/api/teachers/teachers',
@@ -79,32 +95,73 @@ RSpec.describe 'Teachers/Teachers', type: :request do
     end
   end
 
+  describe '正しくない講師に対するテスト' do
+    before do
+      @other_teacher = create(:teacher)
+      @other_api_key = @other_teacher.activate
+    end
+
+    it '講師編集 取得 NG' do
+      get '/api/teachers/teachers/' + @teacher[:id].to_s + '/edit',
+          headers: { 'access-token': @other_api_key[:access_token] }
+      expect(response.status).to eq(403)
+    end
+
+    it '講師編集 NG' do
+      put '/api/teachers/teachers/' + @teacher[:id].to_s,
+          headers: { 'access-token': @other_api_key[:access_token] }
+      expect(response.status).to eq(403)
+    end
+  end
+
   describe '講師以外に対するテスト' do
     before do
       @student = create(:student)
-      @api_key = @student.activate
+      @student_api_key = @student.activate
+    end
+
+    it '講師一覧 取得 NG' do
+      get '/api/teachers/teachers',
+          headers: { 'access-token': @student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '講師詳細 取得 NG' do
+      get '/api/teachers/teachers/' + @teacher[:id].to_s,
+          headers: { 'access-token': @student_api_key[:access_token] }
+      expect(response.status).to eq(401)
     end
 
     it '新規講師登録 NG' do
       post '/api/teachers/teachers',
-           headers: { 'access-token': @api_key[:access_token] }
+           headers: { 'access-token': @student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
 
     it '講師編集 取得 NG' do
       get '/api/teachers/teachers/' + @teacher[:id].to_s + '/edit',
-          headers: { 'access-token': @api_key[:access_token] }
+          headers: { 'access-token': @student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
 
     it '講師編集 NG' do
       put '/api/teachers/teachers/' + @teacher[:id].to_s,
-          headers: { 'access-token': @api_key[:access_token] }
+          headers: { 'access-token': @student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
   end
 
   describe '未ログイン講師に対するテスト' do
+    it '講師一覧 取得 NG' do
+      get '/api/teachers/teachers'
+      expect(response.status).to eq(401)
+    end
+
+    it '講師詳細 取得 NG' do
+      get '/api/teachers/teachers/' + @teacher[:id].to_s
+      expect(response.status).to eq(401)
+    end
+
     it '新規講師登録 NG' do
       post '/api/teachers/teachers'
       expect(response.status).to eq(401)
