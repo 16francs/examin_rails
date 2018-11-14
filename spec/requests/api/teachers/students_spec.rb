@@ -11,7 +11,7 @@ RSpec.describe 'Teachers/Students', type: :request do
       @api_key = @teacher.activate
     end
 
-    it '新規生徒登録 OK' do
+    it '#create 200' do
       post '/api/teachers/students',
            headers: { 'access-token': @api_key[:access_token] },
            params: { user: {
@@ -27,7 +27,7 @@ RSpec.describe 'Teachers/Students', type: :request do
       expect(json['user']['role']).to eq(0)
     end
 
-    it '新規生徒登録 NG' do
+    it '#create 422' do
       post '/api/teachers/students',
            headers: { 'access-token': @api_key[:access_token] },
            params: { user: {
@@ -47,14 +47,14 @@ RSpec.describe 'Teachers/Students', type: :request do
       @api_key = @student.activate
     end
 
-    it '新規生徒登録 NG' do
+    it '#create 401' do
       post '/api/teachers/students'
       expect(response.status).to eq(401)
     end
   end
 
   describe '未ログイン講師に対するテスト' do
-    it '新規生徒登録 NG' do
+    it '#create 401' do
       post '/api/teachers/students'
       expect(response.status).to eq(401)
     end

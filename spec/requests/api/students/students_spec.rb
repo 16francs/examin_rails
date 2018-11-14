@@ -9,7 +9,7 @@ RSpec.describe 'Students/Students', type: :request do
 
   describe '正しい生徒に対するテスト' do
     describe 'GET /api/students/students/:id' do
-      it '生徒詳細 取得' do
+      it '#show 200' do
         get '/api/students/students/' + @student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] }
         expect(response.status).to eq(200)
@@ -17,7 +17,7 @@ RSpec.describe 'Students/Students', type: :request do
     end
 
     describe 'GET /api/students/students/:id/edit' do
-      it '生徒編集 取得' do
+      it '#edit 200' do
         get '/api/students/students/' + @student[:id].to_s + '/edit',
             headers: { 'access-token': @api_key[:access_token] }
         expect(response.status).to eq(200)
@@ -25,7 +25,7 @@ RSpec.describe 'Students/Students', type: :request do
     end
 
     describe 'PUT /api/students/students/:id' do
-      it '生徒編集 OK' do
+      it '#update 200' do
         put '/api/students/students/' + @student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { user: {
@@ -38,7 +38,7 @@ RSpec.describe 'Students/Students', type: :request do
         expect(response.status).to eq(200)
       end
 
-      it '生徒編集 NG' do
+      it '#update 422' do
         put '/api/students/students/' + @student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { user: {
@@ -59,19 +59,19 @@ RSpec.describe 'Students/Students', type: :request do
       @other_api_key = @other_student.activate
     end
 
-    it '生徒詳細 取得 NG' do
+    it '#show 403' do
       get '/api/students/students/' + @student[:id].to_s,
           headers: { 'access-token': @other_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
 
-    it '生徒編集 取得 NG' do
+    it '#edit 403' do
       get '/api/students/students/' + @student[:id].to_s + '/edit',
           headers: { 'access-token': @other_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
 
-    it '生徒編集 NG' do
+    it '#update 403' do
       put '/api/students/students/' + @student[:id].to_s,
           headers: { 'access-token': @other_api_key[:access_token] }
       expect(response.status).to eq(403)
@@ -84,19 +84,19 @@ RSpec.describe 'Students/Students', type: :request do
       @teacher_api_key = @teacher.activate
     end
 
-    it '生徒詳細 取得 NG' do
+    it '#show 403' do
       get '/api/students/students/' + @student[:id].to_s,
           headers: { 'access-token': @teacher_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
 
-    it '生徒編集 取得 NG' do
+    it '#edit 403' do
       get '/api/students/students/' + @student[:id].to_s + '/edit',
           headers: { 'access-token': @teacher_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
 
-    it '生徒編集 NG' do
+    it '#update 403' do
       put '/api/students/students/' + @student[:id].to_s,
           headers: { 'access-token': @teacher_api_key[:access_token] }
       expect(response.status).to eq(403)
@@ -104,17 +104,17 @@ RSpec.describe 'Students/Students', type: :request do
   end
 
   describe '未ログイン生徒に対するテスト' do
-    it '生徒詳細 取得 NG' do
+    it '#show 401' do
       get '/api/students/students/' + @student[:id].to_s
       expect(response.status).to eq(401)
     end
 
-    it '生徒編集 取得 NG' do
+    it '#edit 401' do
       get '/api/students/students/' + @student[:id].to_s + '/edit'
       expect(response.status).to eq(401)
     end
 
-    it '生徒編集 NG' do
+    it '#update 401' do
       put '/api/students/students/' + @student[:id].to_s
       expect(response.status).to eq(401)
     end
