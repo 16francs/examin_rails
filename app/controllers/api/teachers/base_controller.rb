@@ -6,14 +6,8 @@ class Api::Teachers::BaseController < ApplicationController
 
   # 講師であるかの確認
   def log_in_teacher?
-    access_token = request.headers['access-token']
-    api_key = ApiKey.find_by(access_token: access_token)
-    user = User.find(api_key[:user_id])
-    if user.nil?
-      unauthorized
-    elsif user[:role] != 1 && user[:role] != 2 && user[:role] != 3
-      unauthorized
-    end
+    user = current_user
+    unauthorized if user[:role] != 1 && user[:role] != 2 && user[:role] != 3
   end
 
   # ログイン中の講師情報と一致するか確認

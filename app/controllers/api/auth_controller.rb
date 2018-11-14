@@ -2,13 +2,9 @@ class Api::AuthController < ApplicationController
   before_action :require_login, only: %i[show destroy]
 
   def show
-    access_token = request.headers['access-token']
-    if @api_key ||= ApiKey.find_by(access_token: access_token)
-      @user = User.find(@api_key[:user_id])
-      render :show, formats: :json, handler: :jbuilder
-    else
-      not_found
-    end
+    @user = current_user
+    @api_key = current_user.api_key
+    render :show, formats: :json, handler: :jbuilder
   end
 
   def create
@@ -21,13 +17,8 @@ class Api::AuthController < ApplicationController
   end
 
   def destroy
-    access_token = request.headers['access-token']
-    if api_key ||= ApiKey.find_by(access_token: access_token)
-      user = User.find(api_key[:user_id])
-      user.inactivate
-      render json: { status: :success }
-    else
-      not_found
-    end
+    user = current_user
+    user.inactivate
+    render json: { status: :success }, status: :ok
   end
 end

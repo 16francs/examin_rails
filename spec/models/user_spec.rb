@@ -10,7 +10,7 @@ RSpec.describe User, type: :model do
   end
 
   describe 'Userとの関連' do
-    it { should have_many(:api_keys) }
+    it { should have_one(:api_key) }
     it { should have_many(:problems) }
   end
 

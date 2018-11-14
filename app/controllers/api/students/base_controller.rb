@@ -6,14 +6,8 @@ class Api::Students::BaseController < ApplicationController
 
   # 生徒であるかの確認
   def log_in_student?
-    access_token = request.headers['access-token']
-    api_key = ApiKey.find_by(access_token: access_token)
-    user = User.find(api_key[:user_id])
-    if user.nil?
-      unauthorized
-    elsif user[:role] != 1 && user[:role] != 0
-      unauthorized
-    end
+    user = current_user
+    unauthorized if user[:role] != 1 && user[:role] != 0
   end
 
   # ログイン中の生徒情報と一致するか確認

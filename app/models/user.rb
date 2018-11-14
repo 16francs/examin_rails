@@ -2,7 +2,7 @@ class User < ApplicationRecord
   authenticates_with_sorcery!
 
   self.table_name = 'users'
-  has_many :api_keys, dependent: :destroy
+  has_one :api_key, dependent: :destroy
   has_many :problems
 
   validates :password, length: { minimum: 6, maximum: 16 }, if: -> { new_record? || changes[:crypted_password] }
