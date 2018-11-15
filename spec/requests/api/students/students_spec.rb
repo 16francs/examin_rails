@@ -92,38 +92,38 @@ RSpec.describe 'Students/Students', type: :request do
     let!(:teacher) { create(:teacher) }
     let!(:teacher_api_key) { teacher.activate }
 
-    it '#show 403' do
-      get '/api/students/students/' + @student[:id].to_s,
+    it '#show 401' do
+      get '/api/students/students/0',
           headers: { 'access-token': teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
 
-    it '#edit 403' do
-      get '/api/students/students/' + @student[:id].to_s + '/edit',
+    it '#edit 401' do
+      get '/api/students/students/0/edit',
           headers: { 'access-token': teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
 
-    it '#update 403' do
-      put '/api/students/students/' + @student[:id].to_s,
+    it '#update 401' do
+      put '/api/students/students/0',
           headers: { 'access-token': teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
+      expect(response.status).to eq(401)
     end
   end
 
   describe '未ログイン生徒に対するテスト' do
     it '#show 401' do
-      get '/api/students/students/' + @student[:id].to_s
+      get '/api/students/students/0'
       expect(response.status).to eq(401)
     end
 
     it '#edit 401' do
-      get '/api/students/students/' + @student[:id].to_s + '/edit'
+      get '/api/students/students/0/edit'
       expect(response.status).to eq(401)
     end
 
     it '#update 401' do
-      put '/api/students/students/' + @student[:id].to_s
+      put '/api/students/students/0'
       expect(response.status).to eq(401)
     end
   end

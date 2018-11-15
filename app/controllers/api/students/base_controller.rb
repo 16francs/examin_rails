@@ -7,7 +7,7 @@ class Api::Students::BaseController < ApplicationController
   # 生徒であるかの確認
   def log_in_student?
     user = current_user
-    unauthorized if user[:role] != 1 && user[:role] != 0
+    unauthorized if user[:role] != 0
   end
 
   # ログイン中の生徒情報と一致するか確認

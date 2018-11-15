@@ -88,13 +88,12 @@ RSpec.describe 'Teachers/Students', type: :request do
   end
 
   describe '講師以外に対するテスト' do
-    before do
-      @student = create(:student)
-      @api_key = @student.activate
-    end
+    let!(:student) { create(:student) }
+    let!(:student_api_key) { student.activate }
 
     it '#create 401' do
-      post '/api/teachers/students'
+      post '/api/teachers/students',
+           headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
   end
