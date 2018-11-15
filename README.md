@@ -1,9 +1,10 @@
 [![CircleCI](https://circleci.com/gh/nishikawatadashi/examin.svg?style=shield&circle-token=41b2aced5a2b8630217b7b2b187196dc831b0625)](https://circleci.com/gh/nishikawatadashi/examin)
 
-# Examin (Webテストシステム)
+# Examin (バックエンド)
 
+[仕様書: API Blueprint](https://github.com/nishikawatadashi/examin_blueprint)     
 [フロントエンド: Vue.js](https://github.com/nishikawatadashi/examin_vue)     
-[バックエンド: Rails API](https://github.com/nishikawatadashi/examin)      
+[バックエンド: Rails API](https://github.com/nishikawatadashi/examin)       
 
 ## 開発環境
 
