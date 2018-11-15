@@ -7,6 +7,11 @@ RSpec.describe  Api::Teachers::ProblemsController, type: :routing do
         .to route_to('api/teachers/problems#index')
     end
 
+    it 'routes to #show' do
+      expect(get: '/api/teachers/problems/1')
+        .to route_to('api/teachers/problems#show', id: '1')
+    end
+
     it 'routes to #create' do
       expect(post: '/api/teachers/problems')
         .to route_to('api/teachers/problems#create')

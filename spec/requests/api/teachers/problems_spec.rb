@@ -67,7 +67,7 @@ RSpec.describe 'Teachers/Problems', type: :request do
         expect(json['problem']['user_id']).to eq(@teacher[:id])
       end
 
-      it '#createa 422' do
+      it '#create 422' do
         post '/api/teachers/problems',
              headers: { 'access-token': @api_key[:access_token] },
              params: { problem: {
@@ -138,6 +138,12 @@ RSpec.describe 'Teachers/Problems', type: :request do
       expect(response.status).to eq(401)
     end
 
+    it '#show 401' do
+      get '/api/teachers/problems/0',
+          headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
     it '#create 401' do
       post '/api/teachers/problems',
            headers: { 'access-token': student_api_key[:access_token] }
@@ -160,6 +166,11 @@ RSpec.describe 'Teachers/Problems', type: :request do
   describe '未ログイン講師に対するテスト' do
     it '#index 401' do
       get '/api/teachers/problems'
+      expect(response.status).to eq(401)
+    end
+
+    it '#show 401' do
+      get '/api/teachers/problems/0'
       expect(response.status).to eq(401)
     end
 
