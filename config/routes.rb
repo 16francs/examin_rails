@@ -7,12 +7,14 @@ Rails.application.routes.draw do
 
     # 講師用のpath
     namespace :teachers do
+      resources :problems, only: %i[index show create edit update]
       resources :students, only: %i[index show create]
       resources :teachers, only: %i[index show create edit update]
     end
 
     # 生徒用のpath
     namespace :students do
+      resources :problems, only: %i[index show]
       resources :students, only: %i[show edit update]
     end
   end

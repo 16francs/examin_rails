@@ -2,22 +2,30 @@ require 'rails_helper'
 
 RSpec.describe 'Students/Students', type: :request do
   before do
-    @user = build(:user)
     @student = create(:student)
     @api_key = @student.activate
   end
 
   describe '正しい生徒に対するテスト' do
     describe 'GET /api/students/students/:id' do
-      it '生徒詳細 取得' do
+      it '#show 200' do
         get '/api/students/students/' + @student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] }
         expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['user']['id']).to eq(@student[:id])
+        expect(json['user']['login_id']).to eq(@student[:login_id])
+        expect(json['user']['name']).to eq(@student[:name])
+        expect(json['user']['school']).to eq(@student[:school])
+        expect(json['user']['role']).to eq(nil)
+        expect(json['user']['encrypted_password']).to eq(nil)
+        expect(json['user']['salt']).to eq(nil)
       end
     end
 
     describe 'GET /api/students/students/:id/edit' do
-      it '生徒編集 取得' do
+      it '#edit 200' do
         get '/api/students/students/' + @student[:id].to_s + '/edit',
             headers: { 'access-token': @api_key[:access_token] }
         expect(response.status).to eq(200)
@@ -25,20 +33,24 @@ RSpec.describe 'Students/Students', type: :request do
     end
 
     describe 'PUT /api/students/students/:id' do
-      it '生徒編集 OK' do
+      let!(:user) { build(:student) }
+
+      it '#update 200' do
+        count = User.count
         put '/api/students/students/' + @student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { user: {
-              name: @user[:name],
-              school: @user[:school],
-              login_id: @user[:login_id],
+              name: user[:name],
+              school: user[:school],
+              login_id: user[:login_id],
               password: '12345678',
               password_confirmation: '12345678'
             } }
         expect(response.status).to eq(200)
+        expect(User.count).to eq(count)
       end
 
-      it '生徒編集 NG' do
+      it '#update 422' do
         put '/api/students/students/' + @student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { user: {
@@ -54,68 +66,64 @@ RSpec.describe 'Students/Students', type: :request do
   end
 
   describe '正しくない生徒に対するテスト' do
-    before do
-      @other_student = create(:student)
-      @other_api_key = @other_student.activate
-    end
+    let!(:other_student) { create(:student) }
+    let!(:other_student_api_key) { other_student.activate }
 
-    it '生徒詳細 取得 NG' do
+    it '#show 403' do
       get '/api/students/students/' + @student[:id].to_s,
-          headers: { 'access-token': @other_api_key[:access_token] }
+          headers: { 'access-token': other_student_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
 
-    it '生徒編集 取得 NG' do
+    it '#edit 403' do
       get '/api/students/students/' + @student[:id].to_s + '/edit',
-          headers: { 'access-token': @other_api_key[:access_token] }
+          headers: { 'access-token': other_student_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
 
-    it '生徒編集 NG' do
+    it '#update 403' do
       put '/api/students/students/' + @student[:id].to_s,
-          headers: { 'access-token': @other_api_key[:access_token] }
+          headers: { 'access-token': other_student_api_key[:access_token] }
       expect(response.status).to eq(403)
     end
   end
 
   describe '生徒以外に対するテスト' do
-    before do
-      @teacher = create(:teacher)
-      @teacher_api_key = @teacher.activate
+    let!(:teacher) { create(:teacher) }
+    let!(:teacher_api_key) { teacher.activate }
+
+    it '#show 401' do
+      get '/api/students/students/0',
+          headers: { 'access-token': teacher_api_key[:access_token] }
+      expect(response.status).to eq(401)
     end
 
-    it '生徒詳細 取得 NG' do
-      get '/api/students/students/' + @student[:id].to_s,
-          headers: { 'access-token': @teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
+    it '#edit 401' do
+      get '/api/students/students/0/edit',
+          headers: { 'access-token': teacher_api_key[:access_token] }
+      expect(response.status).to eq(401)
     end
 
-    it '生徒編集 取得 NG' do
-      get '/api/students/students/' + @student[:id].to_s + '/edit',
-          headers: { 'access-token': @teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
-    end
-
-    it '生徒編集 NG' do
-      put '/api/students/students/' + @student[:id].to_s,
-          headers: { 'access-token': @teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
+    it '#update 401' do
+      put '/api/students/students/0',
+          headers: { 'access-token': teacher_api_key[:access_token] }
+      expect(response.status).to eq(401)
     end
   end
 
   describe '未ログイン生徒に対するテスト' do
-    it '生徒詳細 取得 NG' do
-      get '/api/students/students/' + @student[:id].to_s
+    it '#show 401' do
+      get '/api/students/students/0'
       expect(response.status).to eq(401)
     end
 
-    it '生徒編集 取得 NG' do
-      get '/api/students/students/' + @student[:id].to_s + '/edit'
+    it '#edit 401' do
+      get '/api/students/students/0/edit'
       expect(response.status).to eq(401)
     end
 
-    it '生徒編集 NG' do
-      put '/api/students/students/' + @student[:id].to_s
+    it '#update 401' do
+      put '/api/students/students/0'
       expect(response.status).to eq(401)
     end
   end

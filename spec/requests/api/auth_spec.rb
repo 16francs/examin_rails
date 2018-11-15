@@ -12,14 +12,14 @@ RSpec.describe 'Auth', type: :request do
       expect(response.status).to eq(200)
       # jsonの検証
       json = JSON.parse(response.body)
-      expect(json['user']['id']).to_not eq(nil)
-      expect(json['user']['login_id']).to_not eq(nil)
-      expect(json['user']['name']).to_not eq(nil)
-      expect(json['user']['school']).to_not eq(nil)
-      expect(json['user']['role']).to_not eq(nil)
+      expect(json['user']['id']).to eq(@user[:id])
+      expect(json['user']['login_id']).to eq(@user[:login_id])
+      expect(json['user']['name']).to eq(@user[:name])
+      expect(json['user']['school']).to eq(@user[:school])
+      expect(json['user']['role']).to eq(@user[:role])
       expect(json['user']['encrypted_password']).to eq(nil)
       expect(json['user']['salt']).to eq(nil)
-      expect(json['api_key']['access_token']).to_not eq(nil)
+      expect(json['api_key']['access_token']).to eq(@api_key[:access_token])
       expect(json['api_key']['expires_at']).to_not eq(nil)
     end
 

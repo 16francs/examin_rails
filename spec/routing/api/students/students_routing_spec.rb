@@ -12,7 +12,7 @@ RSpec.describe Api::Students::StudentsController, type: :routing do
         .to route_to('api/students/students#edit', id: '1')
     end
 
-    it 'route to #update' do
+    it 'routes to #update' do
       expect(put: '/api/students/students/1')
         .to route_to('api/students/students#update', id: '1')
     end

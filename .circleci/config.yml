@@ -13,6 +13,7 @@ jobs:
         DATABASE_PASSWORD: ''
         DATABASE_HOST: 127.0.0.1
         DATABASE_PORT: 3306
+        CIRCLE_ARTIFACTS: /tmp/artifacts
     - image: circleci/mysql:5.7.23
       environment:
         MYSQL_USER: root
@@ -41,15 +42,15 @@ jobs:
         name: Database setup
         command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
 
-    # Run rspec in parallel
-    - run:
-        name: Run rspec in parallel
-        command: |
-          bundle exec rspec --profile 10 \
-                            --out test_results/rspec.xml \
-                            --format progress \
-                            $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
     # Run rubocop
     - run:
         name: Run rubocop
         command: bundle exec rubocop
+
+    # Run rspec in parallel
+    - run:
+        name: Run rspec
+        command: bundle exec rspec
+
+    - store_artifacts:
+        path: /tmp/artifacts/coverage

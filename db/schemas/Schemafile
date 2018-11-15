@@ -1,4 +1,7 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
+require 'answers.schema'
 require 'api_keys.schema'
+require 'problems.schema'
+require 'questions.schema'
 require 'users.schema'
