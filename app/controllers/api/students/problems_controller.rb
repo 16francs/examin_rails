@@ -13,4 +13,3 @@ class Api::Students::ProblemsController < Api::Students::BaseController
     end
   end
 end
-

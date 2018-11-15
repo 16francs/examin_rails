@@ -120,8 +120,8 @@ RSpec.describe 'Teachers/Problems', type: :request do
         put '/api/teachers/problems/' + problem[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { problem: {
-                title: nil,
-                content: nil
+              title: nil,
+              content: nil
             } }
         expect(response.status).to eq(422)
       end
