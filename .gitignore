@@ -8,6 +8,7 @@
 !/log/.keep
 !/tmp/.keep
 /coverage
+dump.rdb
 
 # Ignore idea files
 .idea/
