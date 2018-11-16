@@ -15,11 +15,6 @@ RSpec.describe Question, type: :model do
   end
 
   describe 'nilの場合のテスト NG' do
-    it 'numberがnil' do
-      @question[:number] = 0
-      expect(@question).to_not be_valid
-    end
-
     it 'sentenceがnil' do
       @question[:sentence] = nil
       expect(@question).to_not be_valid
@@ -44,16 +39,6 @@ RSpec.describe Question, type: :model do
   end
 
   describe '数値の検証' do
-    it 'numberの最小値' do
-      @question[:number] = 0
-      expect(@question).to_not be_valid
-    end
-
-    it 'numberは整数' do
-      @question[:number] = 0.1
-      expect(@question).to_not be_valid
-    end
-
     it 'typeの最小値' do
       @question[:type] = 0
       expect(@question).to_not be_valid

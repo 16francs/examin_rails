@@ -19,7 +19,6 @@ RSpec.describe 'Students/Questions', type: :request do
         # jsonの検証
         json = JSON.parse(response.body)
         expect(json['questions'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['number']).to_not eq(nil)
         expect(json['questions'][0]['sentence']).to_not eq(nil)
         expect(json['questions'][0]['type']).to_not eq(nil)
         expect(json['questions'][0]['correct']).to_not eq(nil)
