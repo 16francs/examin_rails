@@ -1,6 +1,8 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
+  rescue_from Exception, with: :internal_server_error
+
   private
 
   # アクセスが禁止場所へのリクエスト時の処理
@@ -20,6 +22,12 @@ class ApplicationController < ActionController::Base
   # 未ログインの場合の処理
   def unauthorized
     render json: { status: :error, message: :unauthorized }, status: :unauthorized
+  end
+
+  # サーバー側が原因の場合のエラー処理
+  def internal_server_error(error)
+    logger.error(error)
+    render json: { status: :error, message: :internal_server_error }, status: :internal_server_error
   end
 
   # ログインしているかの検証
