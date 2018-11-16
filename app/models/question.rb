@@ -1,5 +1,6 @@
 class Question < ApplicationRecord
   self.table_name = 'questions'
+  self.inheritance_column = :_type_disabled
   belongs_to :problem
   has_many :answers
 
