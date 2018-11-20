@@ -3,6 +3,7 @@ class Problem < ApplicationRecord
   belongs_to :user
   has_many :questions, dependent: :destroy
   has_many :answers, through: :questions, dependent: :destroy
+  accepts_nested_attributes_for :questions
 
   validates :title,
             presence: true,
