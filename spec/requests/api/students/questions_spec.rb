@@ -26,12 +26,6 @@ RSpec.describe 'Students/Questions', type: :request do
         expect(json['questions'][0]['updated_at']).to_not eq(nil)
         expect(json['questions'][0]['problem_id']).to eq(nil)
       end
-
-      it '#index 404' do
-        get '/api/students/problems/0/questions',
-            headers: { 'access-token': @api_key[:access_token] }
-        expect(response.status).to eq(404)
-      end
     end
   end
 
