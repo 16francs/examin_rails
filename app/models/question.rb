@@ -2,7 +2,8 @@ class Question < ApplicationRecord
   self.table_name = 'questions'
   self.inheritance_column = :_type_disabled
   belongs_to :problem
-  has_many :answers
+  has_many :achievements
+  has_many :answers, dependent: :delete_all
   accepts_nested_attributes_for :answers
 
   validates :sentence,

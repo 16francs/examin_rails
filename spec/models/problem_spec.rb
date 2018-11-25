@@ -11,8 +11,9 @@ RSpec.describe Problem, type: :model do
 
   describe 'Problemとの関連' do
     it { should belong_to(:user) }
+    it { should have_many(:problems_users) }
+    it { should have_many(:users) }
     it { should have_many(:questions) }
-    it { should have_many(:answers) }
   end
 
   describe 'nilの場合のテスト NG' do
