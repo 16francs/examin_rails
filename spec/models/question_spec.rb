@@ -39,7 +39,7 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  describe '数値の検証' do
+  describe '数値の検証 NG' do
     it 'typeの最小値' do
       @question[:type] = 0
       expect(@question).to_not be_valid
