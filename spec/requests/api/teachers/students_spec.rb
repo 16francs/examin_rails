@@ -8,8 +8,6 @@ RSpec.describe 'Teachers/Students', type: :request do
 
   describe '正しい講師に対するテスト' do
     describe 'POST /api/teachers/students/check_unique' do
-      let!(:user) { create(:student) }
-
       it '#check_unique OK' do
         post '/api/teachers/students/check_unique',
              headers: { 'access-token': @api_key[:access_token] },

@@ -7,6 +7,67 @@ RSpec.describe 'Teachers/Problems', type: :request do
   end
 
   describe '正しい講師に対するテスト' do
+    describe 'POST /api/teachers/teachers/check_unique' do
+      let!(:problem) { create(:problem, :with_user) }
+
+      it '#check_unique OK' do
+        post '/api/teachers/problems/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { title: nil }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(true)
+      end
+
+      it '#check_unique NG' do
+        post '/api/teachers/problems/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { title: problem[:title] }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(false)
+      end
+    end
+
+    describe 'POST /api/teachers/problems/:id/check/unique' do
+      let!(:problem) { create(:problem, :with_user) }
+      let!(:other_problem) { create(:problem, :with_user) }
+
+      describe '#check_unique OK' do
+        it '編集箇所と同じ値' do
+          post '/api/teachers/problems/' + problem[:id].to_s + '/check_unique',
+               headers: { 'access-token': @api_key[:access_token] },
+               params: { title: problem[:title] }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['check_unique']).to eq(true)
+        end
+
+        it '編集箇所と違う値' do
+          post '/api/teachers/problems/' + problem[:id].to_s + '/check_unique',
+               headers: { 'access-token': @api_key[:access_token] },
+               params: { title: '' }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['check_unique']).to eq(true)
+        end
+      end
+
+      it '#check_unique NG' do
+        post '/api/teachers/problems/' + problem[:id].to_s + '/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { title: other_problem[:title] }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(false)
+      end
+    end
+
     describe 'GET /api/teachers/problems' do
       let!(:problem) { create(:problem, :with_user) }
 
@@ -142,6 +203,16 @@ RSpec.describe 'Teachers/Problems', type: :request do
     let!(:student) { create(:student) }
     let!(:student_api_key) { student.activate }
 
+    it '#check_unique 401' do
+      post '/api/teachers/problems/check_unique',
+           headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+
+      post '/api/teachers/problems/0/check_unique',
+           headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
     it '#index 401' do
       get '/api/teachers/problems',
           headers: { 'access-token': student_api_key[:access_token] }
@@ -174,6 +245,14 @@ RSpec.describe 'Teachers/Problems', type: :request do
   end
 
   describe '未ログイン講師に対するテスト' do
+    it 'routes to #check_unique' do
+      post '/api/teachers/problems/check_unique'
+      expect(response.status).to eq(401)
+
+      post '/api/teachers/problems/0/check_unique'
+      expect(response.status).to eq(401)
+    end
+
     it '#index 401' do
       get '/api/teachers/problems'
       expect(response.status).to eq(401)

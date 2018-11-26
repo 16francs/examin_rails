@@ -1,4 +1,8 @@
 class Api::Teachers::ProblemsController < Api::Teachers::BaseController
+  def check_unique
+    render json: { check_unique: title_unique? }
+  end
+
   def index
     @problems = Problem.all
     render :index, formats: :json, handlers: :jbuilder
@@ -48,6 +52,17 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
   end
 
   private
+
+  def title_unique?
+    if params[:id] # update or create
+      return true if Problem.pluck(:title).exclude?(params[:title])
+
+      problem = Problem.find(params[:id])
+      problem[:title] == params[:title]
+    else
+      Problem.pluck(:title).exclude?(params[:title])
+    end
+  end
 
   def problem_params
     params.require(:problem).permit(
