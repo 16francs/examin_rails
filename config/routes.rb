@@ -16,11 +16,12 @@ Rails.application.routes.draw do
 
     # 生徒用のpath
     namespace :students do
-      resources :achievements, only: %i[index show]
       resources :problems, only: %i[index show] do
-        resources :achievements, only: %i[create]
+        resources :problems_users, only: %i[create]
         resources :questions, only: %i[index]
+        post 'achievement', on: :member
       end
+      resources :problems_users, only: %i[index show]
       resources :students, only: %i[show edit update]
     end
   end
