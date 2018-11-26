@@ -34,5 +34,15 @@ RSpec.describe Api::Teachers::TeachersController, type: :routing do
       expect(put: '/api/teachers/teachers/1')
         .to route_to('api/teachers/teachers#update', id: '1')
     end
+
+    it 'routes to #edit_admin' do
+      expect(get: '/api/teachers/teachers/1/edit_admin')
+        .to route_to('api/teachers/teachers#edit_admin', id: '1')
+    end
+
+    it 'routes to #update_admin' do
+      expect(put: '/api/teachers/teachers/1/update_admin')
+        .to route_to('api/teachers/teachers#update_admin', id: '1')
+    end
   end
 end

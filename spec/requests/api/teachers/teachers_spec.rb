@@ -32,15 +32,32 @@ RSpec.describe 'Teachers/Teachers', type: :request do
     describe 'POST /api/teachers/teachers/:id/check/unique' do
       let!(:user) { create(:teacher) }
 
+      before do
+        @admin = create(:admin)
+        @admin_api_key = @admin.activate
+      end
+
       describe '#check_unique OK' do
-        it '編集箇所と同じ値' do
-          post '/api/teachers/teachers/' + @teacher[:id].to_s + '/check_unique',
-               headers: { 'access-token': @api_key[:access_token] },
-               params: { login_id: @teacher[:login_id] }
-          expect(response.status).to eq(200)
-          # jsonの検証
-          json = JSON.parse(response.body)
-          expect(json['check_unique']).to eq(true)
+        describe '編集箇所と同じ値' do
+          it 'current_user' do
+            post '/api/teachers/teachers/' + @teacher[:id].to_s + '/check_unique',
+                 headers: { 'access-token': @api_key[:access_token] },
+                 params: { login_id: @teacher[:login_id] }
+            expect(response.status).to eq(200)
+            # jsonの検証
+            json = JSON.parse(response.body)
+            expect(json['check_unique']).to eq(true)
+          end
+
+          it 'not current_user' do
+            post '/api/teachers/teachers/' + @teacher[:id].to_s + '/check_unique',
+                 headers: { 'access-token': @admin_api_key[:access_token] },
+                 params: { login_id: @teacher[:login_id] }
+            expect(response.status).to eq(200)
+            # jsonの検証
+            json = JSON.parse(response.body)
+            expect(json['check_unique']).to eq(true)
+          end
         end
 
         it '編集箇所と違う値' do
@@ -182,6 +199,61 @@ RSpec.describe 'Teachers/Teachers', type: :request do
               name: nil,
               school: nil,
               login_id: nil,
+              password: nil,
+              password_confirmation: nil
+            } }
+        expect(response.status).to eq(422)
+      end
+    end
+
+    describe 'GET /api/teachers/teachers/:id/edit_admin' do
+      before do
+        @admin = create(:admin)
+        @admin_api_key = @admin.activate
+      end
+
+      it '#edit 200' do
+        get '/api/teachers/teachers/' + @teacher[:id].to_s + '/edit_admin',
+            headers: { 'access-token': @admin_api_key[:access_token] }
+        expect(response.status).to eq(200)
+      end
+    end
+
+    describe 'PUT /api/teachers/teachers/:id/update_admin' do
+      let!(:user) { build(:teacher) }
+
+      before do
+        @admin = create(:admin)
+        @admin_api_key = @admin.activate
+      end
+
+      it '#update 200' do
+        count = User.count
+        put '/api/teachers/teachers/' + @teacher[:id].to_s + '/update_admin',
+            headers: { 'access-token': @admin_api_key[:access_token] },
+            params: { user: {
+              name: user[:name],
+              school: user[:school],
+              login_id: user[:login_id],
+              role: 2,
+              password: '12345678',
+              password_confirmation: '12345678'
+            } }
+        expect(response.status).to eq(200)
+        expect(User.count).to eq(count)
+        # roleの値の確認 (講師の初期権限: 1)
+        json = JSON.parse(response.body)
+        expect(json['user']['role']).to eq(2)
+      end
+
+      it '#update 422' do
+        put '/api/teachers/teachers/' + @teacher[:id].to_s + '/update_admin',
+            headers: { 'access-token': @admin_api_key[:access_token] },
+            params: { user: {
+              name: nil,
+              school: nil,
+              login_id: nil,
+              role: nil,
               password: nil,
               password_confirmation: nil
             } }

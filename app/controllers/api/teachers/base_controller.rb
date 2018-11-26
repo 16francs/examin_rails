@@ -14,4 +14,9 @@ class Api::Teachers::BaseController < ApplicationController
   def correct_teacher?(user)
     user == current_user
   end
+
+  # 管理者であるかの確認
+  def admin_teacher
+    forbidden unless current_user[:role] == 2 || current_user[:role] == 3
+  end
 end

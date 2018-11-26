@@ -1,5 +1,6 @@
 class Api::Teachers::TeachersController < Api::Teachers::BaseController
   before_action :correct_teacher, only: %i[edit update]
+  before_action :admin_teacher, only: %i[edit_admin update_admin]
 
   def check_unique
     render json: { check_unique: login_id_unique? }
@@ -43,6 +44,20 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
     end
   end
 
+  def edit_admin
+    @user = User.find_by(params[:id], role: 1..3)
+    render :edit, formats: :json, handlers: :jbuilder
+  end
+
+  def update_admin
+    @user = User.find_by(params[:id], role: 1..3)
+    if @user.update(user_params_admin)
+      render :update, formats: :json, handelrs: :jbuilder
+    else
+      record_invalid(@user)
+    end
+  end
+
   private
 
   def correct_teacher
@@ -67,5 +82,9 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
 
   def user_params
     params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school)
+  end
+
+  def user_params_admin
+    params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school, :role)
   end
 end
