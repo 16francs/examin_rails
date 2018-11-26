@@ -12,6 +12,7 @@ Rails.application.routes.draw do
         post 'check_unique', on: :member
         resources :questions, only: %i[index]
       end
+      resources :problems_users, only: %i[index show]
       resources :students, only: %i[index show create] do
         post 'check_unique', on: :collection
       end
