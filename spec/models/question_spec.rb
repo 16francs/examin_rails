@@ -11,6 +11,7 @@ RSpec.describe Question, type: :model do
 
   describe 'Questionとの関連' do
     it { should belong_to(:problem) }
+    it { should have_many(:achievements) }
     it { should have_many(:answers) }
   end
 
@@ -38,7 +39,7 @@ RSpec.describe Question, type: :model do
     end
   end
 
-  describe '数値の検証' do
+  describe '数値の検証 NG' do
     it 'typeの最小値' do
       @question[:type] = 0
       expect(@question).to_not be_valid

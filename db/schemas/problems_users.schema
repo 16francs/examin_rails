@@ -1,0 +1,10 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "problems_users", id: :bigint, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8", force: :cascade do |t|
+  t.bigint "problem_id", null: false, unsigned: true
+  t.bigint "user_id", null: false, unsigned: true
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+  t.index ["problem_id"], name: "achievements"
+  t.index ["user_id"], name: "user_id"
+end

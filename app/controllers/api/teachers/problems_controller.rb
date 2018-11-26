@@ -50,6 +50,16 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
   private
 
   def problem_params
-    params.require(:problem).permit(:title, :content)
+    params.require(:problem).permit(
+      :title, :content,
+      questions_attributes: [
+        :sentence,
+        :type,
+        :correct,
+        answers_attributes: [
+          :choice
+        ]
+      ]
+    )
   end
 end

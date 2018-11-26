@@ -11,5 +11,10 @@ RSpec.describe Api::Students::ProblemsController, type: :routing do
       expect(get: '/api/students/problems/1')
         .to route_to('api/students/problems#show', id: '1')
     end
+
+    it 'routes to #achievement' do
+      expect(post: '/api/students/problems/1/achievement')
+        .to route_to('api/students/problems#achievement', id: '1')
+    end
   end
 end

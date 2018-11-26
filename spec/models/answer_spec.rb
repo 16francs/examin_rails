@@ -20,7 +20,7 @@ RSpec.describe Answer, type: :model do
     end
   end
 
-  describe '長さの検証' do
+  describe '長さの検証 NG' do
     it 'choiceの最大値' do
       @answer[:choice] = 'a' * 201
       expect(@answer).to_not be_valid

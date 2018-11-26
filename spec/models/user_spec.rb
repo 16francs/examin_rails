@@ -12,6 +12,7 @@ RSpec.describe User, type: :model do
   describe 'Userとの関連' do
     it { should have_one(:api_key) }
     it { should have_many(:problems) }
+    it { should have_many(:problems_users) }
   end
 
   describe 'nilの場合のテスト NG' do
@@ -89,6 +90,18 @@ RSpec.describe User, type: :model do
         @api_key = @user.activate
         expect(@api_key.before_expired?).to eq(true)
       end
+    end
+  end
+
+  describe 'inactivate' do
+    before do
+      @user.save
+      @api_key = @user.activate
+    end
+
+    it 'ログアウト処理' do
+      @user.inactivate
+      expect(@user.api_key[:activated]).to eq(false)
     end
   end
 end
