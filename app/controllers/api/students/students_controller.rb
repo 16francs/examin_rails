@@ -1,5 +1,9 @@
 class Api::Students::StudentsController < Api::Students::BaseController
-  before_action :correct_student
+  before_action :correct_student, only: %i[show edit update]
+
+  def check_unique
+    render json: { check_unique: login_id_unique? }
+  end
 
   def show
     @user = User.find(params[:id])
@@ -25,6 +29,12 @@ class Api::Students::StudentsController < Api::Students::BaseController
   def correct_student
     user = User.find(params[:id])
     forbidden unless correct_student?(user)
+  end
+
+  def login_id_unique?
+    return true if User.pluck(:login_id).exclude?(params[:login_id])
+
+    current_user[:login_id] == params[:login_id]
   end
 
   def user_params

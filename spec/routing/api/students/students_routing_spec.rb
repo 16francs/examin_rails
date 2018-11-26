@@ -2,6 +2,11 @@ require 'rails_helper'
 
 RSpec.describe Api::Students::StudentsController, type: :routing do
   describe 'routing' do
+    it 'routes to #check_unique' do
+      expect(post: '/api/students/students/check_unique')
+        .to route_to('api/students/students#check_unique')
+    end
+
     it 'routes to #show' do
       expect(get: '/api/students/students/1')
         .to route_to('api/students/students#show', id: '1')

@@ -18,14 +18,15 @@ Rails.application.routes.draw do
     namespace :students do
       resources :problems, only: %i[index show] do
         post 'achievement', on: :member
-
         resources :problems_users, only: %i[create]
         resources :questions, only: %i[index] do
           get 'random', on: :collection
         end
       end
       resources :problems_users, only: %i[index show]
-      resources :students, only: %i[show edit update]
+      resources :students, only: %i[show edit update] do
+        post 'check_unique', on: :collection
+      end
     end
   end
 end
