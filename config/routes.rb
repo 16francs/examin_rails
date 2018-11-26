@@ -10,7 +10,9 @@ Rails.application.routes.draw do
       resources :problems, only: %i[index show create edit update] do
         resources :questions, only: %i[index]
       end
-      resources :students, only: %i[index show create]
+      resources :students, only: %i[index show create] do
+        post 'check_unique', on: :collection
+      end
       resources :teachers, only: %i[index show create edit update] do
         post 'check_unique', on: :collection
         post 'check_unique', on: :member

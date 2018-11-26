@@ -7,6 +7,30 @@ RSpec.describe 'Teachers/Students', type: :request do
   end
 
   describe '正しい講師に対するテスト' do
+    describe 'POST /api/teachers/students/check_unique' do
+      let!(:user) { create(:student) }
+
+      it '#check_unique OK' do
+        post '/api/teachers/students/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { login_id: nil }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(true)
+      end
+
+      it '#check_unique NG' do
+        post '/api/teachers/students/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { login_id: @teacher[:login_id] }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(false)
+      end
+    end
+
     describe 'GET /api/teachers/students' do
       let!(:user) { create(:student) }
 
@@ -92,6 +116,12 @@ RSpec.describe 'Teachers/Students', type: :request do
     let!(:student_api_key) { student.activate }
 
     it '#create 401' do
+      post '/api/teachers/students/check_unique',
+           headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '#create 401' do
       post '/api/teachers/students',
            headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)
@@ -99,6 +129,11 @@ RSpec.describe 'Teachers/Students', type: :request do
   end
 
   describe '未ログイン講師に対するテスト' do
+    it '#check_unique 401' do
+      post '/api/teachers/students/check_unique'
+      expect(response.status).to eq(401)
+    end
+
     it '#create 401' do
       post '/api/teachers/students'
       expect(response.status).to eq(401)

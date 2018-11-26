@@ -1,4 +1,8 @@
 class Api::Teachers::StudentsController < Api::Teachers::BaseController
+  def check_unique
+    render json: { check_unique: login_id_unique? }
+  end
+
   def index
     @users = User.where(role: 0)
     render :index, formats: :json, handlers: :jbuilder
@@ -24,6 +28,10 @@ class Api::Teachers::StudentsController < Api::Teachers::BaseController
   end
 
   private
+
+  def login_id_unique?
+    User.pluck(:login_id).exclude?(params[:login_id])
+  end
 
   def user_params
     params.require(:user)
