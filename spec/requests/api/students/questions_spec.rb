@@ -27,6 +27,34 @@ RSpec.describe 'Students/Questions', type: :request do
         expect(json['questions'][0]['problem_id']).to eq(nil)
       end
     end
+
+    describe 'GET: /api/students/problems/:problem_id/questions/random' do
+      let!(:problem) { create(:problem, :with_user) }
+      let!(:question) { create(:question, problem: problem) }
+      let!(:answer) { create(:answer, question: question) }
+
+      it '#random 200' do
+        get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
+            headers: { 'access-token': @api_key[:access_token] },
+            params: { count: 1 }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['questions'][0]['id']).to_not eq(nil)
+        expect(json['questions'][0]['sentence']).to_not eq(nil)
+        expect(json['questions'][0]['type']).to_not eq(nil)
+        expect(json['questions'][0]['correct']).to_not eq(nil)
+        expect(json['questions'][0]['created_at']).to_not eq(nil)
+        expect(json['questions'][0]['updated_at']).to_not eq(nil)
+        expect(json['questions'][0]['problem_id']).to eq(nil)
+      end
+
+      it '#random 422' do
+        get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(422)
+      end
+    end
   end
 
   describe '生徒以外に対するテスト' do
@@ -38,11 +66,22 @@ RSpec.describe 'Students/Questions', type: :request do
           headers: { 'access-token': teacher_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
+
+    it '#random 401' do
+      get '/api/students/problems/0/questions/random',
+          headers: { 'access-token': teacher_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
   end
 
   describe '未ログイン生徒に対するテスト' do
     it '#index 401' do
       get '/api/students/problems/0/questions'
+      expect(response.status).to eq(401)
+    end
+
+    it '#random 401' do
+      get '/api/students/problems/0/questions/random'
       expect(response.status).to eq(401)
     end
   end

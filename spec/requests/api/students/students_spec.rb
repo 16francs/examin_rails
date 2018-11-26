@@ -7,6 +7,42 @@ RSpec.describe 'Students/Students', type: :request do
   end
 
   describe '正しい生徒に対するテスト' do
+    describe 'POST /api/students/students/check_unique' do
+      let!(:user) { create(:student) }
+
+      describe '#check_unique OK' do
+        it '編集箇所と同じ値' do
+          post '/api/students/students/check_unique',
+               headers: { 'access-token': @api_key[:access_token] },
+               params: { login_id: @student[:login_id] }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['check_unique']).to eq(true)
+        end
+
+        it '編集箇所と違う値' do
+          post '/api/students/students/check_unique',
+               headers: { 'access-token': @api_key[:access_token] },
+               params: { login_id: '' }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['check_unique']).to eq(true)
+        end
+      end
+
+      it '#check_unique NG' do
+        post '/api/students/students/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { login_id: user[:login_id] }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(false)
+      end
+    end
+
     describe 'GET /api/students/students/:id' do
       it '#show 200' do
         get '/api/students/students/' + @student[:id].to_s,
@@ -93,6 +129,12 @@ RSpec.describe 'Students/Students', type: :request do
     let!(:teacher_api_key) { teacher.activate }
 
     it '#show 401' do
+      get '/api/students/students/check_unique',
+          headers: { 'access-token': teacher_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '#show 401' do
       get '/api/students/students/0',
           headers: { 'access-token': teacher_api_key[:access_token] }
       expect(response.status).to eq(401)
@@ -112,6 +154,11 @@ RSpec.describe 'Students/Students', type: :request do
   end
 
   describe '未ログイン生徒に対するテスト' do
+    it '#check_unique 401' do
+      get '/api/students/students/check_unique'
+      expect(response.status).to eq(401)
+    end
+
     it '#show 401' do
       get '/api/students/students/0'
       expect(response.status).to eq(401)
