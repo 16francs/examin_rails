@@ -17,6 +17,7 @@ Rails.application.routes.draw do
     # 生徒用のpath
     namespace :students do
       resources :problems, only: %i[index show] do
+        resources :achievements, only: %i[create]
         resources :questions, only: %i[index]
       end
       resources :students, only: %i[show edit update]
