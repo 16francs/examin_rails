@@ -11,7 +11,10 @@ Rails.application.routes.draw do
         resources :questions, only: %i[index]
       end
       resources :students, only: %i[index show create]
-      resources :teachers, only: %i[index show create edit update]
+      resources :teachers, only: %i[index show create edit update] do
+        post 'check_unique', on: :collection
+        post 'check_unique', on: :member
+      end
     end
 
     # 生徒用のpath

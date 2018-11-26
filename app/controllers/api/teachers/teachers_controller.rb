@@ -1,6 +1,10 @@
 class Api::Teachers::TeachersController < Api::Teachers::BaseController
   before_action :correct_teacher, only: %i[edit update]
 
+  def check_unique
+    render json: { check_unique: login_id_unique? }
+  end
+
   def index
     @users = User.where(role: 1..3)
     render :index, formats: :json, handlers: :jbuilder
@@ -44,6 +48,21 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
   def correct_teacher
     user = User.find(params[:id])
     forbidden unless correct_teacher?(user)
+  end
+
+  def login_id_unique? # rubocop:disable AbcSize
+    if params[:id] # update or create
+      return true if User.pluck(:login_id).exclude?(params[:login_id])
+
+      if current_user[:id] == params[:id].to_i # current user or not
+        current_user[:login_id] == params[:login_id]
+      else
+        user = User.find(params[:id])
+        user[:login_id] == params[:login_id]
+      end
+    else
+      User.pluck(:login_id).exclude?(params[:login_id])
+    end
   end
 
   def user_params
