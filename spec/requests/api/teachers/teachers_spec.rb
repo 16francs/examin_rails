@@ -79,6 +79,8 @@ RSpec.describe 'Teachers/Teachers', type: :request do
         expect(json['users'][0]['name']).to_not eq(nil)
         expect(json['users'][0]['school']).to_not eq(nil)
         expect(json['users'][0]['role']).to_not eq(nil)
+        expect(json['users'][0]['created_at']).to_not eq(nil)
+        expect(json['users'][0]['updated_at']).to_not eq(nil)
         expect(json['users'][0]['encrypted_password']).to eq(nil)
         expect(json['users'][0]['salt']).to eq(nil)
       end

@@ -80,7 +80,6 @@ RSpec.describe 'Teachers/Problems', type: :request do
         expect(json['problems'][0]['id']).to_not eq(nil)
         expect(json['problems'][0]['title']).to_not eq(nil)
         expect(json['problems'][0]['content']).to_not eq(nil)
-        expect(json['problems'][0]['user_id']).to eq(nil)
         expect(json['problems'][0]['created_at']).to_not eq(nil)
         expect(json['problems'][0]['updated_at']).to_not eq(nil)
         expect(json['problems'][0]['user']['id']).to_not eq(nil)

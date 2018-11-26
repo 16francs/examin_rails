@@ -43,6 +43,8 @@ RSpec.describe 'Teachers/Students', type: :request do
         expect(json['users'][0]['name']).to_not eq(nil)
         expect(json['users'][0]['school']).to_not eq(nil)
         expect(json['users'][0]['role']).to_not eq(nil)
+        expect(json['users'][0]['created_at']).to_not eq(nil)
+        expect(json['users'][0]['updated_at']).to_not eq(nil)
         expect(json['users'][0]['encrypted_password']).to eq(nil)
         expect(json['users'][0]['salt']).to eq(nil)
       end
@@ -62,6 +64,8 @@ RSpec.describe 'Teachers/Students', type: :request do
         expect(json['user']['name']).to eq(user[:name])
         expect(json['user']['school']).to eq(user[:school])
         expect(json['user']['role']).to eq(user[:role])
+        expect(json['user']['created_at']).to_not eq(nil)
+        expect(json['user']['updated_at']).to_not eq(nil)
         expect(json['user']['encrypted_password']).to eq(nil)
         expect(json['user']['salt']).to eq(nil)
       end

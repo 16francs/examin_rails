@@ -24,7 +24,8 @@ RSpec.describe 'teachers/Questions', type: :request do
         expect(json['questions'][0]['correct']).to_not eq(nil)
         expect(json['questions'][0]['created_at']).to_not eq(nil)
         expect(json['questions'][0]['updated_at']).to_not eq(nil)
-        expect(json['questions'][0]['problem_id']).to eq(nil)
+        expect(json['questions'][0]['answers'][0]['id']).to_not eq(nil)
+        expect(json['questions'][0]['answers'][0]['choice']).to_not eq(nil)
       end
     end
   end

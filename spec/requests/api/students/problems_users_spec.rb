@@ -45,8 +45,11 @@ RSpec.describe 'Students/ProblemsUsers', type: :request do
         expect(json['achievements'][0]['question_id']).to_not eq(nil)
         expect(json['achievements'][0]['result']).to_not eq(nil)
         expect(json['achievements'][0]['user_choice']).to_not eq(nil)
+        expect(json['achievements'][0]['question']['id']).to_not eq(nil)
         expect(json['achievements'][0]['question']['sentence']).to_not eq(nil)
         expect(json['achievements'][0]['question']['correct']).to_not eq(nil)
+        expect(json['achievements'][0]['question']['answers'][0]['id']).to_not eq(nil)
+        expect(json['achievements'][0]['question']['answers'][0]['choice']).to_not eq(nil)
       end
     end
   end
