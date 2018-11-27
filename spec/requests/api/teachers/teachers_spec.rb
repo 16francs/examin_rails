@@ -299,4 +299,3 @@ RSpec.describe 'Teachers/Teachers', type: :request do
     end
   end
 end
-
