@@ -3,6 +3,7 @@ Rails.application.routes.draw do
     # 共通のpath
     get    '/auth', to: 'auth#show'
     post   '/auth', to: 'auth#create'
+    put    '/auth', to: 'auth#update'
     delete '/auth', to: 'auth#destroy'
 
     # 講師用のpath

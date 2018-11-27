@@ -10,6 +10,10 @@ RSpec.describe Api::AuthController, type: :routing do
       expect(post: '/api/auth').to route_to('api/auth#create')
     end
 
+    it 'routes to #update' do
+      expect(put: '/api/auth').to route_to('api/auth#update')
+    end
+
     it 'routes to #destroy' do
       expect(delete: '/api/auth').to route_to('api/auth#destroy')
     end
