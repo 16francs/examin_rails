@@ -21,8 +21,6 @@ Rails.application.routes.draw do
       resources :teachers, only: %i[index show create edit update] do
         post 'check_unique', on: :collection
         post 'check_unique', on: :member
-        get 'edit_admin', on: :member
-        put 'update_admin', on: :member
       end
     end
 

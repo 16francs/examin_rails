@@ -172,7 +172,6 @@ RSpec.describe 'Teachers/Students', type: :request do
       let!(:user) { build(:user) }
 
       it '#update 200' do
-        count = User.count
         put '/api/teachers/students/' + student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { user: {
@@ -183,7 +182,6 @@ RSpec.describe 'Teachers/Students', type: :request do
               password_confirmation: '12345678'
             } }
         expect(response.status).to eq(200)
-        expect(User.count).to eq(count)
       end
 
       it '#update 422' do
