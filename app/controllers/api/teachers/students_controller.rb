@@ -39,11 +39,14 @@ class Api::Teachers::StudentsController < Api::Teachers::BaseController
   end
 
   def update
-    @user = User.find_by(params[:id], role: 0)
-    if @user.update(user_params)
-      render :update, formats: :json, handelrs: :jbuilder
+    if @user ||= User.find_by(params[:id], role: 0)
+      if @user.update(user_params)
+        render :update, formats: :json, handelrs: :jbuilder
+      else
+        record_invalid(@user)
+      end
     else
-      record_invalid(@user)
+      not_found
     end
   end
 
