@@ -18,5 +18,11 @@ FactoryBot.define do
       role { 1 }
       sequence(:login_id) { |n| "test_teacher#{n}" }
     end
+
+    factory :admin do
+      name { '管理者' }
+      role { 3 }
+      sequence(:login_id) { |n| "test_admin#{n}" }
+    end
   end
 end
