@@ -1,4 +1,6 @@
 class Api::Teachers::StudentsController < Api::Teachers::BaseController
+  before_action :admin_teacher, only: %i[edit update]
+
   def check_unique
     render json: { check_unique: login_id_unique? }
   end
@@ -22,6 +24,20 @@ class Api::Teachers::StudentsController < Api::Teachers::BaseController
     @user[:role] = 0
     if @user.save
       render :create, formats: :json, handlers: :jbuilder
+    else
+      record_invalid(@user)
+    end
+  end
+
+  def edit
+    @user = User.find_by(params[:id], role: 0)
+    render :edit, formats: :json, handlers: :jbuilder
+  end
+
+  def update
+    @user = User.find_by(params[:id], role: 0)
+    if @user.update(user_params)
+      render :update, formats: :json, handelrs: :jbuilder
     else
       record_invalid(@user)
     end

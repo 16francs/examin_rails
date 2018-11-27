@@ -212,7 +212,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
         @admin_api_key = @admin.activate
       end
 
-      it '#edit 200' do
+      it '#edit_admin 200' do
         get '/api/teachers/teachers/' + @teacher[:id].to_s + '/edit_admin',
             headers: { 'access-token': @admin_api_key[:access_token] }
         expect(response.status).to eq(200)
@@ -227,7 +227,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
         @admin_api_key = @admin.activate
       end
 
-      it '#update 200' do
+      it '#update_admin 200' do
         count = User.count
         put '/api/teachers/teachers/' + @teacher[:id].to_s + '/update_admin',
             headers: { 'access-token': @admin_api_key[:access_token] },
@@ -246,7 +246,7 @@ RSpec.describe 'Teachers/Teachers', type: :request do
         expect(json['user']['role']).to eq(2)
       end
 
-      it '#update 422' do
+      it '#update_admin 422' do
         put '/api/teachers/teachers/' + @teacher[:id].to_s + '/update_admin',
             headers: { 'access-token': @admin_api_key[:access_token] },
             params: { user: {
@@ -259,6 +259,20 @@ RSpec.describe 'Teachers/Teachers', type: :request do
             } }
         expect(response.status).to eq(422)
       end
+    end
+  end
+
+  describe '管理者以外に対するテスト' do
+    it '#edit_admin 403' do
+      get '/api/teachers/teachers/0/edit_admin',
+          headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(403)
+    end
+
+    it '#update_admin 403' do
+      put '/api/teachers/teachers/0/update_admin',
+          headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(403)
     end
   end
 
@@ -322,6 +336,18 @@ RSpec.describe 'Teachers/Teachers', type: :request do
           headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
+
+    it '#edit_admin 401' do
+      get '/api/teachers/teachers/0/edit_admin',
+          headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '#update_admin 401' do
+      put '/api/teachers/teachers/0/update_admin',
+          headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
   end
 
   describe '未ログイン講師に対するテスト' do
@@ -355,6 +381,16 @@ RSpec.describe 'Teachers/Teachers', type: :request do
 
     it '#update 401' do
       put '/api/teachers/teachers/0'
+      expect(response.status).to eq(401)
+    end
+
+    it '#edit_admin 401' do
+      get '/api/teachers/teachers/0/edit_admin'
+      expect(response.status).to eq(401)
+    end
+
+    it '#update_admin 401' do
+      put '/api/teachers/teachers/0/update_admin'
       expect(response.status).to eq(401)
     end
   end
