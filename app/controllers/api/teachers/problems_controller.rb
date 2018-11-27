@@ -37,8 +37,7 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
   end
 
   def update
-    @problem = Problem.find_by(id: params[:id])
-    if @problem
+    if @problem ||= Problem.find_by(id: params[:id])
       if @problem.update(problem_params)
         @problem.user = current_user
         @problem.save

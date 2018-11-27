@@ -184,6 +184,19 @@ RSpec.describe 'Teachers/Students', type: :request do
         expect(response.status).to eq(200)
       end
 
+      it '#update 404' do
+        put '/api/teachers/students/0',
+            headers: { 'access-token': @api_key[:access_token] },
+            params: { user: {
+              name: nil,
+              school: nil,
+              login_id: nil,
+              password: nil,
+              password_confirmation: nil
+            } }
+        expect(response.status).to eq(404)
+      end
+
       it '#update 422' do
         put '/api/teachers/students/' + student[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },

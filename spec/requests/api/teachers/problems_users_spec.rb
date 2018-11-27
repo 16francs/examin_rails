@@ -57,6 +57,12 @@ RSpec.describe 'Teachers/ProblemsUsers', type: :request do
         expect(json['achievements'][0]['question']['answers'][0]['id']).to_not eq(nil)
         expect(json['achievements'][0]['question']['answers'][0]['choice']).to_not eq(nil)
       end
+
+      it '#show 404' do
+        get '/api/teachers/problems_users/0',
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(404)
+      end
     end
   end
 
