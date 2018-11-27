@@ -55,43 +55,6 @@ RSpec.describe 'Auth', type: :request do
     end
   end
 
-  describe 'PUT /api/auth' do
-    describe '正しいユーザー' do
-      let!(:user) { build(:user) }
-
-      it '#update 200' do
-        put '/api/auth',
-            headers: { 'access-token': @api_key[:access_token] },
-            params: { user: {
-              name: user[:name],
-              school: user[:school],
-              login_id: user[:login_id],
-              password: '12345678',
-              password_confirmation: '12345678'
-            } }
-        expect(response.status).to eq(200)
-      end
-
-      it '#update 422' do
-        put '/api/auth',
-            headers: { 'access-token': @api_key[:access_token] },
-            params: { user: {
-              name: nil,
-              school: nil,
-              login_id: nil,
-              password: nil,
-              password_confirmation: nil
-            } }
-        expect(response.status).to eq(422)
-      end
-    end
-
-    it '未ログインユーザー' do
-      put '/api/auth'
-      expect(response.status).to eq(401)
-    end
-  end
-
   describe 'Delete /api/auth' do
     it 'ログインユーザー' do
       delete '/api/auth', headers: { 'access-token': @api_key[:access_token] }

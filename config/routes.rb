@@ -3,8 +3,9 @@ Rails.application.routes.draw do
     # 共通のpath
     get    '/auth', to: 'auth#show'
     post   '/auth', to: 'auth#create'
-    put    '/auth', to: 'auth#update'
     delete '/auth', to: 'auth#destroy'
+    post '/users/check_unique', to: 'users#check_unique'
+    put  '/users', to: 'users#update'
 
     # 講師用のpath
     namespace :teachers do
@@ -35,7 +36,6 @@ Rails.application.routes.draw do
         end
       end
       resources :problems_users, only: %i[index show]
-      resources :students, only: %i[show edit update]
     end
   end
 end
