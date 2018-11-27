@@ -6,6 +6,10 @@ class Api::Teachers::ProblemsUsersController < Api::Teachers::BaseController
 
   def show
     @problems_user = ProblemsUser.find_by(params[:id])
-    render :show, formats: :json, handlers: :jbuilder
+    if @problems_user
+      render :show, formats: :json, handlers: :jbuilder
+    else
+      not_found
+    end
   end
 end
