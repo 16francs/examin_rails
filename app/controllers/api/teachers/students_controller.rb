@@ -1,5 +1,5 @@
 class Api::Teachers::StudentsController < Api::Teachers::BaseController
-  before_action :admin_teacher, only: %i[edit update]
+  before_action :admin_teacher, only: %i[check_unique create edit update]
 
   def check_unique
     render json: { check_unique: login_id_unique? }
@@ -30,8 +30,12 @@ class Api::Teachers::StudentsController < Api::Teachers::BaseController
   end
 
   def edit
-    @user = User.find_by(params[:id], role: 0)
-    render :edit, formats: :json, handlers: :jbuilder
+    @user = User.find_by(id: params[:id], role: 0)
+    if @user
+      render :edit, formats: :json, handlers: :jbuilder
+    else
+      not_found
+    end
   end
 
   def update
@@ -46,11 +50,17 @@ class Api::Teachers::StudentsController < Api::Teachers::BaseController
   private
 
   def login_id_unique?
-    User.pluck(:login_id).exclude?(params[:login_id])
+    if params[:id] # update or create
+      return true if User.pluck(:login_id).exclude?(params[:login_id])
+
+      user = User.find(params[:id])
+      user[:login_id] == params[:login_id]
+    else
+      User.pluck(:login_id).exclude?(params[:login_id])
+    end
   end
 
   def user_params
-    params.require(:user)
-          .permit(:login_id, :password, :password_confirmation, :name, :school)
+    params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school)
   end
 end
