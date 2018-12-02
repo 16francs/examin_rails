@@ -2,14 +2,6 @@ require 'rails_helper'
 
 RSpec.describe Api::Teachers::TeachersController, type: :routing do
   describe 'routing' do
-    it 'routes to #check_unique' do
-      expect(post: '/api/teachers/teachers/check_unique')
-        .to route_to('api/teachers/teachers#check_unique')
-
-      expect(post: '/api/teachers/teachers/1/check_unique')
-        .to route_to('api/teachers/teachers#check_unique', id: '1')
-    end
-
     it 'routes to #index' do
       expect(get: '/api/teachers/teachers')
         .to route_to('api/teachers/teachers#index')

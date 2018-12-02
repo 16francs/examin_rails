@@ -7,67 +7,6 @@ RSpec.describe 'Teachers/Students', type: :request do
   end
 
   describe '正しい講師に対するテスト' do
-    describe 'POST /api/teachers/students/check_unique' do
-      let!(:student) { create(:student) }
-
-      it '#check_unique OK' do
-        post '/api/teachers/students/check_unique',
-             headers: { 'access-token': @api_key[:access_token] },
-             params: { login_id: nil }
-        expect(response.status).to eq(200)
-        # jsonの検証
-        json = JSON.parse(response.body)
-        expect(json['check_unique']).to eq(true)
-      end
-
-      it '#check_unique NG' do
-        post '/api/teachers/students/check_unique',
-             headers: { 'access-token': @api_key[:access_token] },
-             params: { login_id: student[:login_id] }
-        expect(response.status).to eq(200)
-        # jsonの検証
-        json = JSON.parse(response.body)
-        expect(json['check_unique']).to eq(false)
-      end
-    end
-
-    describe 'POST /api/teachers/student/:id/check_unique' do
-      let!(:student) { create(:student) }
-      let!(:other_student) { create(:student) }
-
-      describe '#check_unique OK' do
-        it '編集箇所と同じ値' do
-          post '/api/teachers/students/' + student[:id].to_s + '/check_unique',
-               headers: { 'access-token': @api_key[:access_token] },
-               params: { login_id: student[:login_id] }
-          expect(response.status).to eq(200)
-          # jsonの検証
-          json = JSON.parse(response.body)
-          expect(json['check_unique']).to eq(true)
-        end
-
-        it '編集箇所と違う値' do
-          post '/api/teachers/students/' + student[:id].to_s + '/check_unique',
-               headers: { 'access-token': @api_key[:access_token] },
-               params: { login_id: '' }
-          expect(response.status).to eq(200)
-          # jsonの検証
-          json = JSON.parse(response.body)
-          expect(json['check_unique']).to eq(true)
-        end
-      end
-
-      it '#check_unique NG' do
-        post '/api/teachers/students/' + student[:id].to_s + '/check_unique',
-             headers: { 'access-token': @api_key[:access_token] },
-             params: { login_id: other_student[:login_id] }
-        expect(response.status).to eq(200)
-        # jsonの検証
-        json = JSON.parse(response.body)
-        expect(json['check_unique']).to eq(false)
-      end
-    end
-
     describe 'GET /api/teachers/students' do
       let!(:user) { create(:student) }
 
@@ -216,16 +155,6 @@ RSpec.describe 'Teachers/Students', type: :request do
     let!(:teacher) { create(:teacher) }
     let!(:teacher_api_key) { teacher.activate }
 
-    it '#check_unique 401' do
-      post '/api/teachers/students/check_unique',
-           headers: { 'access-token': teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
-
-      post '/api/teachers/students/0/check_unique',
-           headers: { 'access-token': teacher_api_key[:access_token] }
-      expect(response.status).to eq(403)
-    end
-
     it '#create 401' do
       post '/api/teachers/students/',
            headers: { 'access-token': teacher_api_key[:access_token] }
@@ -248,16 +177,6 @@ RSpec.describe 'Teachers/Students', type: :request do
   describe '講師以外に対するテスト' do
     let!(:student) { create(:student) }
     let!(:student_api_key) { student.activate }
-
-    it '#check_unique 401' do
-      post '/api/teachers/students/check_unique',
-           headers: { 'access-token': student_api_key[:access_token] }
-      expect(response.status).to eq(401)
-
-      post '/api/teachers/students/0/check_unique',
-           headers: { 'access-token': student_api_key[:access_token] }
-      expect(response.status).to eq(401)
-    end
 
     it '#index 401' do
       get '/api/teachers/students',
@@ -291,14 +210,6 @@ RSpec.describe 'Teachers/Students', type: :request do
   end
 
   describe '未ログイン講師に対するテスト' do
-    it '#check_unique 401' do
-      post '/api/teachers/students/check_unique'
-      expect(response.status).to eq(401)
-
-      post '/api/teachers/students/0/check_unique'
-      expect(response.status).to eq(401)
-    end
-
     it '#index 401' do
       get '/api/teachers/students'
       expect(response.status).to eq(401)

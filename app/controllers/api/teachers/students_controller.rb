@@ -1,10 +1,6 @@
 class Api::Teachers::StudentsController < Api::Teachers::BaseController
   before_action :admin_teacher, only: %i[check_unique create edit update]
 
-  def check_unique
-    render json: { check_unique: login_id_unique? }
-  end
-
   def index
     @users = User.where(role: 0)
     render :index, formats: :json, handlers: :jbuilder
@@ -51,17 +47,6 @@ class Api::Teachers::StudentsController < Api::Teachers::BaseController
   end
 
   private
-
-  def login_id_unique?
-    if params[:id] # update or create
-      return true if User.pluck(:login_id).exclude?(params[:login_id])
-
-      user = User.find(params[:id])
-      user[:login_id] == params[:login_id]
-    else
-      User.pluck(:login_id).exclude?(params[:login_id])
-    end
-  end
 
   def user_params
     params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school)

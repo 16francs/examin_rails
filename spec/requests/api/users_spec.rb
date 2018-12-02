@@ -37,6 +37,38 @@ RSpec.describe 'Users', type: :request do
     end
   end
 
+  describe 'POST /api/users/:id/check_unique' do
+    describe '正しいユーザー' do
+      let!(:user) { create(:user) }
+      let!(:other_user) { create(:user) }
+
+      it '#check_unique OK' do
+        post '/api/users/' + user[:id].to_s + '/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { login_id: nil }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(true)
+      end
+
+      it '#check_unique NG' do
+        post '/api/users/' + user[:id].to_s + '/check_unique',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { login_id: other_user[:login_id] }
+        expect(response.status).to eq(200)
+        # jsonの検証
+        json = JSON.parse(response.body)
+        expect(json['check_unique']).to eq(false)
+      end
+    end
+
+    it '未ログインユーザー' do
+      post '/api/users/0/check_unique'
+      expect(response.status).to eq(401)
+    end
+  end
+
   describe 'PUT /api/users' do
     describe '正しいユーザー' do
       let!(:user) { build(:user) }

@@ -16,9 +16,14 @@ class Api::UsersController < ApplicationController
   private
 
   def login_id_unique?
-    return true if User.pluck(:login_id).exclude?(params[:login_id])
+    if params[:id] # update or create
+      return true if User.pluck(:login_id).exclude?(params[:login_id])
 
-    current_user[:login_id] == params[:login_id]
+      user = User.find_by(params[:id])
+      user[:login_id] == params[:login_id]
+    else
+      User.pluck(:login_id).exclude?(params[:login_id])
+    end
   end
 
   def user_params
