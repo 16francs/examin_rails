@@ -4,7 +4,8 @@ Rails.application.routes.draw do
     get    '/auth', to: 'auth#show'
     post   '/auth', to: 'auth#create'
     delete '/auth', to: 'auth#destroy'
-    post '/users/check_unique', to: 'users#check_unique'
+    post '/users/check_unique',     to: 'users#check_unique'
+    post '/users/:id/check_unique', to: 'users#check_unique'
     put  '/users', to: 'users#update'
 
     # 講師用のpath
