@@ -64,6 +64,7 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
   end
 
   def problem_params
+    puts 'correct: ' + params[:problem][:questions_attributes][0][:correct]
     params.require(:problem).permit(
       :title, :content,
       questions_attributes: [

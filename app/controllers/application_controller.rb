@@ -16,6 +16,7 @@ class ApplicationController < ActionController::Base
 
   # モデルのバリデーションエラー時の処理
   def record_invalid(model)
+    puts model.errors.messages
     render json: { status: :error, message: :record_invalid, data: model.errors }, status: :unprocessable_entity
   end
 
