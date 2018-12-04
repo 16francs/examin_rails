@@ -12,7 +12,6 @@ RSpec.describe Question, type: :model do
   describe 'Questionとの関連' do
     it { should belong_to(:problem) }
     it { should have_many(:achievements) }
-    it { should have_many(:answers) }
   end
 
   describe 'nilの場合のテスト NG' do

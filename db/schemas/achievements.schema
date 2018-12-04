@@ -5,6 +5,7 @@ create_table "achievements", id: :bigint, unsigned: true, options: "ENGINE=InnoD
   t.bigint "question_id", null: false, unsigned: true
   t.boolean "result", default: false, null: false, unsigned: true
   t.integer "user_choice", default: -1, null: false
+  t.integer "answer_time", default: 0, null: false, unsigned: true
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
   t.index ["problems_user_id"], name: "problems_user_id"
