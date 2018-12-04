@@ -22,11 +22,11 @@ class Api::Students::QuestionsController < Api::Students::BaseController
 
   def create_tests(questions)
     test = []
-    choice = Question.where(problem_id: questions[0][:problem_id]).pluck(:correct)
+    all_choice = Question.where(problem_id: questions[0][:problem_id]).pluck(:correct)
     questions.each do |question|
       case question[:type]
       when 1 then # 択一選択
-        test << single_select_test(question, choice)
+        test << single_select_test(question, all_choice)
       when 2 then # 文字入力
         test << description_test(question)
       else
@@ -36,8 +36,9 @@ class Api::Students::QuestionsController < Api::Students::BaseController
     test
   end
 
-  def single_select_test(question, choice)
-    choice.shuffle!
+  def single_select_test(question, all_choice)
+    choice = all_choice.shuffle
+    choice.delete(question[:correct])
     # 正解も含めて，選択肢が4になるように追加
     answers = [question[:correct]]
     correct = 0
