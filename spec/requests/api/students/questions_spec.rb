@@ -10,7 +10,6 @@ RSpec.describe 'Students/Questions', type: :request do
     describe 'GET /api/students/problems/:problem_id/questions' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#index 200' do
         get '/api/students/problems/' + problem[:id].to_s + '/questions',
@@ -24,15 +23,12 @@ RSpec.describe 'Students/Questions', type: :request do
         expect(json['questions'][0]['correct']).to_not eq(nil)
         expect(json['questions'][0]['created_at']).to_not eq(nil)
         expect(json['questions'][0]['updated_at']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['choice']).to_not eq(nil)
       end
     end
 
     describe 'GET: /api/students/problems/:problem_id/questions/random' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#random 200' do
         get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
@@ -47,8 +43,6 @@ RSpec.describe 'Students/Questions', type: :request do
         expect(json['questions'][0]['correct']).to_not eq(nil)
         expect(json['questions'][0]['created_at']).to_not eq(nil)
         expect(json['questions'][0]['updated_at']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['choice']).to_not eq(nil)
       end
 
       it '#random 422' do

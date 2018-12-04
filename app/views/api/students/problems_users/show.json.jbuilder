@@ -4,6 +4,5 @@ json.achievements @problems_user.achievements do |achievement|
   json.extract! achievement, :id, :question_id, :result, :user_choice
   json.question do
     json.extract! achievement.question, :id, :sentence, :correct
-    json.answers achievement.question.answers, :id, :choice
   end
 end

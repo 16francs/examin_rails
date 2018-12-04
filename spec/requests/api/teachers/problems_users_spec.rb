@@ -30,7 +30,6 @@ RSpec.describe 'Teachers/ProblemsUsers', type: :request do
     describe 'GET /api/teachers/problems_users/:id' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
       let!(:problems_user) { create(:problems_user, problem: problem, user: @teacher) }
       let!(:achievement) { create(:achievement, problems_user: problems_user, question: question) }
 
@@ -54,8 +53,6 @@ RSpec.describe 'Teachers/ProblemsUsers', type: :request do
         expect(json['achievements'][0]['question']['id']).to_not eq(nil)
         expect(json['achievements'][0]['question']['sentence']).to_not eq(nil)
         expect(json['achievements'][0]['question']['correct']).to_not eq(nil)
-        expect(json['achievements'][0]['question']['answers'][0]['id']).to_not eq(nil)
-        expect(json['achievements'][0]['question']['answers'][0]['choice']).to_not eq(nil)
       end
 
       it '#show 404' do

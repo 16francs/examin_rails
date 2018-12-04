@@ -29,7 +29,6 @@ RSpec.describe 'Teachers/Problems', type: :request do
     describe 'GET /api/teachers/problems/:id' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#show 200' do
         get '/api/teachers/problems/' + problem[:id].to_s,
@@ -47,8 +46,6 @@ RSpec.describe 'Teachers/Problems', type: :request do
         expect(json['questions'][0]['sentence']).to_not eq(nil)
         expect(json['questions'][0]['type']).to_not eq(nil)
         expect(json['questions'][0]['correct']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['choice']).to_not eq(nil)
       end
 
       it '#show 404' do
