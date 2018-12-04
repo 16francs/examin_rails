@@ -4,7 +4,6 @@ class Achievement < ApplicationRecord
   belongs_to :question
 
   validates :result,
-            presence: true,
             inclusion: { in: [true, false] }
 
   validates :user_choice,

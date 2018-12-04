@@ -8,7 +8,6 @@ class Problem < ApplicationRecord
 
   validates :title,
             presence: true,
-            uniqueness: true,
             length: { maximum: 30 }
 
   validates :content,
