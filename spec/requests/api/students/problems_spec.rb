@@ -64,11 +64,12 @@ RSpec.describe 'Students/Problems', type: :request do
         achievement_count = Achievement.count
         post '/api/students/problems/' + problem[:id].to_s + '/achievement',
              headers: { 'access-token': @api_key[:access_token] },
-             params: { problems_user: { achievements_attributes: [{
+             params: { achievements: [{
                question_id: question[:id],
                result: achievement[:result],
-               user_choice: achievement[:user_choice]
-             }] } }
+               user_choice: achievement[:user_choice],
+               answer_time: achievement[:answer_time]
+             }] }
         expect(response.status).to eq(200)
         expect(ProblemsUser.count).to eq(problems_user_count + 1)
         expect(Achievement.count).to eq(achievement_count + 1)
@@ -81,11 +82,12 @@ RSpec.describe 'Students/Problems', type: :request do
       it '#achievement 422' do
         post '/api/students/problems/' + problem[:id].to_s + '/achievement',
              headers: { 'access-token': @api_key[:access_token] },
-             params: { problems_user: { achievements_attributes: [{
+             params: { achievements: [{
                question_id: nil,
                result: nil,
-               user_choice: nil
-             }] } }
+               user_choice: nil,
+               answer_time: nil
+             }] }
         expect(response.status).to eq(422)
       end
     end

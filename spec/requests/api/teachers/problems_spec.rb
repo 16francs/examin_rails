@@ -39,13 +39,11 @@ RSpec.describe 'Teachers/Problems', type: :request do
         expect(json['problem']['id']).to_not eq(nil)
         expect(json['problem']['title']).to_not eq(nil)
         expect(json['problem']['content']).to_not eq(nil)
-        expect(json['problem']['user_id']).to_not eq(nil)
         expect(json['problem']['created_at']).to_not eq(nil)
         expect(json['problem']['updated_at']).to_not eq(nil)
-        expect(json['questions'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['sentence']).to_not eq(nil)
-        expect(json['questions'][0]['type']).to_not eq(nil)
-        expect(json['questions'][0]['correct']).to_not eq(nil)
+        expect(json['problem']['user']['id']).to_not eq(nil)
+        expect(json['problem']['user']['name']).to_not eq(nil)
+        expect(json['problem']['user']['school']).to_not eq(nil)
       end
 
       it '#show 404' do
