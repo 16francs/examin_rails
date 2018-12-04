@@ -64,7 +64,7 @@ class Api::Students::QuestionsController < Api::Students::BaseController
       question_id: question[:id],
       sentence: question[:sentence],
       type: question[:type],
-      correct: correct,
+      correct: question[:correct],
       answers: []
     }
   end

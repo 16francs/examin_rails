@@ -30,19 +30,53 @@ RSpec.describe 'Students/Questions', type: :request do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
 
-      it '#random 200' do
-        get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
-            headers: { 'access-token': @api_key[:access_token] },
-            params: { count: 1 }
-        expect(response.status).to eq(200)
-        # jsonの検証
-        json = JSON.parse(response.body)
-        expect(json['questions'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['sentence']).to_not eq(nil)
-        expect(json['questions'][0]['type']).to_not eq(nil)
-        expect(json['questions'][0]['correct']).to_not eq(nil)
-        expect(json['questions'][0]['created_at']).to_not eq(nil)
-        expect(json['questions'][0]['updated_at']).to_not eq(nil)
+      describe '#random 200' do
+        it 'question[:type] == 1' do
+          question[:type] = 1
+          question.save!
+
+          get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
+              headers: { 'access-token': @api_key[:access_token] },
+              params: { count: 1 }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['questions'][0]['question_id']).to_not eq(nil)
+          expect(json['questions'][0]['sentence']).to_not eq(nil)
+          expect(json['questions'][0]['type']).to_not eq(nil)
+          expect(json['questions'][0]['correct']).to_not eq(nil)
+          expect(json['questions'][0]['answers'].length).to eq(4)
+        end
+
+        it 'question[:type] == 2' do
+          question[:type] = 2
+          question.save!
+
+          get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
+              headers: { 'access-token': @api_key[:access_token] },
+              params: { count: 1 }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['questions'][0]['question_id']).to_not eq(nil)
+          expect(json['questions'][0]['sentence']).to_not eq(nil)
+          expect(json['questions'][0]['type']).to_not eq(nil)
+          expect(json['questions'][0]['correct']).to_not eq(nil)
+          expect(json['questions'][0]['answers'].length).to eq(0)
+        end
+
+        it 'question[:type] == 3 -> error' do
+          question[:type] = 3
+          question.save!
+
+          get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
+              headers: { 'access-token': @api_key[:access_token] },
+              params: { count: 1 }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['questions'][0]).to eq(nil)
+        end
       end
 
       it '#random 422' do
