@@ -11,8 +11,6 @@ Rails.application.routes.draw do
     # 講師用のpath
     namespace :teachers do
       resources :problems, only: %i[index show create edit update] do
-        post 'check_unique', on: :collection
-        post 'check_unique', on: :member
         resources :questions, only: %i[index show create edit update]
       end
       resources :problems_users, only: %i[index show]

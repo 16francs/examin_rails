@@ -6,6 +6,5 @@ create_table "problems", id: :bigint, unsigned: true, options: "ENGINE=InnoDB DE
   t.bigint "user_id", null: false, unsigned: true
   t.datetime "created_at", null: false
   t.datetime "updated_at", null: false
-  t.index ["title"], name: "title", unique: true
   t.index ["user_id"], name: "user_id"
 end
