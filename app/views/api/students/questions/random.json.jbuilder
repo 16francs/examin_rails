@@ -1,3 +1,5 @@
+json.count @count
+json.test_type @test_type
 json.questions @tests.each do |test|
-  json.extract! test, :question_id, :sentence, :type, :correct, :answers
+  json.extract! test, :question_id, :sentence, :correct, :answers
 end

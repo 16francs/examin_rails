@@ -20,11 +20,6 @@ RSpec.describe Question, type: :model do
       expect(@question).to_not be_valid
     end
 
-    it 'typeがnil' do
-      @question[:type] = 0
-      expect(@question).to_not be_valid
-    end
-
     it 'correctがnil' do
       @question[:correct] = nil
       expect(@question).to_not be_valid
@@ -34,23 +29,6 @@ RSpec.describe Question, type: :model do
   describe '長さの検証 NG' do
     it 'sentenceの最大値' do
       @question[:sentence] = 'a' * 201
-      expect(@question).to_not be_valid
-    end
-  end
-
-  describe '数値の検証 NG' do
-    it 'typeの最小値' do
-      @question[:type] = 0
-      expect(@question).to_not be_valid
-    end
-
-    it 'typeの最大値' do
-      @question[:type] = 10
-      expect(@question).to_not be_valid
-    end
-
-    it 'typeは整数' do
-      @question[:type] = 0.1
       expect(@question).to_not be_valid
     end
   end
