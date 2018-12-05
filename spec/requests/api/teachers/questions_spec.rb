@@ -191,7 +191,7 @@ RSpec.describe 'teachers/Questions', type: :request do
       expect(response.status).to eq(401)
     end
 
-    it '#update 401' do
+    it '#destroy 401' do
       delete '/api/teachers/problems/0/questions/0',
              headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)

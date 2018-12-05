@@ -1,4 +1,6 @@
 class Api::Teachers::ProblemsController < Api::Teachers::BaseController
+  before_action :admin_teacher, only: %i[destroy]
+
   def index
     @problems = Problem.all
     render :index, formats: :json, handlers: :jbuilder
@@ -41,6 +43,15 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
       else
         record_invalid(@problem)
       end
+    else
+      not_found
+    end
+  end
+
+  def destroy
+    if problem ||= Problem.find_by(id: params[:id])
+      problem.destroy
+      render json: { status: :success }, status: :ok
     else
       not_found
     end
