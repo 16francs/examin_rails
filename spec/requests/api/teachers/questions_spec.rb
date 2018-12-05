@@ -10,7 +10,6 @@ RSpec.describe 'teachers/Questions', type: :request do
     describe 'GET /api/teachers/problems/:problem_id/questions' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#index 200' do
         get '/api/teachers/problems/' + problem[:id].to_s + '/questions',
@@ -24,15 +23,12 @@ RSpec.describe 'teachers/Questions', type: :request do
         expect(json['questions'][0]['correct']).to_not eq(nil)
         expect(json['questions'][0]['created_at']).to_not eq(nil)
         expect(json['questions'][0]['updated_at']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['choice']).to_not eq(nil)
       end
     end
 
     describe 'GET /api/teachers/problems/:problem_id/questions/:id' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#show 200' do
         get '/api/teachers/problems/' + problem[:id].to_s + '/questions/' + question[:id].to_s,
@@ -46,8 +42,6 @@ RSpec.describe 'teachers/Questions', type: :request do
         expect(json['question']['correct']).to_not eq(nil)
         expect(json['question']['created_at']).to_not eq(nil)
         expect(json['question']['updated_at']).to_not eq(nil)
-        expect(json['question']['answers'][0]['id']).to_not eq(nil)
-        expect(json['question']['answers'][0]['choice']).to_not eq(nil)
       end
 
       it '#show 404' do
@@ -60,7 +54,6 @@ RSpec.describe 'teachers/Questions', type: :request do
     describe 'POST /api/teachers/problems/:problem_id/questions' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { build(:question) }
-      let!(:answer) { build(:answer) }
 
       it '#create 200' do
         post '/api/teachers/problems/' + problem[:id].to_s + '/questions',
@@ -68,8 +61,7 @@ RSpec.describe 'teachers/Questions', type: :request do
              params: { question: {
                sentence: question[:sentence],
                type: question[:type],
-               correct: question[:correct],
-               answers_attributes: [{ choice: answer[:choice] }]
+               correct: question[:correct]
              } }
         expect(response.status).to eq(200)
       end
@@ -80,8 +72,7 @@ RSpec.describe 'teachers/Questions', type: :request do
              params: { question: {
                sentence: nil,
                type: nil,
-               correct: nil,
-               answers_attributes: [{}]
+               correct: nil
              } }
         expect(response.status).to eq(422)
       end
@@ -90,7 +81,6 @@ RSpec.describe 'teachers/Questions', type: :request do
     describe 'GET /api/teachers/problems/:problem_id/questions/:id/edit' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#edit 200' do
         get '/api/teachers/problems/' + problem[:id].to_s + '/questions/' + question[:id].to_s + '/edit',
@@ -108,7 +98,6 @@ RSpec.describe 'teachers/Questions', type: :request do
     describe 'PUT /api/teachers/problems/:problem_id/questions/:id' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#edit 200' do
         put '/api/teachers/problems/' + problem[:id].to_s + '/questions/' + question[:id].to_s,
@@ -116,8 +105,7 @@ RSpec.describe 'teachers/Questions', type: :request do
             params: { question: {
               sentence: question[:sentence],
               type: question[:type],
-              correct: question[:correct],
-              answers_attributes: [{ choice: answer[:choice] }]
+              correct: question[:correct]
             } }
         expect(response.status).to eq(200)
       end
@@ -128,8 +116,7 @@ RSpec.describe 'teachers/Questions', type: :request do
             params: { question: {
               sentence: nil,
               type: nil,
-              correct: nil,
-              answers_attributes: [{}]
+              correct: nil
             } }
         expect(response.status).to eq(404)
       end
@@ -140,8 +127,7 @@ RSpec.describe 'teachers/Questions', type: :request do
             params: { question: {
               sentence: nil,
               type: nil,
-              correct: nil,
-              answers_attributes: [{}]
+              correct: nil
             } }
         expect(response.status).to eq(422)
       end

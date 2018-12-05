@@ -28,7 +28,6 @@ RSpec.describe 'Students/Problems', type: :request do
     describe 'GET /api/students/problems/:id' do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
-      let!(:answer) { create(:answer, question: question) }
 
       it '#show 200' do
         get '/api/students/problems/' + problem[:id].to_s,
@@ -46,8 +45,6 @@ RSpec.describe 'Students/Problems', type: :request do
         expect(json['questions'][0]['sentence']).to_not eq(nil)
         expect(json['questions'][0]['type']).to_not eq(nil)
         expect(json['questions'][0]['correct']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['id']).to_not eq(nil)
-        expect(json['questions'][0]['answers'][0]['choice']).to_not eq(nil)
       end
 
       it '#show 404' do
@@ -67,11 +64,12 @@ RSpec.describe 'Students/Problems', type: :request do
         achievement_count = Achievement.count
         post '/api/students/problems/' + problem[:id].to_s + '/achievement',
              headers: { 'access-token': @api_key[:access_token] },
-             params: { problems_user: { achievements_attributes: [{
+             params: { achievements: [{
                question_id: question[:id],
                result: achievement[:result],
-               user_choice: achievement[:user_choice]
-             }] } }
+               user_choice: achievement[:user_choice],
+               answer_time: achievement[:answer_time]
+             }] }
         expect(response.status).to eq(200)
         expect(ProblemsUser.count).to eq(problems_user_count + 1)
         expect(Achievement.count).to eq(achievement_count + 1)
@@ -84,11 +82,12 @@ RSpec.describe 'Students/Problems', type: :request do
       it '#achievement 422' do
         post '/api/students/problems/' + problem[:id].to_s + '/achievement',
              headers: { 'access-token': @api_key[:access_token] },
-             params: { problems_user: { achievements_attributes: [{
+             params: { achievements: [{
                question_id: nil,
                result: nil,
-               user_choice: nil
-             }] } }
+               user_choice: nil,
+               answer_time: nil
+             }] }
         expect(response.status).to eq(422)
       end
     end

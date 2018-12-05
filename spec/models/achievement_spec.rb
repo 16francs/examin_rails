@@ -24,6 +24,11 @@ RSpec.describe Achievement, type: :model do
       @achievement[:user_choice] = nil
       expect(@achievement).to_not be_valid
     end
+
+    it 'answer_timeがnil' do
+      @achievement[:answer_time] = nil
+      expect(@achievement).to_not be_valid
+    end
   end
 
   describe '数値の検証 NG' do
@@ -39,6 +44,11 @@ RSpec.describe Achievement, type: :model do
 
     it 'user_choiceは整数' do
       @achievement[:user_choice] = 0.1
+      expect(@achievement).to_not be_valid
+    end
+
+    it 'answer_timeの最小値' do
+      @achievement[:answer_time] = -1
       expect(@achievement).to_not be_valid
     end
   end
