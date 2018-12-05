@@ -5,19 +5,16 @@ class Api::Students::QuestionsController < Api::Students::BaseController
   end
 
   def random
-    if question_ids ||= random_question_ids
-      @questions = Question.where(id: question_ids)
-      @tests = create_tests(@questions)
-      render :random, formats: :json, handlers: :jbuilder
-    else
-      render json: { status: :error, message: 'not found count param' }, status: :unprocessable_entity
-    end
+    @questions = Question.where(id: random_question_ids)
+    @tests = create_tests(@questions)
+    render :random, formats: :json, handlers: :jbuilder
   end
 
   private
 
   def random_question_ids
-    Question.where(problem_id: params[:problem_id]).pluck(:id).sample(params[:count].to_i) if params[:count]
+    count = params[:count] || 10 # デフォルトで10問取得
+    Question.where(problem_id: params[:problem_id]).pluck(:id).sample(count.to_i)
   end
 
   def create_tests(questions)

@@ -31,6 +31,15 @@ RSpec.describe 'Students/Questions', type: :request do
       let!(:question) { create(:question, problem: problem) }
 
       describe '#random 200' do
+        it 'count == null' do
+          get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
+              headers: { 'access-token': @api_key[:access_token] }
+          expect(response.status).to eq(200)
+          # jsonの検証
+          json = JSON.parse(response.body)
+          expect(json['questions'].length).to_not eq(0)
+        end
+
         it 'question[:type] == 1' do
           question[:type] = 1
           question.save!
@@ -77,12 +86,6 @@ RSpec.describe 'Students/Questions', type: :request do
           json = JSON.parse(response.body)
           expect(json['questions'][0]).to eq(nil)
         end
-      end
-
-      it '#random 422' do
-        get '/api/students/problems/' + problem[:id].to_s + '/questions/random',
-            headers: { 'access-token': @api_key[:access_token] }
-        expect(response.status).to eq(422)
       end
     end
   end
