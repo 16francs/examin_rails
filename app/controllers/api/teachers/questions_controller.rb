@@ -58,6 +58,6 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
   private
 
   def question_params
-    params.require(:question).permit(:sentence, :type, :correct)
+    params.require(:question).permit(:sentence, :correct)
   end
 end

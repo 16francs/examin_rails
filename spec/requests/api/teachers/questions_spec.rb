@@ -19,7 +19,6 @@ RSpec.describe 'teachers/Questions', type: :request do
         json = JSON.parse(response.body)
         expect(json['questions'][0]['id']).to_not eq(nil)
         expect(json['questions'][0]['sentence']).to_not eq(nil)
-        expect(json['questions'][0]['type']).to_not eq(nil)
         expect(json['questions'][0]['correct']).to_not eq(nil)
         expect(json['questions'][0]['created_at']).to_not eq(nil)
         expect(json['questions'][0]['updated_at']).to_not eq(nil)
@@ -38,7 +37,6 @@ RSpec.describe 'teachers/Questions', type: :request do
         json = JSON.parse(response.body)
         expect(json['question']['id']).to_not eq(nil)
         expect(json['question']['sentence']).to_not eq(nil)
-        expect(json['question']['type']).to_not eq(nil)
         expect(json['question']['correct']).to_not eq(nil)
         expect(json['question']['created_at']).to_not eq(nil)
         expect(json['question']['updated_at']).to_not eq(nil)
@@ -60,7 +58,6 @@ RSpec.describe 'teachers/Questions', type: :request do
              headers: { 'access-token': @api_key[:access_token] },
              params: { question: {
                sentence: question[:sentence],
-               type: question[:type],
                correct: question[:correct]
              } }
         expect(response.status).to eq(200)
@@ -71,7 +68,6 @@ RSpec.describe 'teachers/Questions', type: :request do
              headers: { 'access-token': @api_key[:access_token] },
              params: { question: {
                sentence: nil,
-               type: nil,
                correct: nil
              } }
         expect(response.status).to eq(422)
@@ -104,7 +100,6 @@ RSpec.describe 'teachers/Questions', type: :request do
             headers: { 'access-token': @api_key[:access_token] },
             params: { question: {
               sentence: question[:sentence],
-              type: question[:type],
               correct: question[:correct]
             } }
         expect(response.status).to eq(200)
@@ -115,7 +110,6 @@ RSpec.describe 'teachers/Questions', type: :request do
             headers: { 'access-token': @api_key[:access_token] },
             params: { question: {
               sentence: nil,
-              type: nil,
               correct: nil
             } }
         expect(response.status).to eq(404)
@@ -126,7 +120,6 @@ RSpec.describe 'teachers/Questions', type: :request do
             headers: { 'access-token': @api_key[:access_token] },
             params: { question: {
               sentence: nil,
-              type: nil,
               correct: nil
             } }
         expect(response.status).to eq(422)
