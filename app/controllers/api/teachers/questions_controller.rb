@@ -1,4 +1,6 @@
 class Api::Teachers::QuestionsController < Api::Teachers::BaseController
+  before_action :admin_teacher, only: %i[destroy]
+
   def index
     @questions = Question.where(problem_id: params[:problem_id])
     render :index, formats: :json, handlers: :jbuilder
@@ -39,6 +41,15 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
       else
         record_invalid(@question)
       end
+    else
+      not_found
+    end
+  end
+
+  def destroy
+    if question ||= Question.find_by(id: params[:id])
+      question.destroy
+      render json: { status: :success }, status: :ok
     else
       not_found
     end
