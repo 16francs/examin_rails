@@ -26,5 +26,10 @@ RSpec.describe Api::Teachers::QuestionsController, type: :routing do
       expect(put: '/api/teachers/problems/1/questions/1/')
         .to route_to('api/teachers/questions#update', id: '1', problem_id: '1')
     end
+
+    it 'routes to #destroy' do
+      expect(delete: '/api/teachers/problems/1/questions/1')
+        .to route_to('api/teachers/questions#destroy', id: '1', problem_id: '1')
+    end
   end
 end

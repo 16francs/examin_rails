@@ -2,8 +2,8 @@ require 'rails_helper'
 
 RSpec.describe 'teachers/Questions', type: :request do
   before do
-    @teacher = create(:teacher)
-    @api_key = @teacher.activate
+    @admin = create(:admin)
+    @api_key = @admin.activate
   end
 
   describe '正しい講師に対するテスト' do
@@ -99,7 +99,7 @@ RSpec.describe 'teachers/Questions', type: :request do
       let!(:problem) { create(:problem, :with_user) }
       let!(:question) { create(:question, problem: problem) }
 
-      it '#edit 200' do
+      it '#update 200' do
         put '/api/teachers/problems/' + problem[:id].to_s + '/questions/' + question[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { question: {
@@ -110,7 +110,7 @@ RSpec.describe 'teachers/Questions', type: :request do
         expect(response.status).to eq(200)
       end
 
-      it '#edit 404' do
+      it '#update 404' do
         put '/api/teachers/problems/' + problem[:id].to_s + '/questions/0',
             headers: { 'access-token': @api_key[:access_token] },
             params: { question: {
@@ -121,7 +121,7 @@ RSpec.describe 'teachers/Questions', type: :request do
         expect(response.status).to eq(404)
       end
 
-      it '#edit 422' do
+      it '#update 422' do
         put '/api/teachers/problems/' + problem[:id].to_s + '/questions/' + question[:id].to_s,
             headers: { 'access-token': @api_key[:access_token] },
             params: { question: {
@@ -131,6 +131,36 @@ RSpec.describe 'teachers/Questions', type: :request do
             } }
         expect(response.status).to eq(422)
       end
+    end
+  end
+
+  describe 'DELETE /api/teachers/problems/:problem_id/questions/:id' do
+    let!(:problem) { create(:problem, :with_user) }
+    let!(:question) { create(:question, problem: problem) }
+
+    it '#destroy 200' do
+      count = Question.count
+      delete '/api/teachers/problems/' + problem[:id].to_s + '/questions/' + question[:id].to_s,
+             headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(200)
+      expect(Question.count).to eq(count - 1)
+    end
+
+    it '#destroy 404' do
+      delete '/api/teachers/problems/0/questions/0',
+             headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(404)
+    end
+  end
+
+  describe '管理者以外に対するテスト' do
+    let!(:teacher) { create(:teacher) }
+    let!(:teacher_api_key) { teacher.activate }
+
+    it '#destroy 403' do
+      delete '/api/teachers/problems/0/questions/0',
+             headers: { 'access-token': teacher_api_key[:access_token] }
+      expect(response.status).to eq(403)
     end
   end
 
@@ -163,8 +193,14 @@ RSpec.describe 'teachers/Questions', type: :request do
     end
 
     it '#update 401' do
-      get '/api/teachers/problems/0/questions/0',
-          headers: { 'access-token': student_api_key[:access_token] }
+      patch '/api/teachers/problems/0/questions/0',
+            headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '#update 401' do
+      delete '/api/teachers/problems/0/questions/0',
+             headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
   end
@@ -191,7 +227,12 @@ RSpec.describe 'teachers/Questions', type: :request do
     end
 
     it '#update 401' do
-      get '/api/teachers/problems/0/questions/0'
+      patch '/api/teachers/problems/0/questions/0'
+      expect(response.status).to eq(401)
+    end
+
+    it '#destroy 401' do
+      delete '/api/teachers/problems/0/questions/0'
       expect(response.status).to eq(401)
     end
   end
