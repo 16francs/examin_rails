@@ -35,7 +35,7 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
   end
 
   def update
-    if @user ||= User.find_by(params[:id], role: 1..3)
+    if @user ||= User.find_by(id: params[:id], role: 1..3)
       if @user.update(user_params)
         render :update, formats: :json, handlers: :jbuilder
       else
@@ -49,6 +49,6 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
   private
 
   def user_params
-    params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school)
+    params.require(:user).permit(:login_id, :password, :password_confirmation, :name, :school, :role)
   end
 end

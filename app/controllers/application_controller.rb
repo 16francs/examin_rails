@@ -16,7 +16,9 @@ class ApplicationController < ActionController::Base
 
   # モデルのバリデーションエラー時の処理
   def record_invalid(model)
-    puts model.errors.messages
+    logger.error('----- status: 422 エラー内容 -----')
+    logger.error(model.errors.messages)
+    logger.error('---------------------------------')
     render json: { status: :error, message: :record_invalid, data: model.errors }, status: :unprocessable_entity
   end
 
@@ -27,7 +29,9 @@ class ApplicationController < ActionController::Base
 
   # サーバー側が原因の場合のエラー処理
   def internal_server_error(error)
+    logger.error('----- status: 500 エラー内容 -----')
     logger.error(error)
+    logger.error('---------------------------------')
     render json: { status: :error, message: :internal_server_error }, status: :internal_server_error
   end
 
