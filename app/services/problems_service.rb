@@ -1,44 +1,34 @@
 module ProblemsService
-  # エクセル出力用のメソッド
-  def excel_render(file)
-    # エクセルファイルの読み込み
-    RubyXL::Parser.parse(file).tap do |workbook|
-      workbook.worksheets.each do |worksheet|
-        @worksheet = worksheet
-        @worksheet.each_with_index do |row, row_num|
-          # 1行ずつセルをみていく
-          row&.cells&.each do |cell|
-            next if cell.nil? # セルが空欄なら次へ
-
-            cell_render(cell) # セルに値があればcell_renderへ
-          end
-          row_height_auto(row_num)
+  # エクセルから問題を登録するメソッド
+  def create_questions(file, problem)
+    # 正しいファイルが読み込めた場合のみ問題登録処理を行う
+    if spreadsheet ||= open_spreadsheet(file)
+      spreadsheet_head = spreadsheet.row(1) # 1行目のヘッダー情報を取得
+      header = header_attributes
+      # ヘッダーを検証
+      if spreadsheet_head == header
+        # 2行目から1行ずつ問題情報を取得し登録
+        (2..spreadsheet.last_row).each do |i|
+          row = Hash[[header, spreadsheet.row(i)].transpose]
+          Question.create(problem_id: problem[:id], sentence: row['問題'], correct: row['解答'])
         end
+      else
+        @error = '正しいファイルをアップロードしてください'
       end
+    else
+      @error = '正しいファイルをアップロードしてください'
     end
   end
 
   private
 
-  def content_eval(content)
-    view_context.instance_eval(content).gsub(/\R/, "\n") # エクセルの改行は LF
+  # エクセルファイルの読み込み用メソッド
+  def open_spreadsheet(file)
+    Roo::Spreadsheet.open(file.path, extension: :xlsx) if file && File.extname(file.original_filename) == '.xlsx'
   end
 
-  # セルへ値を代入するメソッド
-  def cell_render(cell)
-    cell.change_contents(content_eval(cell.value))
-    cell.change_text_wrap(true) if (cell&.value&.lines("\n")&.count) > 1
-  rescue StandardError
-    # 値がnilの場合エラーメッセージを表示する
-    cell.change_contents('error!')
-    cell.change_font_color('FF0000')
-    cell.change_fill('FFFF00')
-  end
-
-  def row_height_auto(row_num)
-    max_lines = @worksheet[row_num]&.cells&.map { |cell| cell&.value&.lines("\n")&.count || 0 }&.max
-    # 最小値が RubyXL::Row::DEFAULT_HEIGHT (= 13) では合わなかったので手動調整
-    origin_height = [@worksheet.get_row_height(row_num), 20].max
-    @worksheet.change_row_height(row_num, origin_height * max_lines) if max_lines&.positive?
+  # ヘッダーの値の検証用メソッド
+  def header_attributes
+    %w[問題番号 問題 解答]
   end
 end

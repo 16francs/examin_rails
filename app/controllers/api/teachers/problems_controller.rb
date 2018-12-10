@@ -64,6 +64,16 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
   end
 
   def upload
+    if problem ||= Problem.find_by(id: params[:id])
+      create_questions(params[:file], problem)
+      if @error.nil?
+        render json: { status: :success }, status: :ok
+      else
+        render json: { status: :error, message: :file_error }, status: :bad_request
+      end
+    else
+      not_found
+    end
   end
 
   private
