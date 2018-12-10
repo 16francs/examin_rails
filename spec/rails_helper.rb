@@ -104,4 +104,4 @@ SimpleCov.start 'rails' do
     vendor/
   ]
 end
-SimpleCov.minimum_coverage 95
+SimpleCov.minimum_coverage 90
