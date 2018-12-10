@@ -1,4 +1,5 @@
 class Api::Teachers::ProblemsController < Api::Teachers::BaseController
+  include ProblemsService
   before_action :admin_teacher, only: %i[destroy]
 
   def index
@@ -57,9 +58,22 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
     end
   end
 
+  def download
+    download_data
+    send_file(@file_path, type: @file_type)
+  end
+
+  def upload
+  end
+
   private
 
   def problem_params
     params.require(:problem).permit(:title, :content, questions_attributes: %i[sentence correct])
+  end
+
+  def download_data
+    @file_path = Rails.root.join('lib', 'new_questions.xlsx')
+    @file_type = 'application/vnd.ms-excel'
   end
 end

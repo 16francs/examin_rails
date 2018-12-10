@@ -50,6 +50,9 @@ gem 'dotenv-rails', '~>2.4.0'
 # フロントとAPIを同時に起動するためのGem
 gem 'foreman'
 
+# Excelファイルを扱うためのGem
+## ダウンロードファイル配布用
+gem 'rubyXL'
 ## アップロードファイル読み込み用
 gem 'roo'
 

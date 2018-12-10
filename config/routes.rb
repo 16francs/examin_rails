@@ -11,6 +11,8 @@ Rails.application.routes.draw do
     # 講師用のpath
     namespace :teachers do
       resources :problems, only: %i[index show create edit update destroy] do
+        get 'download', on: :collection
+        post 'upload', on: :member
         resources :questions, only: %i[index show create edit update destroy]
       end
       resources :problems_users, only: %i[index show]

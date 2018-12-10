@@ -1,4 +1,7 @@
 ja:
+  time:
+    formats:
+      filename: "%Y%m%d%H%M%S"
   default: &default
     too_short: "は%{count}文字以上に設定して下さい。"
     too_long: "は%{count}文字以下に設定して下さい。"
