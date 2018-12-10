@@ -31,5 +31,15 @@ RSpec.describe Api::Teachers::ProblemsController, type: :routing do
       expect(delete: '/api/teachers/problems/1')
         .to route_to('api/teachers/problems#destroy', id: '1')
     end
+
+    it 'routes to #download' do
+      expect(get: '/api/teachers/problems/download')
+        .to route_to('api/teachers/problems#download')
+    end
+
+    it 'routes to #upload' do
+      expect(post: '/api/teachers/problems/1/upload')
+        .to route_to('api/teachers/problems#upload', id: '1')
+    end
   end
 end
