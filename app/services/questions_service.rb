@@ -1,6 +1,20 @@
 module QuestionsService
   # エクセル出力用メソッド
-  def excel_render(file)
+  def excel_index_render(file)
+    excel = RubyXL::Parser.parse(file)
+    # エクセルファイルの読み込み
+    excel.tap do |workbook|
+      @worksheet = workbook.first
+      # タイトル
+      input_title_cell
+      # 問題一覧
+      @questions.each_with_index do |question, index|
+        input_content_cell(question, index)
+      end
+    end
+  end
+
+  def excel_random_render(file)
     excel = RubyXL::Parser.parse(file)
     # エクセルファイルの読み込み
     excel.tap do |workbook|
@@ -20,6 +34,20 @@ module QuestionsService
   end
 
   private
+
+  # タイトルを代入
+  def input_title_cell
+    title = @worksheet.add_cell(0, 1, @problem[:title])
+    title.change_horizontal_alignment('center')
+    title.change_font_size(18)
+  end
+
+  # 問題を代入
+  def input_content_cell(question, index)
+    @worksheet.add_cell(index + 3, 0, index + 1)
+    @worksheet.add_cell(index + 3, 1, question[:sentence])
+    @worksheet.add_cell(index + 3, 2, question[:correct])
+  end
 
   def content_eval(content)
     view_context.instance_eval <<-RUBY, __FILE__, __LINE__ + 1

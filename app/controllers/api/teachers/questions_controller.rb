@@ -57,6 +57,12 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
   end
 
   def download_index
+    if @problem ||= Problem.find_by(id: params[:problem_id])
+      download_index_data
+      send_data(excel_index_render(@file_path).stream.string, type: @file_type, filename: @file_name)
+    else
+      not_found
+    end
   end
 
   def download_test
@@ -64,7 +70,7 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
       @count = params[:count].to_i
       if @count == 20 || @count == 30 || @count == 50
         download_test_data
-        send_data(excel_render(@file_path).stream.string, type: @file_type, filename: @file_name)
+        send_data(excel_random_render(@file_path).stream.string, type: @file_type, filename: @file_name)
       else
         bad_request
       end
@@ -79,15 +85,21 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
     params.require(:question).permit(:sentence, :correct)
   end
 
-  def question_ids(random)
-    ids = Question.where(problem_id: params[:problem_id]).pluck(:id)
-    random ? ids.sample(@count) : ids
+  def random_question_ids
+    Question.where(problem_id: params[:problem_id]).pluck(:id).sample(@count)
+  end
+
+  def download_index_data
+    @questions = Question.where(problem_id: @problem[:id])
+    @file_name = "#{@problem[:title]}.xlsx"
+    @file_path = Rails.root.join('lib', 'questions.xlsx')
+    @file_type = 'application/vnd.ms-excel'
   end
 
   def download_test_data
-    @questions = Question.where(id: question_ids(true))
-    @file_name = "テスト_#{@count}.xlsx"
-    @file_path = Rails.root.join('lib', "new_tests_#{@count}.xlsx")
+    @questions = Question.where(id: random_question_ids)
+    @file_name = "テスト#{@count}.xlsx"
+    @file_path = Rails.root.join('lib', "tests_#{@count}.xlsx")
     @file_type = 'application/vnd.ms-excel'
   end
 end
