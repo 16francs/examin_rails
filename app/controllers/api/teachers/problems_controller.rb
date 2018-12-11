@@ -69,7 +69,7 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
       if @error.nil?
         render json: { status: :success }, status: :ok
       else
-        render json: { status: :error, message: :file_error }, status: :bad_request
+        bad_request
       end
     else
       not_found

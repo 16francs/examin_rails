@@ -1,9 +1,13 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :null_session
 
-  rescue_from StandardError, with: :internal_server_error
+  # rescue_from StandardError, with: :internal_server_error
 
   private
+
+  def bad_request
+    render json: { status: :error, message: :invalid_params }, status: :bad_request
+  end
 
   # アクセスが禁止場所へのリクエスト時の処理
   def forbidden

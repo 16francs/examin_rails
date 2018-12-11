@@ -14,8 +14,8 @@ Rails.application.routes.draw do
         get 'download', on: :collection
         post 'upload', on: :member
         resources :questions, only: %i[index show create edit update destroy] do
-          post 'download_index', post: :collection
-          post 'download_test', post: :collection
+          post 'download_index', on: :collection
+          post 'download_test', on: :collection
         end
       end
       resources :problems_users, only: %i[index show]

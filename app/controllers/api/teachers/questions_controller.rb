@@ -61,8 +61,13 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
 
   def download_test
     if @problem ||= Problem.find_by(id: params[:problem_id])
-      download_test_data
-      send_data(excel_render(@file_path).stream.string, type: @file_type, filename: @file_name)
+      @count = params[:count].to_i
+      if @count == 20 || @count == 30 || @count == 50
+        download_test_data
+        send_data(excel_render(@file_path).stream.string, type: @file_type, filename: @file_name)
+      else
+        bad_request
+      end
     else
       not_found
     end
@@ -80,15 +85,9 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
   end
 
   def download_test_data
-    @count = params[:count].to_i
-    if @count == 20 || @count == 30 || @count == 50
-      @questions = Question.where(id: question_ids(true))
-
-      @file_name = "テスト_#{@count}"
-      @file_path = Rails.root.join('lib', "new_tests_#{@count}.xlsx")
-      @file_type = 'application/vnd.ms-excel'
-    else
-      render json: { status: :error, message: :invalid_parameter }, status: :bad_request
-    end
+    @questions = Question.where(id: question_ids(true))
+    @file_name = "テスト_#{@count}.xlsx"
+    @file_path = Rails.root.join('lib', "new_tests_#{@count}.xlsx")
+    @file_type = 'application/vnd.ms-excel'
   end
 end

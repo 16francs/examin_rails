@@ -22,7 +22,9 @@ module QuestionsService
   private
 
   def content_eval(content)
-    view_context.instance_eval(content).gsub(/\R/, "\n") # エクセルの改行は LF
+    view_context.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
+      ("#{content}").gsub(/\R/, "\n") # エクセルの改行は LF
+    RUBY
   end
 
   # セルへ値を代入するメソッド
