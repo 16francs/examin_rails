@@ -14,7 +14,7 @@ class Api::Students::QuestionsController < Api::Students::BaseController
       @tests = create_tests(@questions)
       render :random, formats: :json, handlers: :jbuilder
     else
-      render json: { status: :error, message: 'invalid_parameter' }, status: :bad_request
+      render json: { status: :error, message: :invalid_parameter }, status: :bad_request
     end
   end
 

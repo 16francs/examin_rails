@@ -13,7 +13,10 @@ Rails.application.routes.draw do
       resources :problems, only: %i[index show create edit update destroy] do
         get 'download', on: :collection
         post 'upload', on: :member
-        resources :questions, only: %i[index show create edit update destroy]
+        resources :questions, only: %i[index show create edit update destroy] do
+          post 'download_index', post: :collection
+          post 'download_test', post: :collection
+        end
       end
       resources :problems_users, only: %i[index show]
       resources :students, only: %i[index show create edit update]
