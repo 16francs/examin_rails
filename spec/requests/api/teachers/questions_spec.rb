@@ -146,6 +146,48 @@ RSpec.describe 'teachers/Questions', type: :request do
     end
   end
 
+  describe 'POST /api/teachers/problems/:problem_id/questions/download_index' do
+    let!(:problem) { create(:problem, :with_user) }
+    let!(:question) { create(:question, problem: problem) }
+
+    it '#download_index 200' do
+      post '/api/teachers/problems/' + problem[:id].to_s + '/questions/download_index',
+           headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(200)
+    end
+
+    it '#download_index 404' do
+      post '/api/teachers/problems/0/questions/download_index',
+           headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(404)
+    end
+  end
+
+  describe 'POST /api/teachers/problems/:problem_id/questions/download_test' do
+    let!(:problem) { create(:problem, :with_user) }
+    let!(:question) { create(:question, problem: problem) }
+
+    it '#download_index 200' do
+      post '/api/teachers/problems/' + problem[:id].to_s + '/questions/download_test',
+           headers: { 'access-token': @api_key[:access_token] },
+           params: { count: 20 }
+      expect(response.status).to eq(200)
+    end
+
+    it '#download_index 400' do
+      post '/api/teachers/problems/' + problem[:id].to_s + '/questions/download_test',
+           headers: { 'access-token': @api_key[:access_token] },
+           params: { count: 10 }
+      expect(response.status).to eq(400)
+    end
+
+    it '#download_index 404' do
+      post '/api/teachers/problems/0/questions/download_test',
+           headers: { 'access-token': @api_key[:access_token] }
+      expect(response.status).to eq(404)
+    end
+  end
+
   describe '管理者以外に対するテスト' do
     let!(:teacher) { create(:teacher) }
     let!(:teacher_api_key) { teacher.activate }
@@ -196,6 +238,18 @@ RSpec.describe 'teachers/Questions', type: :request do
              headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
+
+    it '#download_index 401' do
+      post '/api/teachers/problems/0/questions/download_index',
+           headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '#download_test 401' do
+      post '/api/teachers/problems/0/questions/download_test',
+           headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
   end
 
   describe '未ログイン講師に対するテスト' do
@@ -226,6 +280,16 @@ RSpec.describe 'teachers/Questions', type: :request do
 
     it '#destroy 401' do
       delete '/api/teachers/problems/0/questions/0'
+      expect(response.status).to eq(401)
+    end
+
+    it '#download_index 401' do
+      post '/api/teachers/problems/0/questions/download_index'
+      expect(response.status).to eq(401)
+    end
+
+    it '#download_test 401' do
+      post '/api/teachers/problems/0/questions/download_test'
       expect(response.status).to eq(401)
     end
   end
