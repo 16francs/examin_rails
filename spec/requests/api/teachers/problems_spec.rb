@@ -148,6 +148,54 @@ RSpec.describe 'Teachers/Problems', type: :request do
         expect(response.status).to eq(404)
       end
     end
+
+    describe 'GET /api/teachers/problems/download' do
+      it '#download 200' do
+        get '/api/teachers/problems/download',
+            headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(200)
+      end
+    end
+
+    describe 'POST /api/teachers/problems/:id/upload' do
+      let!(:problem) { create(:problem, :with_user) }
+
+      before do
+        file_path = File.open(Rails.root.join('lib','new_questions.xlsx'))
+        file_type = 'application/vnd.ms-excel'
+        @file = Rack::Test::UploadedFile.new(file_path, file_type)
+      end
+
+      it '#upload 200' do
+        post '/api/teachers/problems/' + problem[:id].to_s + '/upload',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { file: @file }
+        expect(response.status).to eq(200)
+      end
+
+      it '#upload 400 ファイルなし' do
+        post '/api/teachers/problems/' + problem[:id].to_s + '/upload',
+             headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(400)
+      end
+
+      it '#upload 400 異なるファイル' do
+        file_path = File.open(Rails.root.join('lib', 'questions.xlsx'))
+        file_type = 'application/vnd.ms-excel'
+        file = Rack::Test::UploadedFile.new(file_path, file_type)
+
+        post '/api/teachers/problems/' + problem[:id].to_s + '/upload',
+             headers: { 'access-token': @api_key[:access_token] },
+             params: { file: file }
+        expect(response.status).to eq(400)
+      end
+
+      it '#upload 404' do
+        post '/api/teachers/problems/0/upload',
+             headers: { 'access-token': @api_key[:access_token] }
+        expect(response.status).to eq(404)
+      end
+    end
   end
 
   describe '管理者以外に対するテスト' do
@@ -200,6 +248,18 @@ RSpec.describe 'Teachers/Problems', type: :request do
              headers: { 'access-token': student_api_key[:access_token] }
       expect(response.status).to eq(401)
     end
+
+    it '#download 401' do
+      get '/api/teachers/problems/download',
+          headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
+
+    it '#upload 401' do
+      post '/api/teachers/problems/0/upload',
+           headers: { 'access-token': student_api_key[:access_token] }
+      expect(response.status).to eq(401)
+    end
   end
 
   describe '未ログイン講師に対するテスト' do
@@ -230,6 +290,16 @@ RSpec.describe 'Teachers/Problems', type: :request do
 
     it '#destroy 401' do
       delete '/api/teachers/problems/0'
+      expect(response.status).to eq(401)
+    end
+
+    it '#download 401' do
+      get '/api/teachers/problems/download'
+      expect(response.status).to eq(401)
+    end
+
+    it '#upload 401' do
+      post '/api/teachers/problems/0/upload'
       expect(response.status).to eq(401)
     end
   end
