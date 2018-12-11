@@ -161,7 +161,7 @@ RSpec.describe 'Teachers/Problems', type: :request do
       let!(:problem) { create(:problem, :with_user) }
 
       before do
-        file_path = File.open(Rails.root.join('lib','new_questions.xlsx'))
+        file_path = File.open(Rails.root.join('lib', 'new_questions.xlsx'))
         file_type = 'application/vnd.ms-excel'
         @file = Rack::Test::UploadedFile.new(file_path, file_type)
       end
