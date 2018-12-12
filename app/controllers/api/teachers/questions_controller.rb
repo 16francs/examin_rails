@@ -97,7 +97,7 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
   end
 
   def download_test_data
-    @questions = Question.where(id: random_question_ids)
+    @questions = Question.where(id: random_question_ids).shuffle
     @file_name = "テスト#{@count}.xlsx"
     @file_path = Rails.root.join('lib', "tests_#{@count}.xlsx")
     @file_type = 'application/vnd.ms-excel'
