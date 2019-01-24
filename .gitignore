@@ -1,0 +1,35 @@
+# Ignore bundler config.
+/.bundle
+/vendor/bundle
+
+# Ignore all logfiles and tempfiles.
+/log/*
+/tmp/*
+!/log/.keep
+!/tmp/.keep
+.byebug_history
+/coverage
+dump.rdb
+
+# Ignore idea files
+.idea/
+
+# Mac finder artifacts
+.DS_Store
+
+# Add environment setting.
+/.env
+.ruby-version
+
+# Ignore upload files
+/public/uploads/*
+/storage/*
+!/storage/.keep
+
+# Ignore public/assets
+/public/assets/*
+
+# Ignore client files
+/node_modules
+/yarn-error.log
+/yarn.lock

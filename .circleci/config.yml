@@ -1,0 +1,73 @@
+version: 2
+jobs:
+  build:
+    parallelism: 1
+    docker:
+    - image: circleci/ruby:2.6.0-stretch-node
+      environment:
+        BUNDLE_JOBS: 3
+        BUNDLE_RETRY: 3
+        BUNDLE_PATH: vendor/bundle
+        RAILS_ENV: test
+        DATABASE_USERNAME: root
+        DATABASE_PASSWORD: ''
+        DATABASE_HOST: 127.0.0.1
+        DATABASE_PORT: 3306
+        CIRCLE_ARTIFACTS: /tmp/artifacts
+    - image: circleci/mysql:5.7.23
+      environment:
+        MYSQL_USER: root
+        MYSQL_ALLOW_EMPTY_PASSWORD: yes
+        MYSQL_DATABASE: examin_test
+    working_directory: ~/examin
+    steps:
+      - checkout
+
+      # Which version of bundler?
+      - run:
+          name: Which bundler?
+          command: bundle -v
+
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "Gemfile.lock" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+
+      # Bundle install dependencies
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install --path vendor/bundle
+
+      - save_cache:
+          paths:
+            - ./vendor/bundle
+          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+
+      # Database setup
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:3306 -timeout 120s
+
+      - run:
+          name: Database setup
+          command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
+
+      # Run rubocop
+      - run:
+          name: Run rubocop
+          command: bundle exec rubocop
+
+      # Run rspec in parallel
+      - run:
+          name: Run rspec in parallel
+          command: |
+            bundle exec rspec --profile 10 \
+                              --format RspecJunitFormatter \
+                              --out test_results/rspec.xml \
+                              --format progress \
+                              $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
+
+      - store_artifacts:
+          path: /tmp/artifacts/coverage
