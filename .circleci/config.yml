@@ -60,7 +60,7 @@ jobs:
 
       - run:
           name: Database setup
-          command: bundle exec rails ridgepole:export RAILS_ENV=test
+          command: bundle exec rails ridgepole:apply RAILS_ENV=test
 
       # Run rubocop
       - run:
