@@ -7,8 +7,20 @@ AllCops:
   - 'vendor/**/*'
   - 'Gemfile.lock'
 
+Metrics/AbcSize:
+  Max: 25
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/MethodLength:
+  Max: 20
+
 Style/AsciiComments:
   Enabled: false
+
+Style/ClassAndModuleChildren:
+  EnforcedStyle: compact
 
 Style/DateTime:
   Enabled: false
