@@ -3,7 +3,7 @@
 class ApplicationController < ActionController::API
   SECRET_KEY = Rails.application.secrets.secret_key_base
 
-  rescue_from StandardError, with: :internal_server_error
+  # rescue_from StandardError, with: :internal_server_error
 
   private
 
@@ -17,7 +17,8 @@ class ApplicationController < ActionController::API
     @decoded = JsonWebToken.decode(token)
 
     # トークンの有効期限を確認
-    unauthorized unless @decoded[:expired_at] < DateTime.now
+    expired_at = DateTime.parse(@decoded[:expired_at])
+    unauthorized unless expired_at > DateTime.now
 
     # ログインユーザーを取得
     @current_user = User.find(@decoded[:user_id])
