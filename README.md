@@ -40,7 +40,7 @@ DATABASE_PASSWORD = 'DBのパスワード'
 
 * データベースにテーブルを作成
 
-> $ bundle exec rails db:apply
+> $ bundle exec rails ridgepole:apply
 
 ## 起動方法
 
@@ -58,7 +58,7 @@ DATABASE_PASSWORD = 'DBのパスワード'
 
 * サーバーを起動
 
-> $ rails server
+> $ bundle exec rails server
 
 * 下記のURLにアクセスして確認
 

@@ -9,6 +9,7 @@ gem 'bcrypt', '~> 3.1.7' # ハッシュ化したパスワードを生成する�
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails' # .env による環境変数の設定
 gem 'jbuilder', '~> 2.5' # JSON の生成用
+gem 'jwt' # ログイン認証
 gem 'mysql2', '>= 0.4.4'
 gem 'puma', '~> 3.11'
 gem 'rack-cors' # クロスドメイン対策
