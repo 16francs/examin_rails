@@ -28,7 +28,12 @@
 # データベースの設定
 DATABASE_USERNAME = 'DBのユーザー名'
 DATABASE_PASSWORD = 'DBのパスワード'
+SECRET_KEY_BAE = '認証に使用する秘密鍵'
 ```
+
+* (秘密鍵の生成をしたい場合は以下のコマンドを実行する)
+
+> $ bundle exec rails secret
 
 * システムに必要なGemをインストール(pathは適宜変更)
 
