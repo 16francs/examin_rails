@@ -23,6 +23,7 @@ jobs:
     steps:
       - checkout
 
+      # Install Bundler
       - run:
           name: Configure Bundler
           command: |
@@ -59,7 +60,7 @@ jobs:
 
       - run:
           name: Database setup
-          command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
+          command: bundle exec rails ridgepole:export RAILS_ENV=test
 
       # Run rubocop
       - run:

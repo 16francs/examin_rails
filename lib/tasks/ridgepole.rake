@@ -2,19 +2,19 @@
 
 # rubocop:disable all
 # [Example]
-# -> データベースに反映: bundle exec rails db:export
-# -> データベースから取得: bundle exec rails db:apply
-namespace :db do
+# -> データベースに反映: bundle exec rails ridgepole:export
+# -> データベースから取得: bundle exec rails ridgepole:apply
+namespace :ridgepole do
   config = 'config/database.yml'
   schema = 'db/schemas/Schemafile'
   env = ENV['RAILS_ENV'] || 'development'
 
-  if env == 'production'
-    desc 'apply Schemafile RAILS_ENV=production'
+  if env == 'production' || env == 'test'
+    desc 'apply Schemafile'
     task :apply do
       sh "bundle exec ridgepole -c #{config} -E #{env} --apply -f #{schema}"
     end
-  else
+  else # env -> development
     desc 'apply Schemafile and update schema.rb'
     task :apply do
       sh "bundle exec dotenv -f '.env' ridgepole -c #{config} -E #{env} --apply -f #{schema}"
