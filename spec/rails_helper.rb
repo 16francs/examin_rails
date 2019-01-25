@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 # rubocop:disable all
-require 'coveralls'
-Coveralls.wear!
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
 ENV['RAILS_ENV'] ||= 'test'
@@ -13,6 +11,7 @@ require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
 require 'shoulda/matchers'
 require 'simplecov'
+require 'coveralls'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -90,7 +89,10 @@ if ENV['CIRCLE_ARTIFACTS']
 end
 
 # カバレッジ結果を測定するための設定
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([SimpleCov::Formatter::HTMLFormatter])
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
+  SimpleCov::Formatter::HTMLFormatter,
+  Coveralls::SimpleCov::Formatter
+])
 SimpleCov.start 'rails' do
   # 除外するディレクトリの指定
   add_filter %w[
