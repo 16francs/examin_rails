@@ -46,6 +46,7 @@ SECRET_KEY_BAE = '認証に使用する秘密鍵'
 * データベースにテーブルを作成
 
 > $ bundle exec rails ridgepole:apply
+> $ bundle exec rails ridgepole:apply RAILS_ENV=test
 
 ## 起動方法
 

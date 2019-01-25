@@ -60,7 +60,7 @@ jobs:
 
       - run:
           name: Database setup
-          command: bundle exec rails ridgepole:apply RAILS_ENV=test
+          command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
 
       # Run rubocop
       - run:

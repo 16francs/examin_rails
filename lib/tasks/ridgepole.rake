@@ -9,7 +9,7 @@ namespace :ridgepole do
   schema = 'db/schemas/Schemafile'
   env = ENV['RAILS_ENV'] || 'development'
 
-  if env == 'production' || env == 'test'
+  if env == 'production'
     desc 'apply Schemafile'
     task :apply do
       sh "bundle exec ridgepole -c #{config} -E #{env} --apply -f #{schema}"
