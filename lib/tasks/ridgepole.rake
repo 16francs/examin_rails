@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-# rubocop:disable all
 # [Example]
 # -> データベースに反映: bundle exec rails ridgepole:export
 # -> データベースから取得: bundle exec rails ridgepole:apply
@@ -26,4 +25,3 @@ namespace :ridgepole do
     end
   end
 end
-# rubocop:enable all
