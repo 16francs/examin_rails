@@ -90,11 +90,12 @@ end
 if ENV['CIRCLE_ARTIFACTS']
   dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
   SimpleCov.coverage_dir(dir)
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[Coveralls::SimpleCov::Formatter]
+  formatter = [Coveralls::SimpleCov::Formatter]
 else
-  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[SimpleCov::Formatter::HTMLFormatter]
+  formatter = [SimpleCov::Formatter::HTMLFormatter]
 end
 
+SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new(formatter)
 SimpleCov.start 'rails' do
   # 除外するディレクトリの指定
   add_filter %w[

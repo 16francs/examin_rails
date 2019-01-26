@@ -28,33 +28,31 @@ class ApplicationController < ActionController::API
   end
 
   # --- エラー処理 ---
+  def error_response(status)
+    err = I18n.t("errors.#{status}", default: :'errors.other')
+    render json: { status: err[:status], desciption: err[:description] }, status: err[:status]
+  end
+
   def bad_request
-    render json: { status: 400, description: '' }, status: :bad_request
+    error_response('BadRequest')
   end
 
   def unauthorized
-    render json: { status: 401, description: '' }, status: :unauthorized
+    error_response('Unauthorized')
   end
 
   def forbidden
-    render json: { status: 403, desription: '' }, status: :forbidden
+    error_response('Forbidden')
   end
 
   def not_found
-    render json: { status: 404, description: '' }, status: :not_found
-  end
-
-  def record_invalid(model)
-    logger.error('----- status: 422 エラー内容 -----')
-    logger.error(model.errors.messages)
-    logger.error('---------------------------------')
-    render json: { status: 422, description: '' }, status: :unprocessable_entity
+    error_response('NotFound')
   end
 
   def internal_server_error(error)
     logger.error('----- status: 500 エラー内容 -----')
     logger.error(error)
     logger.error('---------------------------------')
-    render json: { status: 500, description: '' }, status: :internal_server_error
+    error_response('InternalServerError')
   end
 end

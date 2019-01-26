@@ -18,23 +18,23 @@
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
   # DatabaseCleaner の設定
-  # RSpecの実行前に一度、実行
+  # RSpec の実行前に一度、実行
   config.before(:suite) do
-    # DBを綺麗にする手段を指定、トランザクションを張ってrollbackするように指定
+    # DBを綺麗にする手段を指定、トランザクションを張って rollback するように指定
     DatabaseCleaner.strategy = :transaction
     # truncate table文を実行し、レコードを消す
     DatabaseCleaner.clean_with(:truncation)
   end
 
-  # testが始まるごとに実行
+  # test が始まるごとに実行
   config.before(:each) do
-    # strategyがtransactionなので、トランザクションを張る
+    # strategy が transaction なので、トランザクションを張る
     DatabaseCleaner.start
   end
 
-  # exampleが終わるごとに実行
+  # test が終わるごとに実行
   config.after(:each) do
-    # strategyがtransactionなので、rollbackする
+    # strategy が transaction なので、rollback する
     DatabaseCleaner.clean
   end
 

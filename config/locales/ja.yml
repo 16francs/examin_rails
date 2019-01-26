@@ -1,0 +1,20 @@
+ja:
+  errors:
+    BadRequest:
+      status: 400
+      description: bad request
+    Unauthorized:
+      status: 401
+      description: unauhorized
+    Forbidden:
+      status: 403
+      description: forbidden
+    NotFound:
+      status: 404
+      description: not found
+    InternalServerError:
+      status: 500
+      description: server error
+    other:
+      status_code: 500
+      description: server error
