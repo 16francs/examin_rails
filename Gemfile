@@ -41,8 +41,6 @@ group :test do
   gem 'coveralls', require: false
   gem 'database_cleaner'
   gem 'factory_bot_rails'
-  gem 'rails-controller-testing'
-  gem 'rspec-json_matcher'
   gem 'rspec-rails'
   gem 'shoulda-matchers', require: false
   gem 'simplecov'

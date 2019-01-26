@@ -9,8 +9,8 @@ class ApplicationController < ActionController::API
 
   # ログインしているかの検証 <- JWT認証
   def require_login
-    header ||= request.headers['Authorization']
-    unauthorized unless header
+    header = request.headers['Authorization']
+    return unauthorized unless header&.include?('Bearer ')
 
     # token の復号化
     token = header.split(' ').last
@@ -18,11 +18,13 @@ class ApplicationController < ActionController::API
 
     # トークンの有効期限を確認
     expired_at = DateTime.parse(@decoded[:expired_at])
-    unauthorized unless expired_at > DateTime.now
+    return unauthorized unless expired_at > DateTime.now
 
     # ログインユーザーを取得
     @current_user = User.find(@decoded[:user_id])
     unauthorized unless @current_user
+  rescue JWT::DecodeError
+    unauthorized
   end
 
   # --- エラー処理 ---

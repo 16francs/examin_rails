@@ -6,6 +6,35 @@ require 'rails_helper'
 describe 'Api::Auth', type: :request do
   let!(:user) { create(:user) }
 
+  describe 'index action' do
+    context '未ログインの場合' do
+      it 'status: 401' do
+        get '/api/auth'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(user)
+        auth_params = get_auth_params(response)
+        get '/api/auth', headers: auth_params
+      end
+
+      it 'status: 200' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'json の検証' do
+        json = JSON.parse(response.body)
+        expect(json['token']).not_to eq(nil)
+        expect(json['expired_at']).not_to eq(nil)
+        expect(json['user']['id']).to eq(user[:id])
+        expect(json['user']['role']).to eq(user[:role])
+      end
+    end
+  end
+
   describe 'create action' do
     context '有効なパラメータの場合' do
       before do

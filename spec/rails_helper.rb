@@ -65,6 +65,10 @@ RSpec.configure do |config|
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
 
+  # test_helpers の読み込み
+  Dir[Rails.root.join('spec/test_helpers/**/*.rb')].each { |f| require f }
+  config.include RequestHelper
+
   # FactoryBot の設定
   config.include FactoryBot::Syntax::Methods
 end
