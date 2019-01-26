@@ -3,7 +3,7 @@
 class ApplicationController < ActionController::API
   SECRET_KEY = Rails.application.secrets.secret_key_base
 
-  # rescue_from StandardError, with: :internal_server_error
+  rescue_from StandardError, with: :internal_server_error
 
   private
 

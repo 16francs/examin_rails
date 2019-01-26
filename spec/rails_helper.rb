@@ -81,18 +81,16 @@ Shoulda::Matchers.configure do |config|
   end
 end
 
-# CircleCi 上でテスト結果を保存するための設定
+# CircleCi 上でテスト結果を保存するための設定 と カバレッジ結果を測定するための設定
 # save to CircleCI's artifacts directory if we're on CircleCI
 if ENV['CIRCLE_ARTIFACTS']
   dir = File.join(ENV['CIRCLE_ARTIFACTS'], 'coverage')
   SimpleCov.coverage_dir(dir)
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[Coveralls::SimpleCov::Formatter]
+else
+  SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[SimpleCov::Formatter::HTMLFormatter]
 end
 
-# カバレッジ結果を測定するための設定
-SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter.new([
-  SimpleCov::Formatter::HTMLFormatter,
-  Coveralls::SimpleCov::Formatter
-])
 SimpleCov.start 'rails' do
   # 除外するディレクトリの指定
   add_filter %w[
