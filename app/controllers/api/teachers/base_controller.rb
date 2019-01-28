@@ -7,6 +7,6 @@ class Api::Teachers::BaseController < ApplicationController
   private
 
   def logged_in_teacher
-    unauthorized unless @current_user[:role] == 1 || @current_user[:role] == 2
+    raise ApiErrors::Unauthorized unless @current_user[:role] == 1 || @current_user[:role] == 2
   end
 end

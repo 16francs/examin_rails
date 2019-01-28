@@ -1,18 +1,18 @@
 ja:
   errors:
-    BadRequest:
+    ApiErrors::BadRequest:
       status: 400
       description: bad request
-    Unauthorized:
+    ApiErrors::Unauthorized:
       status: 401
       description: unauhorized
-    Forbidden:
+    ApiErrors::Forbidden:
       status: 403
       description: forbidden
-    NotFound:
-      status: 404
-      description: not found
-    InternalServerError:
+    ApiErrors::Validation:
+      status: 422
+      description: validation error
+    ApiErrors::OperationError:
       status: 500
       description: server error
     other:
