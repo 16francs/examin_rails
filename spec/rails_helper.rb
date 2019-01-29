@@ -68,6 +68,7 @@ RSpec.configure do |config|
   # test_helpers の読み込み
   Dir[Rails.root.join('spec/test_helpers/**/*.rb')].each { |f| require f }
   config.include RequestHelper
+  config.include TimeHelper
 
   # FactoryBot の設定
   config.include FactoryBot::Syntax::Methods
