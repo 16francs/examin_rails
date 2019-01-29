@@ -23,9 +23,17 @@ describe 'Api::Teachers::Teachers', type: :request do
       end
 
       context '有効なパラメータの場合' do
-        it 'status: 200' do
+        before do
+          @size = User.all.size
           post '/api/teachers/teachers', params: valid_params, headers: @auth_params
+        end
+
+        it 'status: 200' do
           expect(response.status).to eq(200)
+        end
+
+        it 'size: +1' do
+          expect(User.all.size).to eq(@size + 1)
         end
       end
 

@@ -19,7 +19,6 @@ dump.rdb
 
 # Add environment setting.
 /.env
-.ruby-version
 
 # Ignore upload files
 /public/uploads/*
