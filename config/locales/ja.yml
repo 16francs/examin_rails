@@ -9,12 +9,12 @@ ja:
     ApiErrors::Forbidden:
       status: 403
       description: forbidden
-    ApiErrors::Validation:
+    ApiErrors::ValidationError:
       status: 422
       description: validation error
     ApiErrors::OperationError:
       status: 500
       description: server error
     other:
-      status_code: 500
+      status: 500
       description: server error

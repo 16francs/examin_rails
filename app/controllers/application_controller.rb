@@ -34,15 +34,12 @@ class ApplicationController < ActionController::API
   end
 
   def render_400(error)
-    logger.error('----- status: 400 エラー内容 -----')
-    logger.error(error)
-    logger.error('---------------------------------')
     error_response(error)
   end
 
-  def render_500(error)
+  def render_500(error, error_instance)
     logger.error('----- status: 500 エラー内容 -----')
-    logger.error(error)
+    logger.error(error_instance)
     logger.error('---------------------------------')
     error_response(error)
   end
@@ -60,7 +57,7 @@ class ApplicationController < ActionController::API
     when 422 then
       render_400(error)
     else
-      render_500(error)
+      render_500(error, error_instance)
     end
   end
 end

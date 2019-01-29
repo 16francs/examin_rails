@@ -2,6 +2,9 @@
 
 class Api::Teachers::TeachersController < Api::Teachers::BaseController
   def create
+    Teachers::Teachers::Operation::Create.call(
+      teacher: teacher_params
+    )
     render json: {}, status: :ok
   end
 
