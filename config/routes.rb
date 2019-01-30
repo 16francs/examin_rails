@@ -6,6 +6,7 @@ Rails.application.routes.draw do
     end
 
     namespace :students do
+      resources :problems, only: %i[index]
     end
 
     namespace :teachers do
