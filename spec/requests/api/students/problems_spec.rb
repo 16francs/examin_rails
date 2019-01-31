@@ -31,12 +31,12 @@ describe 'Api::Students::Problems', type: :request do
       it 'json の検証' do
         json = JSON.parse(response.body)
         problems.map(&:reload)
-        expect(json[0]['id']).to eq(problems[0][:id])
-        expect(json[0]['title']).to eq(problems[0][:title])
-        expect(json[0]['content']).to eq(problems[0][:content])
-        expect(json[0]['student_name']).to eq(problems[0].user[:name])
-        expect(json[0]['created_at']).to eq(default_time(problems[0][:created_at]))
-        expect(json[0]['updated_at']).to eq(default_time(problems[0][:updated_at]))
+        expect(json['problems'][0]['id']).to eq(problems[0][:id])
+        expect(json['problems'][0]['title']).to eq(problems[0][:title])
+        expect(json['problems'][0]['content']).to eq(problems[0][:content])
+        expect(json['problems'][0]['teacher_name']).to eq(problems[0].user[:name])
+        expect(json['problems'][0]['created_at']).to eq(default_time(problems[0][:created_at]))
+        expect(json['problems'][0]['updated_at']).to eq(default_time(problems[0][:updated_at]))
       end
     end
   end
