@@ -10,6 +10,7 @@
 .byebug_history
 /coverage
 dump.rdb
+.docker-sync/*
 
 # Ignore idea files
 .idea/
