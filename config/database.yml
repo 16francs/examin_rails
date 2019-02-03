@@ -5,7 +5,7 @@ default: &default
   username: <%= ENV['DATABASE_USERNAME'] || 'examin' %>
   password: <%= ENV['DATABASE_PASSWORD'] || 'examin' %>
   host: <%= ENV['DATABASE_HOST'] || '127.0.0.1' %>
-  port: <%= ENV['DATABASE_PORT'] || 3306 %>
+  port: <%= ENV['DATABASE_PORT'] || 3316 %>
   database: examin
 
 development:

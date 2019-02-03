@@ -1,0 +1,13 @@
+version: '2'
+
+options:
+  verbose: true
+
+syncs:
+  examin_rails_sync:
+    src: './'
+    sync_host_ip: 'localhost'
+    sync_host_port: '3501'
+    sync_strategy: 'rsync'
+    sync_excludes: ['.env', '.git', 'tmp', 'vendor']
+    sync_args: '-vr --delete'
