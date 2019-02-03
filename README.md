@@ -33,6 +33,8 @@ https://github.com/EugenMayer/docker-sync/wiki
 
 ## テストの実行
 
+(ちょっと今エラー出るので実行できないです...ごめんなさい)
+
 > $ sh docker/bin/test.sh
 
 ## DB・Gemのアップデート
@@ -49,7 +51,7 @@ https://github.com/EugenMayer/docker-sync/wiki
 
 > http://localhost:3500
 
-* 起動時，ログが出力された場合のコマンド
+* 起動時，以下のログが出力された場合のコマンド
 
 `A server is already running. Check /examin_rails/tmp/pids/server.pid.` 
 
