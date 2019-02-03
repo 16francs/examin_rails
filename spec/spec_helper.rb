@@ -17,27 +17,6 @@
 #
 # See http://rubydoc.info/gems/rspec-core/RSpec/Core/Configuration
 RSpec.configure do |config|
-  # DatabaseCleaner の設定
-  # RSpec の実行前に一度、実行
-  config.before(:suite) do
-    # DBを綺麗にする手段を指定、トランザクションを張って rollback するように指定
-    DatabaseCleaner.strategy = :transaction
-    # truncate table文を実行し、レコードを消す
-    DatabaseCleaner.clean_with(:truncation)
-  end
-
-  # test が始まるごとに実行
-  config.before(:each) do
-    # strategy が transaction なので、トランザクションを張る
-    DatabaseCleaner.start
-  end
-
-  # test が終わるごとに実行
-  config.after(:each) do
-    # strategy が transaction なので、rollback する
-    DatabaseCleaner.clean
-  end
-
   # rspec-expectations config goes here. You can use an alternate
   # assertion/expectation library such as wrong or the stdlib/minitest
   # assertions if you prefer.

@@ -3,15 +3,17 @@
 # rubocop:disable all
 # This file is copied to spec/ when you run 'rails generate rspec:install'
 require 'spec_helper'
-ENV['RAILS_ENV'] ||= 'test'
+ENV['RAILS_ENV'] = 'test'
 require File.expand_path('../../config/environment', __FILE__)
 # Prevent database truncation if the environment is production
 abort('The Rails environment is running in production mode!') if Rails.env.production?
 require 'rspec/rails'
 # Add additional requires below this line. Rails is not loaded until this point!
+require 'coveralls'
+require 'database_cleaner'
+require 'factory_bot_rails'
 require 'shoulda/matchers'
 require 'simplecov'
-require 'coveralls'
 
 # Requires supporting ruby files with custom matchers and macros, etc, in
 # spec/support/ and its subdirectories. Files matching `spec/**/*_spec.rb` are
@@ -64,6 +66,27 @@ RSpec.configure do |config|
   config.filter_rails_from_backtrace!
   # arbitrary gems may also be filtered via:
   # config.filter_gems_from_backtrace("gem name")
+
+  # DatabaseCleaner の設定
+  # RSpec の実行前に一度、実行
+  config.before(:suite) do
+    # DBを綺麗にする手段を指定、トランザクションを張って rollback するように指定
+    DatabaseCleaner.strategy = :transaction
+    # truncate table文を実行し、レコードを消す
+    DatabaseCleaner.clean_with(:truncation)
+  end
+
+  # test が始まるごとに実行
+  config.before(:each) do
+    # strategy が transaction なので、トランザクションを張る
+    DatabaseCleaner.start
+  end
+
+  # test が終わるごとに実行
+  config.after(:each) do
+    # strategy が transaction なので、rollback する
+    DatabaseCleaner.clean
+  end
 
   # test_helpers の読み込み
   Dir[Rails.root.join('spec/test_helpers/**/*.rb')].each { |f| require f }
