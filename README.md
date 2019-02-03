@@ -14,55 +14,47 @@
 
 * Ruby 2.6.0
 * Rails 6.0.0
-* DB: MySQL5.7.23
+* DB: MySQL5.7.24
 
 ## 環境構築
 
-* .envファイルを作成
+* `docker` ・ `docker-compose` のインストール
 
-> $ touch ./.env
+https://store.docker.com/editions/community/docker-ce-desktop-mac
 
-* 作成した.envファイルに以下の内容を記述(' '内はローカル設定を記述)
+* `docker-sync (rsync)` のインストール
 
-```text:.env
-# データベースの設定
-DATABASE_USERNAME = 'DBのユーザー名'
-DATABASE_PASSWORD = 'DBのパスワード'
-SECRET_KEY_BAE = '認証に使用する秘密鍵'
-```
+https://github.com/EugenMayer/docker-sync/wiki
 
-* (秘密鍵の生成をしたい場合は以下のコマンドを実行する)
+* 以下のコマンドを実行
 
-> $ bundle exec rails secret
+> $ cd examin_rails      
+> $ sh docker/bin/create.sh
 
-* システムに必要なGemをインストール(pathは適宜変更)
+## テストの実行
 
-> $ ./bin/bundle install --path vendor/bundle
+> $ sh docker/bin/test.sh
 
-* データベースの構築(MySQLを使用)
+## DB・Gemのアップデート
 
-> $ bundle exec rails db:create
-
-* データベースにテーブルを作成
-
-> $ bundle exec rails ridgepole:apply
-> $ bundle exec rails ridgepole:apply RAILS_ENV=test
+> $ sh docker/bin/update.sh
 
 ## 起動方法
 
-* MySQLの起動
+* 以下のコマンドを実行
 
-> $ sudo mysql.server start
-
-* テストを実行し，全てのテストをパスするかの確認
-
-> $ bundle exec rspec
-
-* サーバーを起動
-
-> $ bundle exec rails server
+> $ sh docker/bin/start.sh
 
 * 下記のURLにアクセスして確認
 
-> http://localhost:3000
+> http://localhost:3500
 
+* 起動時，ログが出力された場合のコマンド
+
+`A server is already running. Check /examin_rails/tmp/pids/server.pid.` 
+
+> $ docker-compose run --rm web rm -rf tmp/
+
+## 再起動
+
+> $ sh docker/bin/restart.sh
