@@ -24,7 +24,6 @@ services:
     ports:
       - "3316:3306"
     environment:
-      TZ: "Asia/Tokyo"
       MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
 
 volumes:
