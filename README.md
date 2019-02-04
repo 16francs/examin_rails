@@ -68,7 +68,8 @@
 
 `A server is already running. Check /examin_rails/tmp/pids/server.pid.` 
 
-> $ docker-compose run --rm web rm -rf tmp/
+> $ docker-compose run --rm web rm -rf tmp/   
+> $ docker-compose run --rm web bundle exec rails server
 
 ## 再起動
 
