@@ -20,20 +20,33 @@
 
 * `docker` ・ `docker-compose` のインストール
 
-https://store.docker.com/editions/community/docker-ce-desktop-mac
+> https://store.docker.com/editions/community/docker-ce-desktop-mac
 
 * `docker-sync (rsync)` のインストール
 
-https://github.com/EugenMayer/docker-sync/wiki
+> https://github.com/EugenMayer/docker-sync/wiki
+
+(Mac の場合,以下のコマンドでインストールできる)
+
+> $ gem install docker-sync   
+> $ gem install rcynd
 
 * 以下のコマンドを実行
 
 > $ cd examin_rails      
-> $ sh docker/bin/create.sh
+> $ sh docker/bin/create.sh   
+
+(途中でエラーがおきた場合...)
+
+* docker 内の MySQL に データベースを作成
+
+> $ sh docker/bin/create-db.sh    
+
+* その他の設定
+
+> $ sh docker/bin/setup.sh
 
 ## テストの実行
-
-(ちょっと今エラー出るので実行できないです...ごめんなさい)
 
 > $ sh docker/bin/test.sh
 

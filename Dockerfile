@@ -1,6 +1,5 @@
 FROM ruby:2.6.0
 
-ENV LANG C.UTF-8
 ENV PROJECT=examin_rails
 
 RUN apt-get update -qq
@@ -8,7 +7,11 @@ RUN apt-get install -y \
       build-essential \
       mysql-client \
       nodejs \
+      tzdata \
       vim
+
+# Set Timezone
+RUN cp /usr/share/zoneinfo/Asia/Tokyo /etc/localtime
 
 WORKDIR /$PROJECT
 
