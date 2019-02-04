@@ -1,5 +1,6 @@
 FROM ruby:2.6.0
 
+ENV LANG C.UTF-8
 ENV PROJECT=examin_rails
 
 RUN apt-get update -qq
