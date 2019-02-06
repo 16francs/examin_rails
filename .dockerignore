@@ -1,0 +1,5 @@
+.git
+.circleci
+coverage
+log
+tmp
