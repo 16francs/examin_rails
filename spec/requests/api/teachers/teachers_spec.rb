@@ -362,7 +362,6 @@ describe 'Api::Teachers::Teachers', type: :request do
     }
   end
 
-
   def invalid_password_params
     {
       teacher: {

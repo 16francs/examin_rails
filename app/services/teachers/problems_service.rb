@@ -11,7 +11,7 @@ class Teachers::ProblemsService
     @response = []
 
     keys = %i[id title content user_id created_at updated_at]
-    problems = Problem.pluck(:id, :title, :content, :user_id, :created_at, :updated_at)
+    problems = Problem.order(updated_at: :desc).pluck(:id, :title, :content, :user_id, :created_at, :updated_at)
     problems.map! { |problem| Hash[*[keys, problem].transpose.flatten] }
 
     problems.map! do |problem|
