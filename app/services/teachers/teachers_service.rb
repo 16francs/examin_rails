@@ -11,7 +11,7 @@ class Teachers::TeachersService
     @response = []
 
     keys = %i[id name school role]
-    teachers = User.where(acticated: true, role: 1..2).pluck(:id, :name, :school, :role)
+    teachers = User.where(activated: true, role: 1..2).pluck(:id, :name, :school, :role)
     teachers.map! { |teacher| Hash[*[keys, teacher].transpose.flatten] }
 
     @response = teachers

@@ -6,7 +6,6 @@ require 'rails_helper'
 describe 'Api::Teachers::Teachers', type: :request do
   let!(:admin) { create(:admin) }
   let!(:teacher) { build(:teacher) }
-  let!(:other_teacher) { create(:teacher) }
 
   describe 'index action' do
     let(:teachers) { create_list(:teacher, 10) }
@@ -32,10 +31,10 @@ describe 'Api::Teachers::Teachers', type: :request do
       it 'json の検証' do
         json = JSON.parse(response.body)
         teachers.map(&:reload)
-        expect(json['teachers'][0]['id']).to eq(teachers[0][:id])
-        expect(json['teachers'][0]['name']).to eq(teachers[0][:name])
-        expect(json['teachers'][0]['school']).to eq(teachers[0][:school])
-        expect(json['teachers'][0]['role']).to eq(teachers[0][:role])
+        expect(json['teachers'][0]['id']).to eq(admin[:id])
+        expect(json['teachers'][0]['name']).to eq(admin[:name])
+        expect(json['teachers'][0]['school']).to eq(admin[:school])
+        expect(json['teachers'][0]['role']).to eq(admin[:role])
       end
     end
   end
@@ -70,6 +69,8 @@ describe 'Api::Teachers::Teachers', type: :request do
       end
 
       context '無効なパラメータの場合' do
+        let!(:other_teacher) { create(:teacher) }
+
         it 'status: 422' do
           post '/api/teachers/teachers',
                params: login_id_nil_params, headers: @auth_params
@@ -128,6 +129,18 @@ describe 'Api::Teachers::Teachers', type: :request do
           post '/api/teachers/teachers',
                params: invalid_password_params, headers: @auth_params
           expect(response.status).to eq(422)
+        end
+
+        def login_id_unique_params
+          {
+            teacher: {
+              login_id: other_teacher[:login_id],
+              name: teacher[:name],
+              school: teacher[:school],
+              password: '12345678',
+              password_confirmation: '12345678'
+            }
+          }
         end
       end
     end
@@ -349,17 +362,6 @@ describe 'Api::Teachers::Teachers', type: :request do
     }
   end
 
-  def login_id_unique_params
-    {
-      teacher: {
-        login_id: other_teacher[:login_id],
-        name: teacher[:name],
-        school: teacher[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
-      }
-    }
-  end
 
   def invalid_password_params
     {
