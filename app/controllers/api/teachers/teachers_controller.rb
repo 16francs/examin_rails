@@ -1,6 +1,13 @@
 # frozen_string_literal: true
 
 class Api::Teachers::TeachersController < Api::Teachers::BaseController
+  def index
+    service = Teachers::TeachersService.new
+    service.index
+    @response = service.response
+    render :index, formats: :json, handlers: :jbuilder
+  end
+
   def create
     Teachers::Teachers::Operation::Create.call(
       teacher: teacher_params

@@ -8,6 +8,38 @@ describe 'Api::Teachers::Teachers', type: :request do
   let!(:teacher) { build(:teacher) }
   let!(:other_teacher) { create(:teacher) }
 
+  describe 'index action' do
+    let(:teachers) { create_list(:teacher, 10) }
+
+    context '未ログインの場合' do
+      it 'status: 401' do
+        get '/api/teachers/teachers'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(admin)
+        auth_params = get_auth_params(response)
+        get '/api/teachers/teachers', headers: auth_params
+      end
+
+      it 'status: 200' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'json の検証' do
+        json = JSON.parse(response.body)
+        teachers.map(&:reload)
+        expect(json['teachers'][0]['id']).to eq(teachers[0][:id])
+        expect(json['teachers'][0]['name']).to eq(teachers[0][:name])
+        expect(json['teachers'][0]['school']).to eq(teachers[0][:school])
+        expect(json['teachers'][0]['role']).to eq(teachers[0][:role])
+      end
+    end
+  end
+
   describe 'create action' do
     context '未ログインの場合' do
       it 'status: 401' do

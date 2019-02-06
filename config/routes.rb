@@ -12,7 +12,7 @@ Rails.application.routes.draw do
     namespace :teachers do
       resources :problems, only: %i[index]
       resources :students, only: %i[create]
-      resources :teachers, only: %i[create]
+      resources :teachers, only: %i[index create]
     end
   end
 end
