@@ -42,16 +42,10 @@ describe 'Api::Users', type: :request do
     end
 
     context 'ログイン済みの場合' do
-      before do
-        login(user)
-        @auth_params = get_auth_params(response)
-      end
-
       context '有効なパラメータの場合' do
         context 'ログインユーザーの login_id と同じ場合' do
           before do
-            post '/api/users/check_unique',
-                 params: my_login_id_params, headers: @auth_params
+            post '/api/users/check_unique', params: logged_in_user_my_login_id_params
           end
 
           it 'status: 200' do
@@ -66,8 +60,7 @@ describe 'Api::Users', type: :request do
 
         context 'ログインユーザーの login_id と違う場合' do
           before do
-            post '/api/users/check_unique',
-                 params: valid_check_unique_params, headers: @auth_params
+            post '/api/users/check_unique', params: logged_in_user_valid_params
           end
 
           it 'status: 200' do
@@ -83,8 +76,7 @@ describe 'Api::Users', type: :request do
 
       context '無効なパラメータの場合' do
         before do
-          post '/api/users/check_unique',
-               params: invalid_check_unique_params, headers: @auth_params
+          post '/api/users/check_unique', params: logged_in_user_invalid_params
         end
 
         it 'status: 200' do
@@ -115,9 +107,28 @@ describe 'Api::Users', type: :request do
     }
   end
 
-  def my_login_id_params
+  def logged_in_user_valid_params
     {
       user: {
+        id: user[:id],
+        login_id: not_created_user[:login_id]
+      }
+    }
+  end
+
+  def logged_in_user_invalid_params
+    {
+      user: {
+        id: user[:id] ,
+        login_id: created_user[:login_id]
+      }
+    }
+  end
+
+  def logged_in_user_my_login_id_params
+    {
+      user: {
+        id: user[:id],
         login_id: user[:login_id]
       }
     }
