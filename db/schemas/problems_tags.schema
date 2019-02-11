@@ -1,0 +1,9 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "problems_tags", id: :integer, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  t.bigint "problem_id", null: false, unsigned: true
+  t.bigint "tag_id", null: false, unsigned: true
+  t.datetime "created_at", null: false
+  t.index ["problem_id"], name: "problem_id"
+  t.index ["tag_id"], name: "tag_id"
+end

@@ -15,6 +15,8 @@ end
 add_foreign_key "achievements", "problems_users", name: "achievements_ibfk_1", on_update: :cascade, on_delete: :cascade
 add_foreign_key "achievements", "questions", name: "achievements_ibfk_2", on_update: :cascade, on_delete: :cascade
 add_foreign_key "problems", "users", name: "problems_ibfk_1"
+add_foreign_key "problems_tags", "problems", name: "problems_tags_ibfk_1", on_update: :cascade, on_delete: :cascade
+add_foreign_key "problems_tags", "tags", name: "problems_tags_ibfk_2", on_update: :cascade, on_delete: :cascade
 add_foreign_key "problems_users", "problems", name: "problems_users_ibfk_1", on_update: :cascade, on_delete: :cascade
 add_foreign_key "problems_users", "users", name: "problems_users_ibfk_2", on_update: :cascade, on_delete: :cascade
 add_foreign_key "questions", "problems", name: "questions_ibfk_1", on_update: :cascade, on_delete: :cascade

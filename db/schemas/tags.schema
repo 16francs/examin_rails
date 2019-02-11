@@ -1,0 +1,7 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+create_table "tags", id: :bigint, unsigned: true, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4", force: :cascade do |t|
+  t.string "content", limit: 31, default: "", null: false
+  t.datetime "created_at", null: false
+  t.datetime "updated_at", null: false
+end
