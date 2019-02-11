@@ -9,11 +9,10 @@ class UsersService
 
   def check_unique(params)
     @response = User.pluck(:login_id).exclude?(params[:login_id])
+    return if @response || params[:id].nil?
 
     # ログイン済みの場合，ログインユーザーの login_id と同じなのは true を返す
-    if !@response && params[:id]
-      current_user = User.find(params[:id])
-      @response = params[:login_id] == current_user[:login_id]
-    end
+    current_user = User.find(params[:id])
+    @response = params[:login_id] == current_user[:login_id]
   end
 end

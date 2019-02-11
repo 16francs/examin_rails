@@ -119,7 +119,7 @@ describe 'Api::Users', type: :request do
   def logged_in_user_invalid_params
     {
       user: {
-        id: user[:id] ,
+        id: user[:id],
         login_id: created_user[:login_id]
       }
     }
