@@ -7,4 +7,18 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
     @response = service.response
     render :index, formats: :json, handlers: :jbuilder
   end
+
+  def create
+    Teachers::Problems::Operation::Create.call(
+      problem: problem_params,
+      current_user: @current_user
+    )
+    render json: {}, status: :ok
+  end
+
+  private
+
+  def problem_params
+    params.require(:problem).permit(:title, :content, tags: [])
+  end
 end

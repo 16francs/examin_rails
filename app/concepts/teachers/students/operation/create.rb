@@ -35,6 +35,5 @@ class Teachers::Students::Operation::Create < ApplicationOperation
     )
 
     options[:model] = model
-    model.save!
   end
 end

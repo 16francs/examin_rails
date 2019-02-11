@@ -5,7 +5,7 @@ class ApplicationContract < Reform::Form
   require 'reform/form/validation/unique_validator'
 
   # 一般的な入力表現
-  VALID_VALUE_REGEX = /\A[ぁ-んーァ-ンー-龥々a-zａ-ｚA-ZＡ-Ｚ]+\z/.freeze
+  VALID_VALUE_REGEX = /\A[ぁ-んーァ-ンー-龥々a-zａ-ｚA-ZＡ-Ｚ0-9０-９]+\z/.freeze
   # ユーザーID
   VALID_ENGLISH_REGEX = /\A[a-zA-Z0-9]+\z/.freeze
 end
