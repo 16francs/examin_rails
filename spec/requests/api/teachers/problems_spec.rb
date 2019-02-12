@@ -5,6 +5,8 @@ require 'rails_helper'
 # rubocop:disable Metrics/BlockLength
 describe 'Api::Teachers::Problems', type: :request do
   let!(:admin) { create(:admin) }
+  let!(:problem) { build(:problem) }
+  let!(:tag) { build(:tag) }
 
   describe 'index action' do
     let!(:problems) { create_list(:problem, 10, user: admin) }
@@ -38,6 +40,25 @@ describe 'Api::Teachers::Problems', type: :request do
         expect(json['problems'][0]['updated_at']).to eq(default_time(problems[0][:updated_at]))
       end
     end
+  end
+
+  describe 'create action' do
+    context '未ログインの場合' do
+      it 'status: 401' do
+        post '/api/teachers/problems'
+        expect(response.status).to eq(401)
+      end
+    end
+  end
+
+  def valid_params
+    {
+      problem: {
+        title: problem[:title],
+        content: problem[:content],
+        tags: [tag[:content]]
+      }
+    }
   end
 end
 # rubocop:enable all
