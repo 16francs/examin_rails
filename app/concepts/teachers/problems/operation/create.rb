@@ -29,22 +29,13 @@ class Teachers::Problems::Operation::Create < ApplicationOperation
       user_id: params[:current_user][:id]
     )
 
-    # タグ登録
-    tags = []
-    contract.tags.each do |tag|
-      if Tag.pluck(:content).include?(tag)
-        tags << Tag.find_by(content: tag)
-      else
-        tags << Tag.create(content: tag)
-      end
-    end
+    tags = Tag.pluck(:content)
+    contract.tags.map do |content|
+      # タグの登録
+      tag = tags.include?(content) ? Tag.find_by(content: content) : Tag.create(content: content)
 
-    # タグと問題集の関連づけ
-    tags.map do |tag|
-      ProblemsTag.create(
-        problem_id: problem[:id],
-        tag_id: tag[:id]
-      )
+      # タグと問題集の関連づけ
+      ProblemsTag.create(problem_id: problem[:id], tag_id: tag[:id])
     end
   end
 end
