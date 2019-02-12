@@ -4,7 +4,7 @@ class Teachers::Problems::Operation::Create < ApplicationOperation
   step :validate!
   failure :handle_validation_error!, fail_fast: true
   step :persist!
-  failure :handle_internal_error!
+  failure :handle_internal_error!, fail_fast: true
 
   private
 
@@ -37,5 +37,7 @@ class Teachers::Problems::Operation::Create < ApplicationOperation
       # タグと問題集の関連づけ
       ProblemsTag.create(problem_id: problem[:id], tag_id: tag[:id])
     end
+
+    options[:model] = problem
   end
 end

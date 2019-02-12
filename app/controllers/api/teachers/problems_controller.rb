@@ -9,11 +9,14 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
   end
 
   def create
-    Teachers::Problems::Operation::Create.call(
+    options = Teachers::Problems::Operation::Create.call(
       problem: problem_params,
       current_user: @current_user
     )
-    render json: {}, status: :ok
+    service = Teachers::ProblemsService.new
+    service.create(options[:model])
+    @response = service.response
+    render :create, formats: :json, handlers: :jbuilder
   end
 
   private

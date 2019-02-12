@@ -36,7 +36,7 @@ describe 'Api::Teachers::Problems', type: :request do
         expect(json['problems'][0]['title']).to eq(problems[0][:title])
         expect(json['problems'][0]['content']).to eq(problems[0][:content])
         expect(json['problems'][0]['teacher_name']).to eq(problems[0].user[:name])
-        expect(json['problems'][0]['created_at']).to eq(default_time(problems[0][:created_at]))
+        expect(json['problems'][0]['tags']).to eq([])
         expect(json['problems'][0]['updated_at']).to eq(default_time(problems[0][:updated_at]))
       end
     end
@@ -66,6 +66,17 @@ describe 'Api::Teachers::Problems', type: :request do
 
         it 'status: 200' do
           expect(response.status).to eq(200)
+        end
+
+        it 'json の検証' do
+          json = JSON.parse(response.body)
+          problem = Problem.last
+          expect(json['problem']['id']).to eq(problem[:id])
+          expect(json['problem']['title']).to eq(problem[:title])
+          expect(json['problem']['content']).to eq(problem[:content])
+          expect(json['problem']['teacher_name']).to eq(problem.user[:name])
+          expect(json['problem']['tags'][0]).to eq(tag[:content])
+          expect(json['problem']['updated_at']).to eq(default_time(problem[:updated_at]))
         end
 
         it 'size: +1' do
