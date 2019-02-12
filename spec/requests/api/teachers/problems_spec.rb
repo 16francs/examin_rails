@@ -10,6 +10,8 @@ describe 'Api::Teachers::Problems', type: :request do
 
   describe 'index action' do
     let!(:problems) { create_list(:problem, 10, user: admin) }
+    let!(:tag) { create(:tag) }
+    let!(:problems_tag) { create(:problems_tag, problem: problems[0], tag: tag) }
 
     context '未ログインの場合' do
       it 'status: 401' do
@@ -36,7 +38,7 @@ describe 'Api::Teachers::Problems', type: :request do
         expect(json['problems'][0]['title']).to eq(problems[0][:title])
         expect(json['problems'][0]['content']).to eq(problems[0][:content])
         expect(json['problems'][0]['teacher_name']).to eq(problems[0].user[:name])
-        expect(json['problems'][0]['tags']).to eq([])
+        expect(json['problems'][0]['tags']).to eq([tag[:content]])
         expect(json['problems'][0]['updated_at']).to eq(default_time(problems[0][:updated_at]))
       end
     end

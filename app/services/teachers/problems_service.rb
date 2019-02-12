@@ -18,7 +18,7 @@ class Teachers::ProblemsService
       user = User.find_by(id: problem[:user_id]) # user_id が nil OK なため
       problem[:teacher_name] = user ? user[:name] : nil
 
-      tag_ids = ProblemsTag.where(problem_id: problem).pluck(:tag_id)
+      tag_ids = ProblemsTag.where(problem_id: problem[:id]).pluck(:tag_id)
       problem[:tags] = Tag.where(id: tag_ids).pluck(:content)
 
       problem.delete(:user_id)
