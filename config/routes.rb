@@ -6,7 +6,7 @@ Rails.application.routes.draw do
     end
 
     namespace :students do
-      resources :problems, only: %i[index] do
+      resources :problems, only: %i[index show] do
         resources :questions, only: %i[index] do
           get 'random', on: :collection
         end
