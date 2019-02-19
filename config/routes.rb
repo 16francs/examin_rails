@@ -7,10 +7,12 @@ Rails.application.routes.draw do
 
     namespace :students do
       resources :problems, only: %i[index show] do
+        post 'achievement', on: :member
         resources :questions, only: %i[index] do
           get 'random', on: :collection
         end
       end
+      resources :problems_users, only: %i[index show]
     end
 
     namespace :teachers do

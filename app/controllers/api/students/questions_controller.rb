@@ -20,7 +20,7 @@ class Api::Students::QuestionsController < Api::Students::BaseController
   end
 end
 
-private_methods
+private
 
 def random_question_ids
   Question.where(problem_id: params[:problem_id]).pluck(:id).sample(@count)
