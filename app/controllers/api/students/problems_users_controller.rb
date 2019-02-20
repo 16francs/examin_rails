@@ -8,7 +8,7 @@ class Api::Students::ProblemsUsersController < Api::Students::BaseController
   end
 
   def show
-    @problems_user = ProblemsUser.find_by(params[:id])
+    @problems_user = ProblemsUser.find_by(id: params[:id])
     render :show, formats: :json, handler: :jbuilder
   end
 
