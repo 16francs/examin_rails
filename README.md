@@ -29,7 +29,7 @@
 (Mac の場合,以下のコマンドでインストールできる)
 
 > $ gem install docker-sync   
-> $ gem install rcynd
+> $ gem install rcync
 
 * 以下のコマンドを実行
 
@@ -49,6 +49,10 @@
 ## テストの実行
 
 > $ sh docker/bin/test.sh
+
+## コーディングスタイルのチェックの実行
+
+> $ sh docker/bin/lint.sh
 
 ## DB・Gemのアップデート
 

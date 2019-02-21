@@ -13,19 +13,22 @@ fi
 echo "--- docker build ---"
 docker-compose build --no-cache
 
-echo "--- docker-sync setting ---"
+echo "--- install docker-sync ---"
+gem install docker-sync; gem install rsync
+
+echo "--- create docker-sync volume ---"
 docker volume create --name=examin_rails_sync
 
-echo "--- docker-compose up ---"
-docker-sync start
-docker-compose up -d
+echo "--- docker start ---"
+docker-sync start; docker-compose up -d
 
-echo "--- create DATABASE ---"
+echo "--- create database ---"
 sh docker/bin/create-db.sh
 
 echo "--- docker setup ---"
 sh docker/bin/setup.sh
 
-echo "--- docker-compose down ---"
-docker-compose down
-docker-sync stop
+echo "--- docker stop ---"
+docker-compose down; docker-sync stop
+
+echo "--- done ---"
