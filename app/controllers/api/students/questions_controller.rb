@@ -1,10 +1,11 @@
 # frozen_string_literal: true
 
 class Api::Students::QuestionsController < Api::Students::BaseController
-  def index # 問題を全件取得
+  def index
     @questions = Question.where(problem_id: params[:problem_id])
     render :index, formats: :json, handlers: :jbuilder
   end
+
   def random
     @count = params[:count] || 10
     @count = @count.to_i
@@ -39,7 +40,7 @@ def create_tests(questions, tests = [])
 end
 
 # 択一選択型の問題を作成
-def single_select_test(questions, all_choice, tests = []) # rubocop:disable Metrics/MethodLength
+def single_select_test(questions, all_choice, tests = []) # rubocop:disable
   questions.each do |question|
     choice = all_choice.shuffle
     choice.delete(question[:correct])
@@ -55,24 +56,20 @@ def single_select_test(questions, all_choice, tests = []) # rubocop:disable Metr
       end
     end
     # 作成した問題を追加
-    tests << {
-        question_id: question[:id],
-        sentence: question[:sentence],
-        correct: correct,
-        answers: answers
-    }
+    tests << { question_id: question[:id],
+               sentence: question[:sentence],
+               correct: correct,
+               answers: answers }
   end
   tests
 end
 
 def description_test(questions, tests = [])
   questions.each do |question|
-    tests << {
-        question_id: question[:id],
-        sentence: question[:sentence],
-        correct: question[:correct],
-        answers: []
-    }
+    tests << { question_id: question[:id],
+               sentence: question[:sentence],
+               correct: question[:correct],
+               answers: [] }
   end
   tests
 end

@@ -8,7 +8,7 @@ class Api::Students::ProblemsController < Api::Students::BaseController
     render :index, formats: :json, handlers: :jbuilder
   end
 
-  def show # 問題集の詳細取得(１件)
+  def show
     @problem = Problem.find_by(id: params[:id])
     if @problem
       render :show, formats: :json, handlers: :jbuilder
@@ -32,13 +32,11 @@ class Api::Students::ProblemsController < Api::Students::BaseController
   def new_achievements(problems_user)
     request = params[:achievements]
     request.each do |achievement_params|
-      problems_user.achievements.build(
-          question_id: achievement_params[:question_id],
-          result: achievement_params[:result],
-          user_choice: achievement_params[:user_choice],
-          # answer_time: achievement_params[:answer_time]
-          answer_time: 0
-      )
+      problems_user.achievements.build(question_id: achievement_params[:question_id],
+                                       result: achievement_params[:result],
+                                       user_choice: achievement_params[:user_choice],
+                                       # answer_time: achievement_params[:answer_time]
+                                       answer_time: 0)
     end
   end
 end
