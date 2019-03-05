@@ -11,13 +11,11 @@ class Api::Students::QuestionsController < Api::Students::BaseController
     @count = @count.to_i
     @test_type = params[:test_type] || 1
     @test_type = @test_type.to_i
-    if @test_type == 1 || @test_type == 2
-      @questions = Question.where(id: random_question_ids)
-      @tests = create_tests(@questions)
-      render :random, formats: :json, handlers: :jbuilder
-    else
-      raise ApiErrors::BadRequest
-    end
+    raise ApiErrors::BadRequest unless @test_type == 1 || @test_type == 2
+
+    @questions = Question.where(id: random_question_ids)
+    @tests = create_tests(@questions)
+    render :random, formats: :json, handlers: :jbuilder
   end
 end
 
