@@ -13,7 +13,7 @@ class Api::Students::ProblemsController < Api::Students::BaseController
     if @problem
       render :show, formats: :json, handlers: :jbuilder
     else
-      not_found
+      raise ApiErrors::BadRequest
     end
   end
 

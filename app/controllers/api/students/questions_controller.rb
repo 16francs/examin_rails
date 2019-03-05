@@ -16,7 +16,7 @@ class Api::Students::QuestionsController < Api::Students::BaseController
       @tests = create_tests(@questions)
       render :random, formats: :json, handlers: :jbuilder
     else
-      bad_request
+      raise ApiErrors::BadRequest
     end
   end
 end
