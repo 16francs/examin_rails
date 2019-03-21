@@ -1,8 +1,12 @@
 # frozen_string_literal: true
 
-require 'rails_helper'
+class ApplicationService
+  attr_reader :response
 
-module TimeHelper
+  def initialize
+    @response = {}
+  end
+
   def default_time(time)
     time.strftime('%Y-%m-%dT%H:%M:%S%z')
   end

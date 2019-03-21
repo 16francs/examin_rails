@@ -38,64 +38,64 @@ describe 'Api::Teachers::Students', type: :request do
       end
 
       context '無効なパラメータの場合' do
-        it 'status: 422' do
+        it 'status: 400' do
           post '/api/teachers/students',
                params: login_id_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: name_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: school_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_confirmation_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: login_id_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: name_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: school_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_min_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_confirmation_min_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_confirmation_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: login_id_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: name_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: school_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: password_confirmation_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: login_id_unique_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: invalid_password_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
         end
       end
     end

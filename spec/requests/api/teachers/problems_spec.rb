@@ -89,31 +89,31 @@ describe 'Api::Teachers::Problems', type: :request do
       end
 
       context '無効なパラメータの場合' do
-        it 'status: 422' do
+        it 'status: 400' do
           post '/api/teachers/problems',
                params: title_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: content_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: title_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: content_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: title_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: tag_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: tags_size_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/problems',
                params: unique_tags_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
         end
       end
     end

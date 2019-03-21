@@ -2,6 +2,6 @@
 
 module ApplicationHelper
   def default_time(time)
-    time.strftime('%Y-%m-%d %H:%M:%S')
+    time.strftime('%Y-%m-%dT%H:%M:%S%z')
   end
 end

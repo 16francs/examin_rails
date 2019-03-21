@@ -71,64 +71,64 @@ describe 'Api::Teachers::Teachers', type: :request do
       context '無効なパラメータの場合' do
         let!(:other_teacher) { create(:teacher) }
 
-        it 'status: 422' do
+        it 'status: 400' do
           post '/api/teachers/teachers',
                params: login_id_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: name_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: school_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_confirmation_nil_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: login_id_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: name_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: school_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_min_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_confirmation_min_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_confirmation_max_length_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: login_id_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: name_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: school_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: password_confirmation_format_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: login_id_unique_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
           post '/api/teachers/teachers',
                params: invalid_password_params, headers: @auth_params
-          expect(response.status).to eq(422)
+          expect(response.status).to eq(400)
         end
 
         def login_id_unique_params

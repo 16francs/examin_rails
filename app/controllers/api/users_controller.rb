@@ -7,7 +7,7 @@ class Api::UsersController < ApplicationController
     service = UsersService.new
     service.show_me(@current_user)
     @response = service.response
-    render :show_me, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 
   def check_unique
