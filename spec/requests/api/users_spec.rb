@@ -30,7 +30,7 @@ describe 'Api::Users', type: :request do
       it 'json の検証' do
         json = JSON.parse(response.body)
         user.reload
-        
+
         expect(json['id']).to eq(user[:id])
         expect(json['login_id']).to eq(user[:login_id])
         expect(json['name']).to eq(user[:name])

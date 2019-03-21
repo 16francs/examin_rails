@@ -2,19 +2,19 @@ ja:
   errors:
     ApiErrors::BadRequest:
       status: 400
-      description: bad request
+      message: bad request
+    ApiErrors::ValidationError:
+      status: 400
+      message: validation error
     ApiErrors::Unauthorized:
       status: 401
-      description: unauhorized
+      message: unauhorized
     ApiErrors::Forbidden:
       status: 403
-      description: forbidden
-    ApiErrors::ValidationError:
-      status: 422
-      description: validation error
+      message: forbidden
     ApiErrors::OperationError:
       status: 500
-      description: server error
+      message: internal server error
     other:
       status: 500
-      description: server error
+      message: unknown server error

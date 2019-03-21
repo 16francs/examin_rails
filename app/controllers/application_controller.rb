@@ -30,7 +30,7 @@ class ApplicationController < ActionController::API
 
   # --- エラー処理 ---
   def error_response(error)
-    render json: { status: error[:status], desciption: error[:description] }, status: error[:status]
+    render json: { status: error[:status], message: error[:message] }, status: error[:status]
   end
 
   def render_400(error)
@@ -53,8 +53,6 @@ class ApplicationController < ActionController::API
     when 401 then
       render_400(error)
     when 403 then
-      render_400(error)
-    when 422 then
       render_400(error)
     else
       render_500(error, error_instance)
