@@ -14,7 +14,7 @@ class Api::UsersController < ApplicationController
     service = UsersService.new
     service.check_unique(login_id_params)
     @response = service.response
-    render :check_unique, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 
   private
