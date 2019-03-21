@@ -8,6 +8,38 @@ describe 'Api::Users', type: :request do
   let!(:created_user) { create(:user) }
   let!(:not_created_user) { build(:user) }
 
+  describe 'show_me action' do
+    context '未ログインの場合' do
+      it 'status: 401' do
+        get '/api/users/me'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(user)
+        auth_params = get_auth_params(response)
+        get '/api/users/me', headers: auth_params
+      end
+
+      it 'status: 200' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'json の検証' do
+        json = JSON.parse(response.body)
+        expect(json['id']).to eq(user[:id])
+        expect(json['login_id']).to eq(user[:login_id])
+        expect(json['name']).to eq(user[:name])
+        expect(json['school']).to eq(user[:school])
+        expect(json['role']).to eq(user[:role])
+        expect(json['created_at']).to eq(user[:created_at])
+        expect(json['updated_at']).to eq(user[:updated_at])
+      end
+    end
+  end
+
   describe 'check_unique action' do
     context '未ログインの場合' do
       context '有効なパラメータの場合' do
