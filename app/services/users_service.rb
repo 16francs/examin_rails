@@ -7,6 +7,10 @@ class UsersService
     @response = nil
   end
 
+  def show_me(current_user)
+    @response = current_user
+  end
+
   def check_unique(params)
     @response = User.pluck(:login_id).exclude?(params[:login_id])
     return if @response || params[:id].nil?

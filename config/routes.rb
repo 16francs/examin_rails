@@ -2,6 +2,7 @@ Rails.application.routes.draw do
   namespace :api, { format: :json } do
     resources :auth, only: %i[index create]
     resources :users, only: %i[] do
+      get 'me', on: :collection, to: 'users#show_me'
       post 'check_unique', on: :collection
     end
 
