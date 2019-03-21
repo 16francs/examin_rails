@@ -29,13 +29,15 @@ describe 'Api::Users', type: :request do
 
       it 'json の検証' do
         json = JSON.parse(response.body)
+        user.reload
+        
         expect(json['id']).to eq(user[:id])
         expect(json['login_id']).to eq(user[:login_id])
         expect(json['name']).to eq(user[:name])
         expect(json['school']).to eq(user[:school])
         expect(json['role']).to eq(user[:role])
-        expect(json['created_at']).to eq(user[:created_at])
-        expect(json['updated_at']).to eq(user[:updated_at])
+        expect(json['created_at']).to eq(default_time(user[:created_at]))
+        expect(json['updated_at']).to eq(default_time(user[:updated_at]))
       end
     end
   end
@@ -74,10 +76,16 @@ describe 'Api::Users', type: :request do
     end
 
     context 'ログイン済みの場合' do
+      before do
+        login(user)
+        @auth_params = get_auth_params(response)
+      end
+
       context '有効なパラメータの場合' do
         context 'ログインユーザーの login_id と同じ場合' do
           before do
-            post '/api/users/check_unique', params: logged_in_user_my_login_id_params
+            post '/api/users/check_unique', headers: @auth_params,
+                 params: logged_in_user_my_login_id_params
           end
 
           it 'status: 200' do
@@ -92,7 +100,8 @@ describe 'Api::Users', type: :request do
 
         context 'ログインユーザーの login_id と違う場合' do
           before do
-            post '/api/users/check_unique', params: logged_in_user_valid_params
+            post '/api/users/check_unique', headers: @auth_params,
+                 params: logged_in_user_valid_params
           end
 
           it 'status: 200' do
@@ -108,7 +117,8 @@ describe 'Api::Users', type: :request do
 
       context '無効なパラメータの場合' do
         before do
-          post '/api/users/check_unique', params: logged_in_user_invalid_params
+          post '/api/users/check_unique', headers: @auth_params,
+               params: logged_in_user_invalid_params
         end
 
         it 'status: 200' do
