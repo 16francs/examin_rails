@@ -84,8 +84,7 @@ describe 'Api::Users', type: :request do
       context '有効なパラメータの場合' do
         context 'ログインユーザーの login_id と同じ場合' do
           before do
-            post '/api/users/check_unique', headers: @auth_params,
-                 params: logged_in_user_my_login_id_params
+            post '/api/users/check_unique', headers: @auth_params, params: logged_in_user_my_login_id_params
           end
 
           it 'status: 200' do
@@ -100,8 +99,7 @@ describe 'Api::Users', type: :request do
 
         context 'ログインユーザーの login_id と違う場合' do
           before do
-            post '/api/users/check_unique', headers: @auth_params,
-                 params: logged_in_user_valid_params
+            post '/api/users/check_unique', headers: @auth_params, params: logged_in_user_valid_params
           end
 
           it 'status: 200' do
@@ -117,8 +115,7 @@ describe 'Api::Users', type: :request do
 
       context '無効なパラメータの場合' do
         before do
-          post '/api/users/check_unique', headers: @auth_params,
-               params: logged_in_user_invalid_params
+          post '/api/users/check_unique', headers: @auth_params, params: logged_in_user_invalid_params
         end
 
         it 'status: 200' do

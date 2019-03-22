@@ -6,7 +6,7 @@ class ApplicationService
   def initialize
     @response = {}
   end
-  
+
   def default_time(time)
     time.strftime('%Y-%m-%dT%H:%M:%S%z')
   end
