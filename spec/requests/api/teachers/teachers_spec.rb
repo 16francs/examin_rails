@@ -59,8 +59,19 @@ describe 'Api::Teachers::Teachers', type: :request do
           post '/api/teachers/teachers', params: valid_params, headers: @auth_params
         end
 
-        it 'status: 200' do
-          expect(response.status).to eq(200)
+        it 'status: 201' do
+          expect(response.status).to eq(201)
+        end
+
+        it 'json を検証' do
+          json = JSON.parse(response.body)
+          teacher = User.last
+          expect(json['teacher']['id']).to eq(teacher[:id])
+          expect(json['teacher']['name']).to eq(teacher[:name])
+          expect(json['teacher']['school']).to eq(teacher[:school])
+          expect(json['teacher']['role']).to eq(teacher[:role])
+          expect(json['teacher']['created_at']).to eq(default_time(teacher[:created_at]))
+          expect(json['teacher']['updated_at']).to eq(default_time(teacher[:updated_at]))
         end
 
         it 'size: +1' do

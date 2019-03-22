@@ -5,14 +5,17 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
     service = Teachers::TeachersService.new
     service.index
     @response = service.response
-    render :index, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 
   def create
-    Teachers::Teachers::Operation::Create.call(
+    options = Teachers::Teachers::Operation::Create.call(
       teacher: teacher_params
     )
-    render json: {}, status: :ok
+    service = Teachers::TeachersService.new
+    service.create(options[:model])
+    @response = service.response
+    render json: @response, status: :created
   end
 
   private

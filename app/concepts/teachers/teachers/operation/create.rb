@@ -24,7 +24,7 @@ class Teachers::Teachers::Operation::Create < ApplicationOperation
   def persist!(options, **)
     contract = options[:contract]
 
-    model = User.new(
+    model = User.create(
       login_id: contract.login_id,
       name: contract.name,
       school: contract.school,
@@ -34,6 +34,6 @@ class Teachers::Teachers::Operation::Create < ApplicationOperation
       activated: true
     )
 
-    model.save!
+    options[:model] = model
   end
 end
