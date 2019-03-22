@@ -28,8 +28,19 @@ describe 'Api::Teachers::Students', type: :request do
           post '/api/teachers/students', params: valid_params, headers: @auth_params
         end
 
-        it 'status: 200' do
-          expect(response.status).to eq(200)
+        it 'status: 201' do
+          expect(response.status).to eq(201)
+        end
+
+        it 'json を検証' do
+          json = JSON.parse(response.body)
+          student = User.last
+          expect(json['student']['id']).to eq(student[:id])
+          expect(json['student']['name']).to eq(student[:name])
+          expect(json['student']['school']).to eq(student[:school])
+          expect(json['student']['role']).to eq(student[:role])
+          expect(json['student']['created_at']).to eq(default_time(student[:created_at]))
+          expect(json['student']['updated_at']).to eq(default_time(student[:updated_at]))
         end
 
         it 'size: +1' do

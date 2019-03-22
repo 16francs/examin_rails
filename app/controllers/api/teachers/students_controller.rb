@@ -2,10 +2,13 @@
 
 class Api::Teachers::StudentsController < Api::Teachers::BaseController
   def create
-    Teachers::Students::Operation::Create.call(
+    options = Teachers::Students::Operation::Create.call(
       student: student_params
     )
-    render json: {}, status: :ok
+    service = Teachers::StudentsService.new
+    service.create(options[:model])
+    @response = service.response
+    render json: @response, status: :created
   end
 
   private
