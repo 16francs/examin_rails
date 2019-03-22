@@ -7,8 +7,6 @@ class Students::Achievements::Contract::Create < Students::Achievements::Contrac
 
   validates :question_id,
             presence: true
-  validates :result,
-            inclusion: { in: [true, false] }
   validates :user_choice,
             numericality: { only_integer: true }
 

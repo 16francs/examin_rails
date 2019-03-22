@@ -10,6 +10,7 @@ class Students::Achievements::Operation::Create < ApplicationOperation
 
   def validate!(options, params, **)
     achievements = params[:achievements]
+
     achievements.map! do |achievement|
       contract = Students::Achievements::Contract::Create.new(Achievement.new)
 
@@ -17,7 +18,7 @@ class Students::Achievements::Operation::Create < ApplicationOperation
       contract.result = achievement[:result]
       contract.user_choice = achievement[:user_choice]
 
-      return false unless contract.valid?
+      raise ApiErrors::ValidationError unless contract.valid?
 
       contract
     end
@@ -35,8 +36,9 @@ class Students::Achievements::Operation::Create < ApplicationOperation
     )
 
     # 成績の登録
-    contracts.map! do |contract|
+    contracts.each do |contract|
       Achievement.create(
+        problems_user_id: problems_user[:id],
         question_id: contract.question_id,
         result: contract.result,
         user_choice: contract.user_choice,
@@ -45,6 +47,5 @@ class Students::Achievements::Operation::Create < ApplicationOperation
     end
 
     options[:model] = problems_user
-    options[:model][:achievements] = contracts
   end
 end

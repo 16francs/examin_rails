@@ -30,6 +30,6 @@ class Api::Students::ProblemsController < Api::Students::BaseController
   private
 
   def achievements_params
-    params.permit(achievements: [])
+    params.require(:achievements)
   end
 end
