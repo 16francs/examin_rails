@@ -10,11 +10,9 @@ class Api::Students::ProblemsController < Api::Students::BaseController
 
   def show
     @problem = Problem.find_by(id: params[:id])
-    if @problem
-      render :show, formats: :json, handlers: :jbuilder
-    else
-      not_found
-    end
+    raise ApiErrors::BadRequest unless @problem
+
+    render :show, formats: :json, handlers: :jbuilder
   end
 
   def achievement

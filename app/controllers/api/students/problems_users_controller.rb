@@ -15,6 +15,6 @@ class Api::Students::ProblemsUsersController < Api::Students::BaseController
 
   def correct_student
     problems_user = ProblemsUser.find_by(params[:id])
-    forbidden unless correct_student?(problems_user.user)
+    raise ApiErrors::Forbidden unless correct_student?(problems_user.user)
   end
 end
