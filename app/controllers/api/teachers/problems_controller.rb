@@ -5,7 +5,7 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
     service = Teachers::ProblemsService.new
     service.index
     @response = service.response
-    render :index, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 
   def create
@@ -16,7 +16,7 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
     service = Teachers::ProblemsService.new
     service.create(options[:model])
     @response = service.response
-    render :create, formats: :json, handlers: :jbuilder
+    render json: @response, status: :created
   end
 
   private

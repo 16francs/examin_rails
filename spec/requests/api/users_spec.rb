@@ -31,13 +31,13 @@ describe 'Api::Users', type: :request do
         json = JSON.parse(response.body)
         user.reload
 
-        expect(json['id']).to eq(user[:id])
-        expect(json['login_id']).to eq(user[:login_id])
-        expect(json['name']).to eq(user[:name])
-        expect(json['school']).to eq(user[:school])
-        expect(json['role']).to eq(user[:role])
-        expect(json['created_at']).to eq(default_time(user[:created_at]))
-        expect(json['updated_at']).to eq(default_time(user[:updated_at]))
+        expect(json['user']['id']).to eq(user[:id])
+        expect(json['user']['login_id']).to eq(user[:login_id])
+        expect(json['user']['name']).to eq(user[:name])
+        expect(json['user']['school']).to eq(user[:school])
+        expect(json['user']['role']).to eq(user[:role])
+        expect(json['user']['created_at']).to eq(default_time(user[:created_at]))
+        expect(json['user']['updated_at']).to eq(default_time(user[:updated_at]))
       end
     end
   end

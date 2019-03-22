@@ -66,8 +66,8 @@ describe 'Api::Teachers::Problems', type: :request do
           post '/api/teachers/problems', params: valid_params, headers: @auth_params
         end
 
-        it 'status: 200' do
-          expect(response.status).to eq(200)
+        it 'status: 201' do
+          expect(response.status).to eq(201)
         end
 
         it 'json の検証' do
