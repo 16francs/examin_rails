@@ -5,7 +5,7 @@ class Api::Students::ProblemsController < Api::Students::BaseController
     service = Students::ProblemsService.new
     service.index
     @response = service.response
-    render :index, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 
   def show
