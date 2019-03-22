@@ -21,13 +21,15 @@ class Teachers::ProblemsService < ApplicationService
     @response[:problems] = problems
   end
 
-  def create(problem)
-    @response[:problem] = problem.slice(:id, :title, :content)
-    @response[:problem][:updated_at] = default_time(problem[:updated_at])
+  def create(model)
+    problem = model.slice(:id, :title, :content)
+    problem[:updated_at] = default_time(model[:updated_at])
 
-    user = User.find_by(id: problem[:user_id])
-    @response[:problem][:teacher_name] = user ? user[:name] : nil
+    user = User.find_by(id: model[:user_id])
+    problem[:teacher_name] = user ? user[:name] : nil
 
-    @response[:problem][:tags] = problem.tags.pluck(:content)
+    problem[:tags] = model.tags.pluck(:content)
+
+    @response[:problem] = problem
   end
 end
