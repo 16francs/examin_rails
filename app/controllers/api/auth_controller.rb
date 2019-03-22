@@ -9,7 +9,7 @@ class Api::AuthController < ApplicationController
     service = AuthService.new
     service.index(token, @decoded, @current_user)
     @response = service.response
-    render :index, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 
   def create
@@ -19,6 +19,6 @@ class Api::AuthController < ApplicationController
     service = AuthService.new
     service.create(@user)
     @response = service.response
-    render :create, formats: :json, handlers: :jbuilder
+    render json: @response, status: :ok
   end
 end
