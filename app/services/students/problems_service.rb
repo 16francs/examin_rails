@@ -18,4 +18,27 @@ class Students::ProblemsService < ApplicationService
 
     @response[:problems] = problems
   end
+
+  def show(params)
+    problem = Problem.find_by(id: params[:id])
+    raise ApiErrors::BadRequest unless problem
+
+    keys = %i[id sentence correct]
+    questions = problem.questions.pluck(:id, :sentence, :correct)
+    questions.map! { |question| Hash[*[keys, question].transpose.flatten] }
+
+    @response[:problem] = problem.slice(:id, :title, :user_id, :created_at, :updated_at)
+    @response[:questions] = questions
+  end
+
+  def achievement(model)
+    problems_user = model.slice(:id, :problem_id, :user_id, :created_at, :updated_at)
+
+    keys = %i[id question_id result user_choice]
+    achievements = model[:achievements].map { |achievement| achievement[keys] }
+    achievements.map! { |achievement| Hash[*[keys, achievement].transpose.flatten] }
+
+    @response[:problems_user] = problems_user
+    @response[:problems_user][:achievements] = achievements
+  end
 end
