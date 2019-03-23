@@ -66,12 +66,12 @@ describe 'Api::Teachers::Teachers', type: :request do
         it 'json を検証' do
           json = JSON.parse(response.body)
           teacher = User.last
-          expect(json['teacher']['id']).to eq(teacher[:id])
-          expect(json['teacher']['name']).to eq(teacher[:name])
-          expect(json['teacher']['school']).to eq(teacher[:school])
-          expect(json['teacher']['role']).to eq(teacher[:role])
-          expect(json['teacher']['created_at']).to eq(default_time(teacher[:created_at]))
-          expect(json['teacher']['updated_at']).to eq(default_time(teacher[:updated_at]))
+          expect(json['id']).to eq(teacher[:id])
+          expect(json['name']).to eq(teacher[:name])
+          expect(json['school']).to eq(teacher[:school])
+          expect(json['role']).to eq(teacher[:role])
+          expect(json['created_at']).to eq(default_time(teacher[:created_at]))
+          expect(json['updated_at']).to eq(default_time(teacher[:updated_at]))
         end
 
         it 'size: +1' do

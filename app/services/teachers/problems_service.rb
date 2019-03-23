@@ -23,6 +23,7 @@ class Teachers::ProblemsService < ApplicationService
 
   def create(model)
     problem = model.slice(:id, :title, :content)
+    problem[:created_at] = default_time(model[:created_at])
     problem[:updated_at] = default_time(model[:updated_at])
 
     user = User.find_by(id: model[:user_id])
@@ -30,6 +31,6 @@ class Teachers::ProblemsService < ApplicationService
 
     problem[:tags] = model.tags.pluck(:content)
 
-    @response[:problem] = problem
+    @response = problem
   end
 end

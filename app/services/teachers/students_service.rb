@@ -6,6 +6,6 @@ class Teachers::StudentsService < ApplicationService
     student[:created_at] = default_time(model[:created_at])
     student[:updated_at] = default_time(model[:updated_at])
 
-    @response[:student] = student
+    @response = student
   end
 end

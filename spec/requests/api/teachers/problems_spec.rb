@@ -73,12 +73,12 @@ describe 'Api::Teachers::Problems', type: :request do
         it 'json の検証' do
           json = JSON.parse(response.body)
           problem = Problem.last
-          expect(json['problem']['id']).to eq(problem[:id])
-          expect(json['problem']['title']).to eq(problem[:title])
-          expect(json['problem']['content']).to eq(problem[:content])
-          expect(json['problem']['teacher_name']).to eq(problem.user[:name])
-          expect(json['problem']['tags'][0]).to eq(tag[:content])
-          expect(json['problem']['updated_at']).to eq(default_time(problem[:updated_at]))
+          expect(json['id']).to eq(problem[:id])
+          expect(json['title']).to eq(problem[:title])
+          expect(json['content']).to eq(problem[:content])
+          expect(json['teacher_name']).to eq(problem.user[:name])
+          expect(json['tags'][0]).to eq(tag[:content])
+          expect(json['updated_at']).to eq(default_time(problem[:updated_at]))
         end
 
         it 'size: +1' do

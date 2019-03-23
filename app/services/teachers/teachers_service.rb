@@ -14,6 +14,6 @@ class Teachers::TeachersService < ApplicationService
     teacher[:created_at] = default_time(model[:created_at])
     teacher[:updated_at] = default_time(model[:updated_at])
 
-    @response[:teacher] = teacher
+    @response = teacher
   end
 end
