@@ -12,7 +12,6 @@ describe Api::Students::ProblemsController, type: :routing do
   end
 
   it 'routes to #achievement' do
-    expect(post: '/api/students/problems/1/achievement').to
-      route_to('api/students/problems#achievement', problem_id: '1')
+    expect(post: '/api/students/problems/1/achievement').to route_to('api/students/problems#achievement', problem_id: '1')
   end
 end

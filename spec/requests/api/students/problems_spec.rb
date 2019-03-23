@@ -102,8 +102,7 @@ describe 'Api::Students::Problems', type: :request do
         before do
           @problems_user_size = ProblemsUser.all.size
           @achievement_size = Achievement.all.size
-          post '/api/students/problems/' + problem[:id].to_s + '/achievement', headers: @auth_params,
-               params: valid_params
+          post '/api/students/problems/' + problem[:id].to_s + '/achievement', headers: @auth_params, params: valid_params
         end
 
         it 'status: 201' do
