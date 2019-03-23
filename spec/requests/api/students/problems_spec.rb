@@ -68,11 +68,11 @@ describe 'Api::Students::Problems', type: :request do
         json = JSON.parse(response.body)
         problem.reload
         questions.map(&:reload)
-        expect(json['problem']['id']).to eq(problem[:id])
-        expect(json['problem']['title']).to eq(problem[:title])
-        expect(json['problem']['user_id']).to eq(problem[:user_id])
-        expect(json['problem']['created_at']).to eq(default_time(problem[:created_at]))
-        expect(json['problem']['updated_at']).to eq(default_time(problem[:updated_at]))
+        expect(json['id']).to eq(problem[:id])
+        expect(json['title']).to eq(problem[:title])
+        expect(json['user_id']).to eq(problem[:user_id])
+        expect(json['created_at']).to eq(default_time(problem[:created_at]))
+        expect(json['updated_at']).to eq(default_time(problem[:updated_at]))
         expect(json['questions'][0]['id']).to eq(questions[0][:id])
         expect(json['questions'][0]['sentence']).to eq(questions[0][:sentence])
         expect(json['questions'][0]['correct']).to eq(questions[0][:correct])
@@ -114,15 +114,15 @@ describe 'Api::Students::Problems', type: :request do
           json = JSON.parse(response.body)
           problems_user = ProblemsUser.last
           achievement = Achievement.last
-          expect(json['problems_user']['id']).to eq(problems_user[:id])
-          expect(json['problems_user']['problem_id']).to eq(problems_user[:problem_id])
-          expect(json['problems_user']['user_id']).to eq(problems_user[:user_id])
-          expect(json['problems_user']['created_at']).to eq(default_time(problems_user[:created_at]))
-          expect(json['problems_user']['updated_at']).to eq(default_time(problems_user[:updated_at]))
-          expect(json['problems_user']['achievements'][1]['id']).to eq(achievement[:id])
-          expect(json['problems_user']['achievements'][1]['question_id']).to eq(achievement[:question_id])
-          expect(json['problems_user']['achievements'][1]['result']).to eq(achievement[:result])
-          expect(json['problems_user']['achievements'][1]['user_choice']).to eq(achievement[:user_choice])
+          expect(json['id']).to eq(problems_user[:id])
+          expect(json['problem_id']).to eq(problems_user[:problem_id])
+          expect(json['user_id']).to eq(problems_user[:user_id])
+          expect(json['created_at']).to eq(default_time(problems_user[:created_at]))
+          expect(json['updated_at']).to eq(default_time(problems_user[:updated_at]))
+          expect(json['achievements'][1]['id']).to eq(achievement[:id])
+          expect(json['achievements'][1]['question_id']).to eq(achievement[:question_id])
+          expect(json['achievements'][1]['result']).to eq(achievement[:result])
+          expect(json['achievements'][1]['user_choice']).to eq(achievement[:user_choice])
         end
 
         it 'size: +1' do

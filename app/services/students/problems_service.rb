@@ -27,23 +27,22 @@ class Students::ProblemsService < ApplicationService
     questions = problem.questions.pluck(:id, :sentence, :correct)
     questions.map! { |question| Hash[*[keys, question].transpose.flatten] }
 
-    @response[:problem] = problem.slice(:id, :title, :user_id)
-    @response[:problem][:created_at] = default_time(problem[:created_at])
-    @response[:problem][:updated_at] = default_time(problem[:updated_at])
+    @response = problem.slice(:id, :title, :user_id)
+    @response[:created_at] = default_time(problem[:created_at])
+    @response[:updated_at] = default_time(problem[:updated_at])
 
     @response[:questions] = questions
   end
 
   def achievement(model)
-    problems_user = model.slice(:id, :problem_id, :user_id)
-    problems_user[:created_at] = default_time(model[:created_at])
-    problems_user[:updated_at] = default_time(model[:updated_at])
-
     keys = %i[id question_id result user_choice]
     achievements = model.achievements.pluck(:id, :question_id, :result, :user_choice)
     achievements.map! { |achievement| Hash[*[keys, achievement].transpose.flatten] }
 
-    @response[:problems_user] = problems_user
-    @response[:problems_user][:achievements] = achievements
+    @response = model.slice(:id, :problem_id, :user_id)
+    @response[:created_at] = default_time(model[:created_at])
+    @response[:updated_at] = default_time(model[:updated_at])
+
+    @response[:achievements] = achievements
   end
 end
