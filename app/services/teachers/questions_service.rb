@@ -8,4 +8,12 @@ class Teachers::QuestionsService < ApplicationService
 
     @response[:questions] = questions
   end
+
+  def create(model)
+    question = model.slice(:id, :problem_id, :sentence, :correct)
+    question[:created_at] = default_time(model[:created_at])
+    question[:updated_at] = default_time(model[:updated_at])
+
+    @response = question
+  end
 end
