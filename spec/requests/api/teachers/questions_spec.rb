@@ -84,7 +84,18 @@ describe 'Api::Teachers::Problems', type: :request do
 
       context '無効なパラメータの場合' do
         it 'status: 400' do
-          # TODO: 400 のテスト記述
+          post '/api/teachers/problems/' + problem[:id].to_s + '/questions',
+               params: sentence_nil_params, headers: @auth_params
+          expect(response.status).to eq(400)
+          post '/api/teachers/problems/' + problem[:id].to_s + '/questions',
+               params: correct_nil_params, headers: @auth_params
+          expect(response.status).to eq(400)
+          post '/api/teachers/problems/' + problem[:id].to_s + '/questions',
+               params: sentence_max_length_params, headers: @auth_params
+          expect(response.status).to eq(400)
+          post '/api/teachers/problems/' + problem[:id].to_s + '/questions',
+               params: correct_max_length_params, headers: @auth_params
+          expect(response.status).to eq(400)
         end
       end
     end
@@ -95,6 +106,42 @@ describe 'Api::Teachers::Problems', type: :request do
       question: {
         sentence: question[:sentence],
         correct: question[:correct]
+      }
+    }
+  end
+
+  def sentence_nil_params
+    {
+      question: {
+        sentence: nil,
+        correct: question[:correct]
+      }
+    }
+  end
+
+  def correct_nil_params
+    {
+      question: {
+        sentence: nil,
+        correct: question[:correct]
+      }
+    }
+  end
+
+  def sentence_max_length_params
+    {
+      question: {
+        sentence: 'a' * 64,
+        correct: question[:correct]
+      }
+    }
+  end
+
+  def correct_max_length_params
+    {
+      question: {
+        sentence: question[:sentence],
+        correct: 'a' * 64
       }
     }
   end
