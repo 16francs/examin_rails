@@ -11,13 +11,13 @@ else
 fi
 
 echo "--- bundle install ---"
-docker-compose run --rm web bundle install --path vendor/bundle
+docker-compose -f docker-compose.development.yml run --rm web bundle install --path vendor/bundle
 
 echo "--- generate secret_key ---"
-secret_key=`docker-compose run --rm web bundle exec rails secret`
+secret_key=`docker-compose -f docker-compose.development.yml run --rm web bundle exec rails secret`
 
 echo "--- create .env file ---"
-docker-compose run --rm web bash << EOF
+docker-compose -f docker-compose.development.yml run --rm web bash << EOF
 touch .env
 cat << EOS > .env
 SECRET_KEY_BASE="$secret_key"
@@ -38,8 +38,8 @@ DATABASE_PASSWORD="examin"
 EOS
 
 echo "--- ridgepole apply ---"
-docker-compose run --rm web bundle exec rails ridgepole:apply
-docker-compose run --rm web bundle exec rails ridgepole:apply RAILS_ENV=test
+docker-compose -f docker-compose.development.yml run --rm web bundle exec rails ridgepole:apply
+docker-compose -f docker-compose.development.yml run --rm web bundle exec rails ridgepole:apply RAILS_ENV=test
 
 echo "--- db:seed ---"
-docker-compose run --rm web bundle exec rails db:seed
+docker-compose -f docker-compose.development.yml run --rm web bundle exec rails db:seed

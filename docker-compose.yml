@@ -4,13 +4,11 @@ services:
   web:
     build: .
     image: examin/rails
-    command: bundle exec rails server -p 3000 -b '0.0.0.0'
     volumes:
-      - ./:/examin_rails:cached
+      - .:/examin_rails:cached
     ports:
       - "3500:3000"
     environment:
-      RAILS_ENV: "development"
       TZ: "Asia/Tokyo"
     tty: true
     stdin_open: true

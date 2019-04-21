@@ -1,3 +1,3 @@
 #!/bin/bash
 
-docker-compose run --rm web bundle exec rspec
+docker-compose -f docker-compose.development.yml run --rm web bundle exec rspec

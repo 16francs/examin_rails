@@ -1,6 +1,5 @@
-.git
-.circleci
+.bundle
 coverage
 log
 tmp
-/vendor
+vendor

@@ -20,7 +20,7 @@ COPY Gemfile* ./
 
 # Bundle Install
 RUN gem install bundler
-RUN bundle install --path vendor/bundle --without development test
+RUN bundle install --without development test
 
 # Copy Project
 ADD . ./

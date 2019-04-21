@@ -21,9 +21,11 @@ COPY Gemfile* ./
 
 # Bundle Install
 RUN gem install bundler
-RUN bundle install --path vendor/bundle --without production
+RUN bundle install --without production
 
 # Copy Project
 ADD . ./
 
 EXPOSE 3000
+
+CMD ["bundle", "exec", "rails", "server", "-e", "development", "-p", "3000", "-b", "0.0.0.0"]

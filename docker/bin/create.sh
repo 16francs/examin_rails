@@ -11,7 +11,7 @@ else
 fi
 
 echo "--- docker build ---"
-docker-compose build --no-cache
+docker-compose -f docker-compose.development.yml build --no-cache
 
 echo "--- install docker-sync ---"
 gem install docker-sync; gem install rsync
@@ -20,7 +20,7 @@ echo "--- create docker-sync volume ---"
 docker volume create --name=examin_rails_sync
 
 echo "--- docker start ---"
-docker-sync start; docker-compose up -d
+docker-sync start; docker-compose -f docker-compose.development.yml up -d
 
 echo "--- create database ---"
 sh docker/bin/create-db.sh
@@ -29,6 +29,6 @@ echo "--- docker setup ---"
 sh docker/bin/setup.sh
 
 echo "--- docker stop ---"
-docker-compose down; docker-sync stop
+docker-compose -f docker-compose.development.yml down; docker-sync stop
 
 echo "--- done ---"
