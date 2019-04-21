@@ -23,10 +23,10 @@ echo "--- docker start ---"
 docker-sync start; docker-compose -f docker-compose.development.yml up -d
 
 echo "--- create database ---"
-sh docker/bin/create-db.sh
+sh docker/bin/sync/create-db.sh
 
 echo "--- docker setup ---"
-sh docker/bin/setup.sh
+sh docker/bin/sync/setup.sh
 
 echo "--- docker stop ---"
 docker-compose -f docker-compose.development.yml down; docker-sync stop
