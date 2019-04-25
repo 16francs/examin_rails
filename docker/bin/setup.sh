@@ -15,11 +15,3 @@ DATABASE_HOST="db"
 DATABASE_PORT="3306"
 EOS
 EOF
-
-touch .env
-cat << EOS > .env
-SECRET_KEY_BASE="$secret_key"
-
-DATABASE_USERNAME="examin"
-DATABASE_PASSWORD="examin"
-EOS

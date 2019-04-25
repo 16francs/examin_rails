@@ -24,12 +24,12 @@ sync-lint:
 setup:
 	docker-compose build --no-cache
 	docker-compose up -d
-	sh docker/bin/create-db.sh
+	-sh docker/bin/create-db.sh
 	docker-compose run --rm web bundle install
 	sh docker/bin/setup.sh
 	docker-compose run --rm web bundle exec rails ridgepole:apply
 	docker-compose run --rm web bundle exec rails ridgepole:apply RAILS_ENV=test
-	docker-compose run --rm web bundle exec rails db:seed
+	-docker-compose run --rm web bundle exec rails db:seed
 	docker-compose down
 
 update:
