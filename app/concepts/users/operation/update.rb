@@ -25,9 +25,9 @@ class Users::Operation::Update < ApplicationOperation
 
     model = User.find(contract.id)
     model.update(
-        login_id: contract.login_id,
-        name: contract.name,
-        school: contract.school
+      login_id: contract.login_id,
+      name: contract.name,
+      school: contract.school
     )
 
     options[:model] = model
