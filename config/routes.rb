@@ -3,7 +3,7 @@ Rails.application.routes.draw do
     resources :auth, only: %i[index create]
     resources :users, only: %i[] do
       get 'me', on: :collection, to: 'users#show_me'
-      post 'me', on: :collection, to: 'users#update_me'
+      patch 'me', on: :collection, to: 'users#update_me'
       post 'check_unique', on: :collection
     end
 

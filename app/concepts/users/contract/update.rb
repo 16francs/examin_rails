@@ -26,7 +26,7 @@ class Users::Contract::Update < Users::Contract::Operate
   private
 
   def login_id_unique?
-    user = User.find(login_id: login_id)
+    user = User.find_by(login_id: login_id)
 
     errors.add(:login_id, 'not unique') if user && user[:id] != id.to_i
   end

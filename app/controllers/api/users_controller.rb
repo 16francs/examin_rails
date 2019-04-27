@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Api::UsersController < ApplicationController
-  before_action :require_login, only: :show_me
+  before_action :require_login, only: %i[show_me update_me]
 
   def show_me
     service = UsersService.new
