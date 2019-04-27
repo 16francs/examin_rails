@@ -262,9 +262,9 @@ describe 'Api::Users', type: :request do
   def login_id_nil_params
     {
       user: {
-          login_id: nil,
-          name: user[:name],
-          school: user[:school]
+        login_id: nil,
+        name: user[:name],
+        school: user[:school]
       }
     }
   end
