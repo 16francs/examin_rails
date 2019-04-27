@@ -2,9 +2,19 @@
 
 class UsersService < ApplicationService
   def show_me(current_user)
-    @response = current_user.slice(:id, :login_id, :name, :school, :role)
-    @response[:created_at] = default_time(current_user[:created_at])
-    @response[:updated_at] = default_time(current_user[:updated_at])
+    user = current_user.slice(:id, :login_id, :name, :school, :role)
+    user[:created_at] = default_time(current_user[:created_at])
+    user[:updated_at] = default_time(current_user[:updated_at])
+
+    @response = user
+  end
+
+  def update_me(model)
+    user = model.slice(:id, :login_id, :name, :school, :role)
+    user[:created_at] = default_time(model[:created_at])
+    user[:updated_at] = default_time(model[:updated_at])
+
+    @response = user
   end
 
   def check_unique(params)
