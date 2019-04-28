@@ -21,6 +21,6 @@ class Api::Teachers::TeachersController < Api::Teachers::BaseController
   private
 
   def teacher_params
-    params.require(:teacher).permit(:login_id, :name, :school, :password, :password_confirmation)
+    params.require(:teacher).permit(:login_id, :name, :school)
   end
 end

@@ -14,8 +14,6 @@ class Teachers::Teachers::Operation::Create < ApplicationOperation
     contract.login_id = params[:teacher][:login_id]
     contract.name = params[:teacher][:name]
     contract.school = params[:teacher][:school]
-    contract.password = params[:teacher][:password]
-    contract.password_confirmation = params[:teacher][:password_confirmation]
 
     options[:contract] = contract
     contract.valid?
@@ -24,12 +22,14 @@ class Teachers::Teachers::Operation::Create < ApplicationOperation
   def persist!(options, **)
     contract = options[:contract]
 
+    # パスワードは login_id と同じ
+    # 権限は 講師権限 で登録 ( 1: 講師, 2: 管理者 )
     model = User.create(
       login_id: contract.login_id,
       name: contract.name,
       school: contract.school,
-      password: contract.password,
-      password_confirmation: contract.password_confirmation,
+      password: contract.login_id,
+      password_confirmation: contract.login_id,
       role: 1,
       activated: true
     )
