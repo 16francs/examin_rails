@@ -19,6 +19,12 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
     render json: @response, status: :created
   end
 
+  def download_template
+    service = Teachers::ProblemsService.new
+    file = service.download_template
+    send_file(file[:path], type: file[:type])
+  end
+
   private
 
   def problem_params

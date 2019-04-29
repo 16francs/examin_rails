@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
     namespace :teachers do
       resources :problems, only: %i[index create] do
+        get 'download', on: :collection, to: 'problems#download_template'
         resources :questions, only: %i[index create]
       end
       resources :students, only: %i[create]

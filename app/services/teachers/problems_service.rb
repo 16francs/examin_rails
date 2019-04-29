@@ -33,4 +33,12 @@ class Teachers::ProblemsService < ApplicationService
 
     @response = problem
   end
+
+  def download_template
+    file = {}
+    file[:path] = Rails.root.join('lib', 'new_questions.xlsx')
+    file[:type] = 'application/vnd.ms-excel'
+
+    file
+  end
 end
