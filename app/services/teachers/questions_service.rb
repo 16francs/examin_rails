@@ -16,4 +16,16 @@ class Teachers::QuestionsService < ApplicationService
 
     @response = question
   end
+
+  def create_many(models)
+    models.map! do |model|
+      question = model.slice(:id, :sentence, :correct)
+      question[:created_at] = default_time(model[:created_at])
+      question[:updated_at] = default_time(model[:updated_at])
+
+      question
+    end
+
+    @response[:questions] = models
+  end
 end

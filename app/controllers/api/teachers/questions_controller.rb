@@ -19,9 +19,24 @@ class Api::Teachers::QuestionsController < Api::Teachers::BaseController
     render json: @response, status: :created
   end
 
+  def create_many
+    options = Teachers::Questions::Operation::CreateMany.call(
+      problem_id: params[:problem_id],
+      file: upload_params
+    )
+    service = Teachers::QuestionsService.new
+    service.create_many(options[:model])
+    @response = service.response
+    render json: @response, status: :created
+  end
+
   private
 
   def question_params
     params.require(:question).permit(:sentence, :correct)
+  end
+
+  def upload_params
+    params.require(:file)
   end
 end
