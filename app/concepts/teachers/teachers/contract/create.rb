@@ -4,8 +4,6 @@ class Teachers::Teachers::Contract::Create < Teachers::Teachers::Contract::Opera
   property :login_id
   property :name
   property :school
-  property :password
-  property :password_confirmation
 
   validates :login_id,
             presence: true,

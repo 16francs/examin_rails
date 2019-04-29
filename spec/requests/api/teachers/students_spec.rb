@@ -8,6 +8,39 @@ describe 'Api::Teachers::Students', type: :request do
   let!(:student) { build(:student) }
   let!(:other_student) { create(:student) }
 
+  describe 'index action' do
+    let(:students) { create_list(:student, 10) }
+
+    context '未ログインの場合' do
+      it 'status: 401' do
+        get '/api/teachers/students'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(admin)
+        auth_params = get_auth_params(response)
+        get '/api/teachers/students', headers: auth_params
+      end
+
+      it 'status: 200' do
+        expect(response.status).to eq(200)
+      end
+
+      it 'json の検証' do
+        json = JSON.parse(response.body)
+        students.map(&:reload)
+        expect(json['students'][0]['id']).to eq(other_student[:id])
+        expect(json['students'][0]['name']).to eq(other_student[:name])
+        expect(json['students'][0]['school']).to eq(other_student[:school])
+        expect(json['students'][0]['role']).to eq(other_student[:role])
+        expect(json['students'][0]['login_id']).to eq(other_student[:login_id])
+      end
+    end
+  end
+
   describe 'create action' do
     context '未ログインの場合' do
       it 'status: 401' do
@@ -60,12 +93,6 @@ describe 'Api::Teachers::Students', type: :request do
                params: school_nil_params, headers: @auth_params
           expect(response.status).to eq(400)
           post '/api/teachers/students',
-               params: password_nil_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: password_confirmation_nil_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
                params: login_id_max_length_params, headers: @auth_params
           expect(response.status).to eq(400)
           post '/api/teachers/students',
@@ -73,18 +100,6 @@ describe 'Api::Teachers::Students', type: :request do
           expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: school_max_length_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: password_min_length_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: password_max_length_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: password_confirmation_min_length_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: password_confirmation_max_length_params, headers: @auth_params
           expect(response.status).to eq(400)
           post '/api/teachers/students',
                params: login_id_format_params, headers: @auth_params
@@ -96,17 +111,18 @@ describe 'Api::Teachers::Students', type: :request do
                params: school_format_params, headers: @auth_params
           expect(response.status).to eq(400)
           post '/api/teachers/students',
-               params: password_format_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: password_confirmation_format_params, headers: @auth_params
-          expect(response.status).to eq(400)
-          post '/api/teachers/students',
                params: login_id_unique_params, headers: @auth_params
           expect(response.status).to eq(400)
-          post '/api/teachers/students',
-               params: invalid_password_params, headers: @auth_params
-          expect(response.status).to eq(400)
+        end
+
+        def login_id_unique_params
+          {
+            student: {
+              login_id: other_student[:login_id],
+              name: student[:name],
+              school: student[:school]
+            }
+          }
         end
       end
     end
@@ -117,9 +133,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -129,9 +143,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: nil,
         name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -141,9 +153,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: nil,
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -153,33 +163,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: student[:name],
-        school: nil,
-        password: '12345678',
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_nil_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: nil,
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_confirmation_nil_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: nil
+        school: nil
       }
     }
   end
@@ -189,9 +173,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: 'a' * 32,
         name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -201,9 +183,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: 'a' * 64,
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -213,57 +193,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: student[:name],
-        school: 'a' * 64,
-        password: '12345678',
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_min_length_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: 'a' * 7,
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_max_length_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: 'a' * 16,
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_confirmation_min_length_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: 'a' * 7
-      }
-    }
-  end
-
-  def password_confirmation_max_length_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: 'a' * 16
+        school: 'a' * 64
       }
     }
   end
@@ -273,9 +203,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: '!#$-%&@*/',
         name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -285,9 +213,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: '!#$-%&@*/',
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
+        school: student[:school]
       }
     }
   end
@@ -297,57 +223,7 @@ describe 'Api::Teachers::Students', type: :request do
       student: {
         login_id: student[:login_id],
         name: student[:name],
-        school: '!#$-%&@*/',
-        password: '12345678',
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_format_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '!#$%&@*/',
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def password_confirmation_format_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '!#$-%&@*/'
-      }
-    }
-  end
-
-  def login_id_unique_params
-    {
-      student: {
-        login_id: other_student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '12345678'
-      }
-    }
-  end
-
-  def invalid_password_params
-    {
-      student: {
-        login_id: student[:login_id],
-        name: student[:name],
-        school: student[:school],
-        password: '12345678',
-        password_confirmation: '87654321'
+        school: '!#$-%&@*/'
       }
     }
   end

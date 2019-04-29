@@ -24,7 +24,7 @@ Rails.application.routes.draw do
           post 'upload', on: :collection, to: 'questions#create_many'
         end
       end
-      resources :students, only: %i[create]
+      resources :students, only: %i[index create]
       resources :teachers, only: %i[index create]
     end
   end
