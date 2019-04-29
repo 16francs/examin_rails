@@ -20,6 +20,9 @@ sync-test:
 sync-lint:
 	sh docker/bin/sync/lint.sh
 
+sync-routes:
+  sh docker/bin/sync/routes.sh
+
 # docker-sync を利用しない
 setup:
 	docker-compose build --no-cache
@@ -33,6 +36,7 @@ setup:
 	docker-compose down
 
 update:
+  docker-compose build
 	docker-compose run --rm web bundle install
 	docker-compose run --rm web bundle exec rails ridgepole:apply
 	docker-compose run --rm web bundle exec rails ridgepole:apply RAILS_ENV=test
@@ -54,3 +58,6 @@ test:
 
 lint:
 	docker-compose run --rm web bundle exec rubocop
+
+routes:
+  docker-compose run --rm web bundle exec rails routes

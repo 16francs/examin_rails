@@ -15,7 +15,7 @@ class Teachers::Questions::Operation::CreateMany < ApplicationOperation
     # エクセルファイルの読み込み
     # 値の取得とバリデーションチェック -> nil が帰ってきたとき、エラーあり
     options[:contract] = validate_questions(params[:file])
-    options[:contract] != nil
+    !options[:contract].nil?
   end
 
   def persist!(options, params, **)
@@ -34,13 +34,11 @@ class Teachers::Questions::Operation::CreateMany < ApplicationOperation
     options[:model] = questions
   end
 
-  private
-
   # -------- 以下、エクセルファイルの処理 ---------
 
   # エクセルから問題を取得・バリデーションチェックを行うメソッド
   def validate_questions(file)
-    contracts = []    # 取得した問題を格納する配列
+    contracts = [] # 取得した問題を格納する配列
 
     # 正しいファイルが読み込めたかの検証
     spreadsheet = open_spreadsheet(file)
