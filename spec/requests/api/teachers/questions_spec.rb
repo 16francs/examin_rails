@@ -101,6 +101,77 @@ describe 'Api::Teachers::Problems', type: :request do
     end
   end
 
+  describe 'create_many action' do
+    before do
+      file_type = 'application/vnd.ms-excel'
+      file_path = File.open(Rails.root.join('lib/test', 'new_questions.xlsx'))
+      @file = Rack::Test::UploadedFile.new(file_path, file_type)
+      other_file_path = File.open(Rails.root.join('lib/test', 'questions.xlsx'))
+      @other_file = Rack::Test::UploadedFile.new(other_file_path, file_type)
+    end
+
+    context '未ログインの場合' do
+      it 'status: 401' do
+        post '/api/teachers/problems/' + problem[:id].to_s + '/questions/upload'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(admin)
+        @auth_params = get_auth_params(response)
+      end
+
+      context '有効なパラメータの場合' do
+        before do
+          @size = Question.all.size
+          post '/api/teachers/problems/' + problem[:id].to_s + '/questions/upload',
+               headers: @auth_params, params: valid_upload_params
+        end
+
+        it 'status: 201' do
+          expect(response.status).to eq(201)
+        end
+
+        it 'json の検証' do
+          json = JSON.parse(response.body)
+          question = Question.last
+          expect(json['questions'][0]['id']).to eq(question[:id])
+          expect(json['questions'][0]['sentence']).to eq(question[:sentence])
+          expect(json['questions'][0]['sentence']).to eq(question[:sentence])
+          expect(json['questions'][0]['correct']).to eq(question[:correct])
+          expect(json['questions'][0]['created_at']).to eq(default_time(question[:created_at]))
+          expect(json['questions'][0]['updated_at']).to eq(default_time(question[:updated_at]))
+        end
+
+        it 'size + 1' do
+          expect(Question.all.size).to eq(@size + 1)
+        end
+      end
+
+      context '無効なパラメータの場合' do
+        it 'status: 400' do
+          post '/api/teachers/problems/' + problem[:id].to_s + '/questions/upload',
+               headers: @auth_params, params: invalid_upload_params
+          expect(response.status).to eq(400)
+        end
+      end
+    end
+
+    def valid_upload_params
+      {
+        file: @file
+      }
+    end
+
+    def invalid_upload_params
+      {
+        file: @other_file
+      }
+    end
+  end
+
   def valid_params
     {
       question: {

@@ -119,6 +119,27 @@ describe 'Api::Teachers::Problems', type: :request do
     end
   end
 
+  describe 'download action' do
+    context '未ログインの場合' do
+      it 'status: 401' do
+        get '/api/teachers/problems/download'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(admin)
+        @auth_params = get_auth_params(response)
+      end
+
+      it 'status: 200' do
+        get '/api/teachers/problems/download', headers: @auth_params
+        expect(response.status).to eq(200)
+      end
+    end
+  end
+
   def valid_params
     {
       problem: {
