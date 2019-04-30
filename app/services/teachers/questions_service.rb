@@ -2,11 +2,24 @@
 
 class Teachers::QuestionsService < ApplicationService
   def index(problem_id)
+    # 問題集を取得
+    problem = Problem.find(problem_id)
+    @response = problem.slice(:id, :title, :content)
+    @response[:created_at] = default_time(problem[:created_at])
+    @response[:updated_at] = default_time(problem[:updated_at])
+    @response[:tags] = problem.tags.pluck(:content)
+
+    user = User.find_by(id: problem[:user_id])
+    @response[:teacher_name] = user ? user[:name] : nil
+
+    # 問題一覧を取得
     keys = %i[id sentence correct]
     questions = Question.where(problem_id: problem_id).pluck(:id, :sentence, :correct)
     questions.map! { |question| Hash[*[keys, question].transpose.flatten] }
-
     @response[:questions] = questions
+
+    # 問題数を取得
+    @response[:count] = questions.length
   end
 
   def create(model)
