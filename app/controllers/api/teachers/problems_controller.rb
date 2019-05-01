@@ -25,9 +25,25 @@ class Api::Teachers::ProblemsController < Api::Teachers::BaseController
     send_file(file[:path], type: file[:type])
   end
 
+  def download_index
+    service = Teachers::ProblemsService.new
+    file = service.download_index(params[:id])
+    send_data(file[:content], type: file[:type], filename: file[:name])
+  end
+
+  def download_test
+    service = Teachers::ProblemsService.new
+    file = service.download_test(params[:id], test_params)
+    send_data(file[:content], type: file[:type], filename: file[:name])
+  end
+
   private
 
   def problem_params
     params.require(:problem).permit(:title, :content, tags: [])
+  end
+
+  def test_params
+    params.require(:test).permit(:count)
   end
 end

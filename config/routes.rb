@@ -20,6 +20,8 @@ Rails.application.routes.draw do
     namespace :teachers do
       resources :problems, only: %i[index create] do
         get 'download', on: :collection, to: 'problems#download_template'
+        get 'download', on: :member, to: 'problems#download_index'
+        post 'test', on: :member, to: 'problems#download_test'
         resources :questions, only: %i[index create] do
           post 'upload', on: :collection, to: 'questions#create_many'
         end
