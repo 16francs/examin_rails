@@ -119,7 +119,7 @@ describe 'Api::Teachers::Problems', type: :request do
     end
   end
 
-  describe 'download action' do
+  describe 'download_template action' do
     context '未ログインの場合' do
       it 'status: 401' do
         get '/api/teachers/problems/download'
@@ -136,6 +136,71 @@ describe 'Api::Teachers::Problems', type: :request do
       it 'status: 200' do
         get '/api/teachers/problems/download', headers: @auth_params
         expect(response.status).to eq(200)
+      end
+    end
+  end
+
+  describe 'download_index action' do
+    let!(:problem) { create(:problem, user: admin) }
+    let!(:questions) { create_list(:question, 10, problem: problem) }
+
+    context '未ログインの場合' do
+      it 'status: 401' do
+        get '/api/teachers/problems/' + problem[:id].to_s + '/download'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(admin)
+        @auth_params = get_auth_params(response)
+      end
+
+      it 'status: 200' do
+        get '/api/teachers/problems/' + problem[:id].to_s + '/download', headers: @auth_params
+        expect(response.status).to eq(200)
+      end
+    end
+  end
+
+  describe 'download_test action' do
+    let!(:problem) { create(:problem, user: admin) }
+    let!(:questions) { create_list(:question, 10, problem: problem) }
+
+    context '未ログインの場合' do
+      it 'status: 401' do
+        post '/api/teachers/problems/' + problem[:id].to_s + '/test'
+        expect(response.status).to eq(401)
+      end
+    end
+
+    context 'ログイン済みの場合' do
+      before do
+        login(admin)
+        @auth_params = get_auth_params(response)
+      end
+
+      context '有効なパラメータの場合' do
+        before do
+          post '/api/teachers/problems/' + problem[:id].to_s + '/test',
+               headers: @auth_params, params: test_valid_params
+        end
+
+        it 'status: 200' do
+          expect(response.status).to eq(200)
+        end
+      end
+
+      context '無効なパラメータの場合' do
+        it 'status: 400' do
+          post '/api/teachers/problems/' + problem[:id].to_s + '/test',
+               headers: @auth_params, params: test_count_nil_params
+          expect(response.status).to eq(400)
+          post '/api/teachers/problems/' + problem[:id].to_s + '/test',
+               headers: @auth_params, params: test_count_invalid_params
+          expect(response.status).to eq(400)
+        end
       end
     end
   end
@@ -226,6 +291,30 @@ describe 'Api::Teachers::Problems', type: :request do
         title: '!#$-%&@*/',
         content: problem[:content],
         tags: [tag[:content], tag[:content]]
+      }
+    }
+  end
+
+  def test_valid_params
+    {
+      test: {
+        count: 20
+      }
+    }
+  end
+
+  def test_count_nil_params
+    {
+      test: {
+        count: nil
+      }
+    }
+  end
+
+  def test_count_invalid_params
+    {
+      test: {
+        count: 15
       }
     }
   end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/ClassLength
 class Teachers::ProblemsService < ApplicationService
   def index
     keys = %i[id title content user_id updated_at]
@@ -58,17 +59,17 @@ class Teachers::ProblemsService < ApplicationService
     # 入力値の検証
     # count -> 20, 30, 50 のみ, それ以外 -> error
     count = test[:count].to_i
-    raise ApiErrors::BadRequest unless count == 20 || count == 30 || count == 50
+    raise ApiErrors::BadRequest unless [20, 30, 50].include?(count)
 
     file = {}
-    @problem = Problem.find(problem_id)
+    problem = Problem.find(problem_id)
     # 問題のランダム取得
     question_ids = @problem.questions.pluck(:id).sample(count)
-    @questions = Question.where(id: question_ids).shuffle
+    questions = Question.where(id: question_ids).shuffle
 
-    file[:content] = test_render(count.to_s).stream.string
+    file[:content] = test_render(count.to_s, problem, questions).stream.string
     file[:type] = 'application/vnd.ms-excel'
-    file[:name] = "test_#{count.to_s}.xlsx"
+    file[:name] = "test_#{count}.xlsx"
 
     file
   end
@@ -108,16 +109,18 @@ class Teachers::ProblemsService < ApplicationService
 
   ## ------- 以下、テスト作成 -------
   # テスト出力
-  def test_render(count)
+  def test_render(count, problem, questions)
     file = Rails.root.join('lib', "tests_#{count}.xlsx")
     excel = RubyXL::Parser.parse(file)
+    @problem = problem
+    @questions = questions
     # エクセルファイルの読み込み
     excel.tap do |workbook|
       workbook.worksheets.each do |worksheet|
         worksheet.each_with_index do |row, row_num|
           # 1行ずつセルをみていく
           row&.cells&.each do |cell|
-            next if cell.nil? # セルが空欄なら次へ
+            next unless cell&.value # セルが空欄なら次へ
 
             cell_render(cell) # セルに値があればcell_renderへ
           end
@@ -138,10 +141,14 @@ class Teachers::ProblemsService < ApplicationService
     cell.change_fill('FFFF00')
   end
 
+  # セルの値を取得
+  # 変数が書かれているときは、変数の値を取得
   def content_eval(content)
-    view_context.instance_eval <<-RUBY, __FILE__, __LINE__ + 1
-      ("#{content}").gsub(/\R/, "\n") # エクセルの改行は LF
-    RUBY
+    # rubocop:disable Security/Eval
+    eval(content).gsub(/\R/, '\n')
+    # rubocop:enable Security/Eval
+  rescue StandardError
+    content.inspect.include?('@') ? nil : content.to_s.gsub(/\R/, '\n')
   end
 
   def row_height_auto(worksheet, row_num)
@@ -151,3 +158,4 @@ class Teachers::ProblemsService < ApplicationService
     worksheet.change_row_height(row_num, origin_height * max_lines) if max_lines&.positive?
   end
 end
+# rubocop:enable all
