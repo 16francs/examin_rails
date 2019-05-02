@@ -64,7 +64,7 @@ class Teachers::ProblemsService < ApplicationService
     file = {}
     problem = Problem.find(problem_id)
     # 問題のランダム取得
-    question_ids = @problem.questions.pluck(:id).sample(count)
+    question_ids = problem.questions.pluck(:id).sample(count)
     questions = Question.where(id: question_ids).shuffle
 
     file[:content] = test_render(count.to_s, problem, questions).stream.string
