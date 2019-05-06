@@ -4,10 +4,11 @@
 
 # Examin (バックエンド)
 
+[インフラ関連: Docker](https://github.com/16francs/examin)     
 [仕様書: API Blueprint](https://github.com/16francs/examin_blueprint)     
 [フロントエンド: Nuxt.js](https://github.com/16francs/examin_vue)     
 [バックエンド(今はこれ使ってる): Rails API](https://github.com/16francs/examin_rails)   
-[バックエンド: Golang API](https://github.com/16francs/examin_go)   
+[バックエンド(移行予定): Golang API](https://github.com/16francs/examin_go)   
 [バックエンド: SpringBoot API](https://github.com/16francs/examin_boot)
 
 ## 開発環境
@@ -16,65 +17,62 @@
 * Rails 6.0.0
 * DB: MySQL5.7.24
 
-## 環境構築
+## docker-sync 使う
 
-* `docker` ・ `docker-compose` のインストール
+### 環境構築
 
-> https://store.docker.com/editions/community/docker-ce-desktop-mac
+* 初回のみ
 
-* `docker-sync (rsync)` のインストール
+> $ make sync-setup
 
-> https://github.com/EugenMayer/docker-sync/wiki
+* 更新を反映させる時
 
-(Mac の場合,以下のコマンドでインストールできる)
+> $ make sync-update
 
-> $ gem install docker-sync   
-> $ gem install rcync
-
-* 以下のコマンドを実行
-
-> $ cd examin_rails      
-> $ sh docker/bin/create.sh   
-
-(途中でエラーがおきた場合...)
-
-* docker 内の MySQL に データベースを作成
-
-> $ sh docker/bin/create-db.sh    
-
-* その他の設定
-
-> $ sh docker/bin/setup.sh
-
-## テストの実行
-
-> $ sh docker/bin/test.sh
-
-## コーディングスタイルのチェックの実行
-
-> $ sh docker/bin/lint.sh
-
-## DB・Gemのアップデート
-
-> $ sh docker/bin/update.sh
-
-## 起動方法
+### 起動方法
 
 * 以下のコマンドを実行
 
-> $ sh docker/bin/start.sh
+> $ make sync-start
 
 * 下記のURLにアクセスして確認
 
 > http://localhost:3500
 
-* 起動時，以下のログが出力された場合のコマンド
+### 再起動
 
-`A server is already running. Check /examin_rails/tmp/pids/server.pid.` 
+> $ make sync-restart
 
-> $ docker-compose run --rm web rm -rf tmp/   
-> $ docker-compose run --rm web bundle exec rails server
+### 停止
 
-## 再起動
+> $ make sync-stop
 
-> $ sh docker/bin/restart.sh
+---
+
+##  docker-sync 使わない
+
+### 環境構築
+
+> $ make setup
+
+* 更新を反映させる時
+
+> $ make update
+
+### 起動方法
+
+* 以下のコマンドを実行
+
+> $ make start
+
+* 下記のURLにアクセスして確認
+
+> http://localhost:3500
+
+### 再起動
+
+> $ make restart
+
+### 停止
+
+> $ make stop
