@@ -1,25 +1,40 @@
-version: 2
-jobs:
-  build:
-    parallelism: 1
+version: 2.1
+
+executors:
+  default:
     docker:
-    - image: circleci/ruby:2.6.0-node
-      environment:
-        BUNDLE_JOBS: 3
-        BUNDLE_RETRY: 3
-        BUNDLE_PATH: vendor/bundle
-        RAILS_ENV: test
-        DATABASE_USERNAME: root
-        DATABASE_PASSWORD: ''
-        DATABASE_HOST: 127.0.0.1
-        DATABASE_PORT: 3306
-        CIRCLE_ARTIFACTS: /tmp/artifacts
-    - image: circleci/mysql:5.7.23
-      environment:
-        MYSQL_USER: root
-        MYSQL_ALLOW_EMPTY_PASSWORD: yes
-        MYSQL_DATABASE: examin_test
+      - image: circleci/ruby:2.6.0-node
+        environment:
+          BUNDLE_JOBS: 3
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          RAILS_ENV: test
+          DATABASE_USERNAME: root
+          DATABASE_PASSWORD: ''
+          DATABASE_HOST: 127.0.0.1
+          DATABASE_PORT: 3306
+          CIRCLE_ARTIFACTS: /tmp/artifacts
+      - image: circleci/mysql:5.7.23
+        environment:
+          MYSQL_USER: root
+          MYSQL_ALLOW_EMPTY_PASSWORD: yes
+          MYSQL_DATABASE: examin_test
     working_directory: ~/examin
+
+commands:
+  restore_dependencies:
+    steps:
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "Gemfile.lock" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-
+
+jobs:
+  setup:
+    executor:
+      name: default
     steps:
       - checkout
 
@@ -36,12 +51,7 @@ jobs:
           name: Which bundler?
           command: bundle -v
 
-      # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - v1-dependencies-{{ checksum "Gemfile.lock" }}
-            # fallback to using the latest cache if no exact match is found
-            - v1-dependencies-
+      - restore_dependencies
 
       # Bundle install dependencies
       - run:
@@ -50,7 +60,7 @@ jobs:
 
       - save_cache:
           paths:
-            - ./vendor/bundle
+          - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
 
       # Database setup
@@ -61,6 +71,36 @@ jobs:
       - run:
           name: Database setup
           command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
+
+  test:
+    executor:
+      name: default
+    steps:
+      - checkout
+
+      # setup のをうまく引き継げないのでとりあえず追加
+      # --- ここから ---
+      - run:
+          name: Configure Bundler
+          command: |
+            echo 'export BUNDLER_VERSION=$(cat Gemfile.lock | tail -1 | tr -d " ")' >> $BASH_ENV
+            source $BASH_ENV
+            gem install bundler
+
+      - restore_dependencies
+
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install --path vendor/bundle
+
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:3306 -timeout 120s
+
+      - run:
+          name: Database setup
+          command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
+      # --- ここまで ---
 
       # Run rubocop
       - run:
@@ -74,3 +114,11 @@ jobs:
 
       - store_artifacts:
           path: /tmp/artifacts/coverage
+
+workflows:
+  setup_and_test:
+    jobs:
+      - setup
+      - test:
+          requires:
+            - setup
