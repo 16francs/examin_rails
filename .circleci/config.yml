@@ -79,6 +79,11 @@ jobs:
       - checkout
       - restore_dependencies
 
+      # うまく動かないので bundle install を追加
+      - run:
+          name: Bundle Install
+          command: bundle check || bundle install --path vendor/bundle
+
       # Run rubocop
       - run:
           name: Run rubocop
