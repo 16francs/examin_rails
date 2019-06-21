@@ -77,9 +77,9 @@ jobs:
       name: default
     steps:
       - checkout
-      - restore_dependencies
 
-      # うまく動かないので、以下 2つ の step を追加
+      # setup のをうまく引き継げないのでとりあえず追加
+      # --- ここから ---
       - run:
           name: Configure Bundler
           command: |
@@ -87,9 +87,20 @@ jobs:
             source $BASH_ENV
             gem install bundler
 
+      - restore_dependencies
+
       - run:
           name: Bundle Install
           command: bundle check || bundle install --path vendor/bundle
+
+      - run:
+          name: Wait for DB
+          command: dockerize -wait tcp://localhost:3306 -timeout 120s
+
+      - run:
+          name: Database setup
+          command: bundle exec ridgepole -c config/database.yml -E test --apply -f db/schemas/Schemafile
+      # --- ここまで ---
 
       # Run rubocop
       - run:
