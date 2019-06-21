@@ -3,7 +3,7 @@
 require 'rails_helper'
 
 # rubocop:disable Metrics/BlockLength
-describe 'Api::Teachers::Problems', type: :request do
+describe 'Api::Teachers::Questions', type: :request do
   let!(:admin) { create(:admin) }
   let!(:problem) { create(:problem, user: admin) }
   let!(:tag) { create(:tag) }
