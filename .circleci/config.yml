@@ -75,7 +75,7 @@ jobs:
   test:
     executor:
       name: default
-    step:
+    steps:
       - checkout
       - restore_dependencies
 
