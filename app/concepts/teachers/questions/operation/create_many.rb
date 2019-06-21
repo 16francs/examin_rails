@@ -22,16 +22,19 @@ class Teachers::Questions::Operation::CreateMany < ApplicationOperation
     problem_id = params[:problem_id]
     questions = options[:contract]
 
-    # 問題登録
+    # 問題の一括登録
     questions.map! do |question|
-      Question.create(
+      Question.new(
         problem_id: problem_id,
         sentence: question.sentence,
         correct: question.correct
       )
     end
+    Question.import questions, validation: false
 
-    options[:model] = questions
+    # import では登録後の値が種ときできない
+    # -> DB にアクセスし、questions の個数分後ろから値を取得
+    options[:model] = Question.last(questions.count)
   end
 
   # -------- 以下、エクセルファイルの処理 ---------

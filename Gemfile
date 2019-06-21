@@ -5,6 +5,7 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.0'
 
+gem 'activerecord-import' # DB への一括登録
 gem 'bcrypt', '~> 3.1.7' # ハッシュ化したパスワードを生成する用
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails' # .env による環境変数の設定
