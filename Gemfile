@@ -15,7 +15,7 @@ gem 'mysql2', '>= 0.4.4'
 gem 'puma', '~> 3.11'
 gem 'rack-cors' # クロスドメイン対策
 gem 'rack-health' # ヘルスチェック用のインターフェース
-gem 'rails', '~> 6.0.0.beta1'
+gem 'rails', '~> 6.0.0.rc2'
 gem 'reform-rails' # バリデーションチェック用
 gem 'ridgepole' # スキーマ管理用
 gem 'roo' # Excel アップロードファイル読み込み用
