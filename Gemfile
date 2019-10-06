@@ -9,7 +9,7 @@ gem 'activerecord-import' # DB への一括登録
 gem 'bcrypt', '~> 3.1.7' # ハッシュ化したパスワードを生成する用
 gem 'bootsnap', '>= 1.1.0', require: false
 gem 'dotenv-rails' # .env による環境変数の設定
-gem 'jbuilder', '~> 2.5' # JSON の生成用
+gem 'jbuilder', '~> 2.9' # JSON の生成用
 gem 'jwt' # ログイン認証
 gem 'mysql2', '>= 0.4.4'
 gem 'puma', '~> 4.2'
