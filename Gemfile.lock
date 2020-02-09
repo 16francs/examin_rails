@@ -156,7 +156,7 @@ GEM
       pry (>= 0.10.4)
     puma (4.2.0)
       nio4r (~> 2.0)
-    rack (2.0.7)
+    rack (2.2.1)
     rack-cors (1.0.3)
     rack-health (0.1.2)
       rack (>= 1.2.0)
